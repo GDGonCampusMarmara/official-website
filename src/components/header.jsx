@@ -1,4 +1,21 @@
+import { useState, useEffect } from "react";
+
 const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const menuItems = [
     { name: "Anasayfa", href: "#hero" },
     { name: "Hakkımızda", href: "#about" },
@@ -8,8 +25,14 @@ const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-transparent transition-all duration-300">
-      <div className="container mx-auto px-6 h-24 flex items-center justify-between">
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-[#0a0d14]/80 backdrop-blur-md border-b border-white/10 h-20"
+          : "bg-transparent h-24"
+      }`}
+    >
+      <div className="container mx-auto px-6 h-full flex items-center justify-between">
         <a
           href="/"
           className="flex items-center gap-2"
@@ -18,7 +41,9 @@ const Header = () => {
           <img
             src="/logo.svg"
             alt="GDG Logo"
-            className="h-24 w-auto object-contain"
+            className={`transition-all duration-300 object-contain ${
+              isScrolled ? "h-16" : "h-24"
+            }`}
           />
         </a>
 
