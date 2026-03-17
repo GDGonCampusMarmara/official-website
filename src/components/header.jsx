@@ -1,52 +1,112 @@
+import { useState, useEffect } from "react";
+
 const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+
   const menuItems = [
-    { name: "Anasayfa", href: "#hero" },
-    { name: "Hakkımızda", href: "#about" },
-    { name: "Etkinlikler", href: "#events" },
-    { name: "Ekibimiz", href: "#team" },
-    { name: "Blog", href: "#blog" },
+    { name: "Anasayfa", href: "#hero", id: "hero" },
+    { name: "Hakkımızda", href: "#about", id: "about" },
+    { name: "Etkinlikler", href: "#events", id: "events" },
+    { name: "Ekibimiz", href: "#team", id: "team" },
+    { name: "Blog", href: "#blog", id: "blog" },
   ];
 
+  useEffect(() => {
+    const handleScrollBg = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    const observerOptions = {
+      root: null,
+      threshold: 0.6,
+    };
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+
+    menuItems.forEach((item) => {
+      const element = document.getElementById(item.id);
+      if (element) observer.observe(element);
+    });
+
+    window.addEventListener("scroll", handleScrollBg);
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollBg);
+      observer.disconnect();
+    };
+  });
+
+  const handleClick = (id) => {
+    setActiveSection(id);
+  };
+
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-transparent transition-all duration-300">
-      <div className="container mx-auto px-6 h-24 flex items-center justify-between">
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+        isScrolled
+          ? "bg-[#0a0d14]/90 backdrop-blur-md border-b border-white/5 h-20"
+          : "bg-transparent h-24"
+      }`}
+    >
+      <div className="container mx-auto px-6 h-full flex items-center justify-between">
         <a
-          href="/"
+          href="#hero"
+          onClick={() => handleClick("hero")}
           className="flex items-center gap-2"
-          title="GDG Official Website"
         >
           <img
             src="/logo.svg"
             alt="GDG Logo"
-            className="h-24 w-auto object-contain"
+            className={`transition-all duration-300 object-contain ${
+              isScrolled ? "h-16" : "h-22"
+            }`}
           />
         </a>
 
         <nav className="hidden md:block">
           <ul className="flex gap-10">
-            {menuItems.map((item, index) => (
-              <li key={item.name} className="relative group">
-                <a
-                  href={item.href}
-                  className={`text-m font-semibold tracking-wide transition-colors duration-200 hover:text-blue-400 ${
-                    index === 0 ? "text-blue-500" : "text-white"
-                  }`}
-                >
-                  {item.name}
-                </a>
+            {menuItems.map((item) => {
+              const isActive = activeSection === item.id;
 
-                {index === 0 && (
-                  <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-blue-500 rounded-full"></div>
-                )}
-              </li>
-            ))}
+              return (
+                <li key={item.id} className="relative py-2">
+                  <a
+                    href={item.href}
+                    onClick={() => handleClick(item.id)}
+                    className={`text-sm font-semibold tracking-wide transition-all duration-300 ${
+                      isActive
+                        ? "text-blue-500"
+                        : "text-white/70 hover:text-blue-400"
+                    }`}
+                  >
+                    {item.name}
+                  </a>
+
+                  {isActive && (
+                    <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.6)]"></div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
         <div>
           <a
             href="#join"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-full text-sm font-bold transition-all shadow-lg hover:shadow-blue-500/40 active:scale-95 inline-block"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-full text-sm font-bold transition-all shadow-lg active:scale-95 inline-block"
           >
             Aramıza Katıl
           </a>
