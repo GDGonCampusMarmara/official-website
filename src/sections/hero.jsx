@@ -45,7 +45,7 @@ const Hero = () => {
           </h1>
 
           <p className="text-gray-300 text-xl md:text-xl max-w-2xl mt-8 leading-relaxed font-normal opacity-90">
-            Google Developers tarafından desteklenen, Marmara
+            Google Developers Groups tarafından desteklenen, Marmara
             Üniversitesi&apos;nin teknoloji ve yazılım topluluğu. Öğren,
             geliştir ve ağını genişlet.
           </p>
