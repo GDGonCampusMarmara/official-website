@@ -1,42 +1,40 @@
 const About = () => {
   const focusAreas = [
     {
-      title: "Web Development",
+      title: "Zirveler ve Etkinlikler",
       description:
-        "Modern web teknolojileri ve frameworkler ile projeler geliştiriyoruz.",
+        "Sektörün tanınan isimleri ile network etkinlikleri ve zirveleri yapıyoruz.",
       color: "border-blue-500",
       icon: "🌐",
     },
     {
-      title: "Artificial Intelligence",
+      title: "Yapay Zeka",
       description: "Makine öğrenmesi ve veri bilimi dünyasını keşfediyoruz.",
       color: "border-red-500",
       icon: "🤖",
     },
     {
-      title: "Mobile Apps",
+      title: "Kariyer ve Gelişim:",
       description:
-        "Flutter ve Android ile her platformda çalışan uygulamalar üretiyoruz.",
+        "Teknik gezilerle topluluk üyelerimizi profesyonel iş hayatına hazırlıyoruz.",
       color: "border-green-500",
-      icon: "📱",
+      icon: "🚀",
     },
     {
-      title: "Cloud Computing",
+      title: "Teknik Atölyeler",
       description:
-        "Google Cloud platformu ile ölçeklenebilir sistemleri öğreniyoruz.",
+        "Yazılım dilleri ve güncel framework'ler üzerine uygulamalı çalışmalarla projelerimizi hayata geçiriyoruz.",
       color: "border-yellow-500",
-      icon: "☁️",
+      icon: "💻",
     },
   ];
 
   return (
     <section id="about" className="py-24 bg-[#0a0d14] relative overflow-hidden">
-      {/* Hafif bir arka plan parlaması */}
       <div className="absolute top-1/2 left-0 w-72 h-72 bg-blue-600/5 rounded-full blur-[120px]"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Sol Taraf: Metin İçeriği */}
           <div className="flex flex-col gap-6 text-left">
             <h2 className="text-blue-500 font-bold tracking-widest uppercase text-sm">
               Hakkımızda
