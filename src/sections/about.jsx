@@ -39,7 +39,7 @@ const About = () => {
           {/* Sol Taraf: Metin İçeriği */}
           <div className="flex flex-col gap-6 text-left">
             <h2 className="text-blue-500 font-bold tracking-widest uppercase text-sm">
-              Biz Kimiz?
+              Hakkımızda
             </h2>
             <h3 className="text-4xl md:text-5xl font-extrabold text-white leading-tight">
               Geleceğin Teknolojilerini <br />
