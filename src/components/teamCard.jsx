@@ -32,16 +32,14 @@ function GoogleAvatar({ photo, name }) {
 
   return (
     <div
-      className="rounded-full p-[3px]"
-      style={{ background: googleConicGradient, width: 76, height: 76 }}
+      className="rounded-full p-[3px] w-[76px] h-[76px] bg-[conic-gradient(#EA4335_0deg_90deg,#f9ab00_90deg_180deg,#34A853_180deg_270deg,#4285F4_270deg_360deg)]"
     >
       <div className="w-full h-full rounded-full overflow-hidden bg-white flex items-center justify-center">
         {photo ? (
           <img src={photo} alt={name} className="w-full h-full object-cover" />
         ) : (
           <div
-            className="w-full h-full flex items-center justify-center text-white text-xl font-bold select-none"
-            style={{ background: googleConicGradient }}
+            className="w-full h-full flex items-center justify-center text-white text-xl font-bold select-none bg-[conic-gradient(#EA4335_0deg_90deg,#f9ab00_90deg_180deg,#34A853_180deg_270deg,#4285F4_270deg_360deg)]"
           >
             {initials}
           </div>
@@ -56,11 +54,9 @@ const TeamCard = ({ member }) => {
 
   return (
     <div
-      className="relative bg-white rounded-2xl px-6 py-7 flex flex-col items-center gap-3"
+      className="relative bg-white rounded-2xl px-6 py-7 flex flex-col items-center gap-3 w-[230px]"
       style={{
-        width: 230,
-        transition:
-          "box-shadow 0.35s cubic-bezier(0.34,1.56,0.64,1), transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+        transition: "box-shadow 0.35s cubic-bezier(0.34,1.56,0.64,1), transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
         boxShadow: hovered
           ? googleBoxShadow
           : "0 2px 12px 0 rgba(60,64,67,0.09), 0 1px 3px 0 rgba(60,64,67,0.06)",
@@ -75,18 +71,12 @@ const TeamCard = ({ member }) => {
       {/* name */}
       <div className="text-center">
         <h3
-          className="text-gray-900 font-bold text-base leading-snug"
-          style={{ fontFamily: "'Google Sans', sans-serif" }}
+          className="text-gray-900 font-bold text-base leading-snug font-['Google_Sans']"
         >
           {member.name}
         </h3>
         <span
-          className="inline-block mt-1 text-white text-xs font-semibold px-3 py-0.5 rounded-full"
-          style={{
-            background: "linear-gradient(90deg, #4285F4, #34A853)",
-            letterSpacing: "0.03em",
-            fontFamily: "'Google Sans', sans-serif",
-          }}
+          className="inline-block mt-1 text-white text-xs font-semibold px-3 py-0.5 rounded-full bg-gradient-to-r from-[#4285F4] to-[#34A853] tracking-[0.03em] font-['Google_Sans']"
         >
           {member.title}
         </span>
@@ -110,8 +100,7 @@ const TeamCard = ({ member }) => {
           />
         </svg>
         <span
-          className="text-xs text-gray-400 border-b border-dotted border-gray-200 pb-px w-full group-hover/email:border-blue-300 transition-colors"
-          style={{ fontFamily: "'Google Sans', sans-serif" }}
+          className="text-xs text-gray-400 border-b border-dotted border-gray-200 pb-px w-full group-hover/email:border-blue-300 transition-colors font-['Google_Sans']"
         >
           {member.email}
         </span>
@@ -125,8 +114,7 @@ const TeamCard = ({ member }) => {
             href={member[s.key] || "#"}
             target="_blank"
             rel="noreferrer"
-            className="w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95"
-            style={{ background: "#0A66C215" }}>
+            className="w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95 bg-[#0A66C215]">
             <img src={s.icon} className="w-3.5 h-3.5" alt="linkedin" />
           </a>
         ))}

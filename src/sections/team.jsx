@@ -51,39 +51,31 @@ const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#f9ab00", "#34A853"];
 export default function Team() {
   return (
     <section
-      className="min-h-screen w-full py-16 px-6"
-      style={{ backgroundColor: "#f8f9fa", fontFamily: "'Google Sans', sans-serif" }}
+      className="min-h-screen w-full py-16 px-6 bg-[#f8f9fa] font-['Google_Sans']"
     >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
-      `}</style>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" />
 
       {/* h1 */}
       <div className="text-center mb-12">
         <p
-          className="text-base font-semibold tracking-widest uppercase mb-2"
-          style={{ color: "#4285f4" }}
+          className="text-base font-semibold tracking-widest uppercase mb-2 text-[#4285F4]"
         >
           Ekibimiz
         </p>
         <h2
-          className="text-4xl font-bold text-gray-900"
-          style={{ fontFamily: "'Google Sans', sans-serif" }}
+          className="text-4xl font-bold text-gray-900 font-['Google_Sans']"
         >
           Bizi{" "}
-          <span
-            style={{
-              color: "#000000",
-            }}
-          >
+          <span className="text-black">
             Tanıyın
           </span>
         </h2>
         <div className="flex justify-center gap-1 mt-3">
-          {GOOGLE_COLORS.map((c, i) => (
-            <div key={i} className="w-7 h-1 rounded-full" style={{ background: c }} />
-          ))}
-        </div>
+        <div className="w-7 h-1 rounded-full bg-[#4285F4]" />
+        <div className="w-7 h-1 rounded-full bg-[#EA4335]" />
+        <div className="w-7 h-1 rounded-full bg-[#f9ab00]" />
+        <div className="w-7 h-1 rounded-full bg-[#34A853]" />
+      </div>
       </div>
 
       {/* cards */}
