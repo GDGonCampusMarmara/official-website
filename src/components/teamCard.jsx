@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const googleConicGradient = `conic-gradient(
   #EA4335 0deg 90deg,
@@ -48,6 +49,15 @@ function GoogleAvatar({ photo, name }) {
     </div>
   );
 }
+
+GoogleAvatar.propTypes = {
+  photo: PropTypes.string,
+  name: PropTypes.string.isRequired,
+};
+
+GoogleAvatar.defaultProps = {
+  photo: null,
+};
 
 const TeamCard = ({ member }) => {
   const [hovered, setHovered] = useState(false);
@@ -122,5 +132,16 @@ const TeamCard = ({ member }) => {
     </div>
   );
 }
+
+TeamCard.propTypes = {
+  member: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    linkedin: PropTypes.string,
+    photo: PropTypes.string,
+  }).isRequired,
+};
 
 export default TeamCard;
