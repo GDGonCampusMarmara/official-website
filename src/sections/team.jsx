@@ -120,17 +120,6 @@ function TeamCard({ member }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* cards top colors */}
-      <div className="absolute top-0 left-5 right-5 h-[3px] rounded-full overflow-hidden">
-        <div
-          className="h-full w-full"
-          style={{
-            background:
-              "linear-gradient(90deg, #EA4335 0%, #f9ab00 33%, #34A853 66%, #4285F4 100%)",
-          }}
-        />
-      </div>
-
       {/* pho. */}
       <GoogleAvatar photo={member.photo} name={member.name} />
 
