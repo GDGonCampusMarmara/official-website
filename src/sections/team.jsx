@@ -51,11 +51,11 @@ const MEMBERS = [
 ];
 // ─────────────────────────────────────────────────────────────────────────────
 
-const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#FBBC05", "#34A853"];
+const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#f9ab00", "#34A853"];
 
 const googleConicGradient = `conic-gradient(
   #EA4335 0deg 90deg,
-  #FBBC05 90deg 180deg,
+  #f9ab00 90deg 180deg,
   #34A853 180deg 270deg,
   #4285F4 270deg 360deg
 )`;
@@ -63,7 +63,7 @@ const googleConicGradient = `conic-gradient(
 const googleBoxShadow = `
   -7px -7px 0px 2px #EA4335,
    7px -7px 0px 2px #4285F4,
-  -7px  7px 0px 2px #FBBC05,
+  -7px  7px 0px 2px #f9ab00,
    7px  7px 0px 6px #34A853,
    0px  0px 24px 4px rgba(66,133,244,0.12)
 `;
@@ -131,7 +131,7 @@ function TeamCard({ member }) {
           className="h-full w-full"
           style={{
             background:
-              "linear-gradient(90deg, #EA4335 0%, #FBBC05 33%, #34A853 66%, #4285F4 100%)",
+              "linear-gradient(90deg, #EA4335 0%, #f9ab00 33%, #34A853 66%, #4285F4 100%)",
           }}
         />
       </div>
@@ -238,7 +238,7 @@ export default function Team() {
           Harika{" "}
           <span
             style={{
-              background: "linear-gradient(90deg, #EA4335, #FBBC05, #34A853, #4285F4)",
+              background: "linear-gradient(90deg, #EA4335, #f9ab00, #34A853, #4285F4)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
