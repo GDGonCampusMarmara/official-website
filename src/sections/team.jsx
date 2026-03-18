@@ -7,7 +7,6 @@ const MEMBERS = [
     id: 1,
     name: "İsim Soyisim",
     title: "Frontend Developer",
-    description: "Kullanıcı deneyimi odaklı, modern web teknolojileri konusunda uzman.",
     email: "isim@sirket.com",
     linkedin: "#",
     photo: null,
@@ -16,7 +15,6 @@ const MEMBERS = [
     id: 2,
     name: "İsim Soyisim",
     title: "UI/UX Designer",
-    description: "Yaratıcı tasarım çözümleri ile kullanıcı odaklı arayüzler tasarlayan.",
     email: "isim@sirket.com",
     linkedin: "#",
     photo: null,
@@ -25,7 +23,6 @@ const MEMBERS = [
     id: 3,
     name: "İsim Soyisim",
     title: "Backend Developer",
-    description: "Yüksek performanslı API ve sistem mimarileri konusunda deneyimli.",
     email: "isim@sirket.com",
     linkedin: "#",
     photo: null,
@@ -34,7 +31,6 @@ const MEMBERS = [
     id: 4,
     name: "İsim Soyisim",
     title: "Backend Developer",
-    description: "Yüksek performanslı API ve sistem mimarileri konusunda deneyimli.",
     email: "isim@sirket.com",
     linkedin: "#",
     photo: null,
@@ -43,7 +39,6 @@ const MEMBERS = [
     id: 5,
     name: "İsim Soyisim",
     title: "Backend Developer",
-    description: "Yüksek performanslı API ve sistem mimarileri konusunda deneyimli.",
     email: "isim@sirket.com",
     linkedin: "#",
     photo: null,
@@ -158,15 +153,7 @@ function TeamCard({ member }) {
           {member.title}
         </span>
       </div>
-
-      {/* explain */}
-      <p
-        className="text-center text-gray-400 text-xs leading-relaxed"
-        style={{ fontFamily: "'Google Sans', sans-serif" }}
-      >
-        {member.description}
-      </p>
-
+      
       <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
       {/* mail */}
