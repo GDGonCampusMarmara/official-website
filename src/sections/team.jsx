@@ -202,8 +202,8 @@ export default function Team() {
       {/* h1 */}
       <div className="text-center mb-12">
         <p
-          className="text-xs font-semibold tracking-widest uppercase mb-2"
-          style={{ color: "#4285F4" }}
+          className="text-base font-semibold tracking-widest uppercase mb-2"
+          style={{ color: "#4285f4" }}
         >
           Ekibimiz
         </p>
@@ -211,15 +211,13 @@ export default function Team() {
           className="text-4xl font-bold text-gray-900"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
-          Harika{" "}
+          Bizi{" "}
           <span
             style={{
-              background: "linear-gradient(90deg, #EA4335, #f9ab00, #34A853, #4285F4)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              color: "#000000",
             }}
           >
-            İnsanlar
+            Tanıyın
           </span>
         </h2>
         <div className="flex justify-center gap-1 mt-3">
