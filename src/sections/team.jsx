@@ -143,7 +143,7 @@ function TeamCard({ member }) {
       <div className="text-center">
         <h3
           className="text-gray-900 font-bold text-base leading-snug"
-          style={{ fontFamily: "'Playfair Display', serif" }}
+          style={{ fontFamily: "'Google Sans', sans-serif" }}
         >
           {member.name}
         </h3>
@@ -152,7 +152,7 @@ function TeamCard({ member }) {
           style={{
             background: "linear-gradient(90deg, #4285F4, #34A853)",
             letterSpacing: "0.03em",
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Google Sans', sans-serif",
           }}
         >
           {member.title}
@@ -162,7 +162,7 @@ function TeamCard({ member }) {
       {/* explain */}
       <p
         className="text-center text-gray-400 text-xs leading-relaxed"
-        style={{ fontFamily: "'DM Sans', sans-serif" }}
+        style={{ fontFamily: "'Google Sans', sans-serif" }}
       >
         {member.description}
       </p>
@@ -217,10 +217,10 @@ export default function Team() {
   return (
     <section
       className="min-h-screen w-full py-16 px-6"
-      style={{ backgroundColor: "#f8f9fa", fontFamily: "'DM Sans', sans-serif" }}
+      style={{ backgroundColor: "#f8f9fa", fontFamily: "'Google Sans', sans-serif" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
       `}</style>
 
       {/* h1 */}
