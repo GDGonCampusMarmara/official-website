@@ -1,39 +1,11 @@
-import { useMemo } from "react";
-
+import StarField from "../components/starField";
 const Hero = () => {
-  const stars = useMemo(() => {
-    return Array.from({ length: 100 }).map((_, i) => ({
-      id: `star-${i}`,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      size: `${Math.random() * 2.5 + 1}px`,
-      delay: `${Math.random() * 5}s`,
-      opacity: Math.random() * 0.7 + 0.3,
-    }));
-  }, []);
-
   return (
     <section
       id="hero"
       className="min-h-screen w-full pt-20 flex items-center justify-center bg-[#0a0d14] relative overflow-hidden z-10"
     >
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-900/20 via-transparent to-transparent opacity-40"></div>
-        {stars.map((star) => (
-          <div
-            key={star.id}
-            className="absolute bg-white rounded-full animate-pulse-slow shadow-[0_0_8px_rgba(255,255,255,0.8)]"
-            style={{
-              top: star.top,
-              left: star.left,
-              width: star.size,
-              height: star.size,
-              animationDelay: star.delay,
-              opacity: star.opacity,
-            }}
-          />
-        ))}
-      </div>
+      <StarField starCount={120} />
 
       <div className="container mx-auto px-6 relative z-10 flex justify-center">
         <div className="flex flex-col items-start text-left max-w-5xl w-full">
