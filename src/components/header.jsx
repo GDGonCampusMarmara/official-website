@@ -19,7 +19,8 @@ const Header = () => {
 
     const observerOptions = {
       root: null,
-      threshold: 0.6,
+      rootMargin: "-20% 0px -70% 0px",
+      threshold: 0,
     };
 
     const observerCallback = (entries) => {
@@ -37,7 +38,9 @@ const Header = () => {
 
     menuItems.forEach((item) => {
       const element = document.getElementById(item.id);
-      if (element) observer.observe(element);
+      if (element) {
+        observer.observe(element);
+      }
     });
 
     window.addEventListener("scroll", handleScrollBg);
@@ -48,8 +51,21 @@ const Header = () => {
     };
   });
 
-  const handleClick = (id) => {
-    setActiveSection(id);
+  const handleClick = (e, id) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 85; 
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
@@ -63,14 +79,14 @@ const Header = () => {
       <div className="container mx-auto px-6 h-full flex items-center justify-between">
         <a
           href="#hero"
-          onClick={() => handleClick("hero")}
+          onClick={(e) => handleClick(e, "hero")}
           className="flex items-center gap-2"
         >
           <img
             src="/logo.svg"
             alt="GDG Logo"
             className={`transition-all duration-300 object-contain ${
-              isScrolled ? "h-16" : "h-22"
+              isScrolled ? "h-12" : "h-16"
             }`}
           />
         </a>
@@ -84,7 +100,7 @@ const Header = () => {
                 <li key={item.id} className="relative py-2">
                   <a
                     href={item.href}
-                    onClick={() => handleClick(item.id)}
+                    onClick={(e) => handleClick(e, item.id)}
                     className={`text-sm font-semibold tracking-wide transition-all duration-300 ${
                       isActive
                         ? "text-blue-500"
@@ -94,9 +110,11 @@ const Header = () => {
                     {item.name}
                   </a>
 
-                  {isActive && (
-                    <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.6)]"></div>
-                  )}
+                  <div
+                    className={`absolute -bottom-1 left-0 h-[2px] bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.6)] transition-all duration-500 ${
+                      isActive ? "w-full opacity-100" : "w-0 opacity-0"
+                    }`}
+                  ></div>
                 </li>
               );
             })}

@@ -45,7 +45,10 @@ const MEMBERS = [
 
 export default function Team() {
   return (
-    <section className="min-h-screen w-full py-16 px-6 bg-gray-50 font-['Google_Sans']">
+    <section
+      id="team"
+      className="min-h-screen w-full py-16 px-6 bg-gray-50 font-['Google_Sans']"
+    >
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap"
