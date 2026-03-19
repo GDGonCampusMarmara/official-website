@@ -1,0 +1,42 @@
+export const members = [
+  {
+    id: 1,
+    name: "İsim Soyisim",
+    title: "Frontend Developer",
+    email: "isim@sirket.com",
+    linkedin: "#",
+    photo: null,
+  },
+  {
+    id: 2,
+    name: "İsim Soyisim",
+    title: "UI/UX Designer",
+    email: "isim@sirket.com",
+    linkedin: "#",
+    photo: null,
+  },
+  {
+    id: 3,
+    name: "İsim Soyisim",
+    title: "Backend Developer",
+    email: "isim@sirket.com",
+    linkedin: "#",
+    photo: null,
+  },
+  {
+    id: 4,
+    name: "İsim Soyisim",
+    title: "Backend Developer",
+    email: "isim@sirket.com",
+    linkedin: "#",
+    photo: null,
+  },
+  {
+    id: 5,
+    name: "İsim Soyisim",
+    title: "Backend Developer",
+    email: "isim@sirket.com",
+    linkedin: "#",
+    photo: null,
+  },
+];
