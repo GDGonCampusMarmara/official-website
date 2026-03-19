@@ -1,4 +1,6 @@
 import StarField from "../components/starField";
+import Button from "../components/common/button";
+
 const Hero = () => {
   return (
     <section
@@ -23,12 +25,8 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-wrap gap-6 mt-10">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-xl shadow-blue-600/20 active:scale-95">
-              Etkinlikleri Keşfet →
-            </button>
-            <button className="bg-white hover:bg-gray-100 text-black px-8 py-4 rounded-full font-bold text-lg transition-all active:scale-95">
-              Aramıza Katıl
-            </button>
+            <Button variant="primary">Etkinlikleri Keşfet →</Button>
+            <Button variant="secondary">Aramıza Katıl</Button>
           </div>
 
           <div className="flex flex-wrap gap-12 mt-16 border-t border-white/10 pt-10 w-full">

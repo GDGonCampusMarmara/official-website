@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Button from "./common/button";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,7 +56,7 @@ const Header = () => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const offset = 85; 
+      const offset = 85;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -122,12 +123,9 @@ const Header = () => {
         </nav>
 
         <div>
-          <a
-            href="#join"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-full text-sm font-bold transition-all shadow-lg active:scale-95 inline-block"
-          >
+          <Button variant="primary" size="sm">
             Aramıza Katıl
-          </a>
+          </Button>
         </div>
       </div>
     </header>
