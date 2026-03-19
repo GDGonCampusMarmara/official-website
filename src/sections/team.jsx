@@ -1,7 +1,7 @@
 import TeamCard from "../components/teamCard";
 import { members } from "../constants/teamData";
 
-export default function Team() {
+const Team = () => {
   return (
     <section
       id="team"
@@ -34,4 +34,6 @@ export default function Team() {
       </div>
     </section>
   );
-}
+};
+
+export default Team;
