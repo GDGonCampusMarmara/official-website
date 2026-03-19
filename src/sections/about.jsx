@@ -30,7 +30,10 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-24 bg-[#0a0d14] relative overflow-hidden">
+    <section
+      id="about"
+      className="min-h-screen w-full pt-20 bg-[#0a0d14] relative overflow-hidden"
+    >
       <div className="absolute top-1/2 left-0 w-72 h-72 bg-blue-600/5 rounded-full blur-[120px]"></div>
 
       <div className="container mx-auto px-6 relative z-10">
