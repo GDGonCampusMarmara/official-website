@@ -73,7 +73,7 @@ const TeamCard = ({ member }) => {
         <h3 className="text-gray-900 font-bold text-base leading-snug font-['Google_Sans']">
           {member.name}
         </h3>
-        <span className="inline-block mt-1 text-white text-xs font-semibold px-3 py-0.5 rounded-full bg-gradient-to-r from-bg-blue-500 to-bg-green-500 tracking-[0.03em] font-['Google_Sans']">
+        <span className="inline-block mt-1 text-white text-xs font-semibold px-3 py-0.5 rounded-full bg-gradient-to-r from-blue-500 to-green-500 tracking-[0.03em] font-['Google_Sans']">
           {member.title}
         </span>
       </div>
