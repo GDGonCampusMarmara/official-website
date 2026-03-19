@@ -1,47 +1,5 @@
 import TeamCard from "../components/teamCard";
-
-const MEMBERS = [
-  {
-    id: 1,
-    name: "İsim Soyisim",
-    title: "Frontend Developer",
-    email: "isim@sirket.com",
-    linkedin: "#",
-    photo: null,
-  },
-  {
-    id: 2,
-    name: "İsim Soyisim",
-    title: "UI/UX Designer",
-    email: "isim@sirket.com",
-    linkedin: "#",
-    photo: null,
-  },
-  {
-    id: 3,
-    name: "İsim Soyisim",
-    title: "Backend Developer",
-    email: "isim@sirket.com",
-    linkedin: "#",
-    photo: null,
-  },
-  {
-    id: 4,
-    name: "İsim Soyisim",
-    title: "Backend Developer",
-    email: "isim@sirket.com",
-    linkedin: "#",
-    photo: null,
-  },
-  {
-    id: 5,
-    name: "İsim Soyisim",
-    title: "Backend Developer",
-    email: "isim@sirket.com",
-    linkedin: "#",
-    photo: null,
-  },
-];
+import { members } from "../constants/teamData";
 
 export default function Team() {
   return (
@@ -70,7 +28,7 @@ export default function Team() {
       </div>
 
       <div className="max-w-screen-xl mx-auto flex flex-wrap justify-center gap-16">
-        {MEMBERS.map((member) => (
+        {members.map((member) => (
           <TeamCard key={member.id} member={member} />
         ))}
       </div>
