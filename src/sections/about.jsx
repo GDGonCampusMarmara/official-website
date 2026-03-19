@@ -1,5 +1,5 @@
 import { focusAreas } from "../constants/aboutData";
-
+import FocusCard from "../components/focusCard";
 const About = () => {
   return (
     <section
@@ -36,23 +36,15 @@ const About = () => {
             </div>
           </div>
 
-          {/* Sağ Taraf: Odak Alanları Kartları */}
           <div className="grid sm:grid-cols-2 gap-6">
             {focusAreas.map((area, index) => (
-              <div
+              <FocusCard
                 key={index}
-                className={`p-8 bg-white/5 border-t-4 ${area.color} rounded-2xl hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-2 group`}
-              >
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">
-                  {area.icon}
-                </div>
-                <h4 className="text-xl font-bold text-white mb-2">
-                  {area.title}
-                </h4>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {area.description}
-                </p>
-              </div>
+                icon={area.icon}
+                title={area.title}
+                description={area.description}
+                borderColorClass={area.color}
+              />
             ))}
           </div>
         </div>
