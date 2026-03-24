@@ -25,7 +25,7 @@ function GoogleAvatar({ photo, name }) {
     .toUpperCase();
 
   return (
-    <div className="rounded-full p-[3px] w-[76px] h-[76px] bg-[conic-gradient(#EA4335_0deg_90deg,#f9ab00_90deg_180deg,#34A853_180deg_270deg,#4285F4_270deg_360deg)]">
+    <div className="rounded-full p-[3px] w-[76px] h-[76px] bg-white-500">
       <div className="w-full h-full rounded-full overflow-hidden bg-white flex items-center justify-center">
         {photo ? (
           <img src={photo} alt={name} className="w-full h-full object-cover" />
@@ -99,7 +99,6 @@ const TeamCard = ({ member }) => {
         </span>
       </div>
 
-      
       <div className="flex gap-2 mt-1">
         {SOCIALS.map((s) => (
           <a
