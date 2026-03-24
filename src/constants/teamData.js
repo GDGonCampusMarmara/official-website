@@ -15,7 +15,7 @@ export const members = [
     linkedin: "https://www.linkedin.com/in/fatih-serdar-erkan",
     photo: null,
   },
-    {
+  {
     id: 3,
     name: "Zeynepnaz Koç",
     title: "Secretary General",
@@ -34,7 +34,7 @@ export const members = [
   {
     id: 5,
     name: "Talha Dağ",
-    title: "technical team member",
+    title: "Technical Team Member",
     email: "isim@sirket.com",
     linkedin: "https://www.linkedin.com/in/talha-dağ-0337b9263",
     photo: null,
@@ -55,7 +55,7 @@ export const members = [
     linkedin: "https://www.linkedin.com/in/esma-öztaş-296301247",
     photo: null,
   },
-    {
+  {
     id: 8,
     name: "Nilvana Karabulut",
     title: "Event team member",
@@ -63,7 +63,7 @@ export const members = [
     linkedin: "https://www.linkedin.com/in/nilvanakarabulut1",
     photo: null,
   },
-    {
+  {
     id: 9,
     name: "Nisa Nur Erkan",
     title: "Sponsorship Team Lead",
@@ -71,7 +71,7 @@ export const members = [
     linkedin: "https://www.linkedin.com/in/nisa-nur-erkan",
     photo: null,
   },
-    {
+  {
     id: 10,
     name: "Muhammet Emin Balmuk",
     title: "Project Team Member",
@@ -79,7 +79,7 @@ export const members = [
     linkedin: "https://www.linkedin.com/in/eminbalmuk",
     photo: null,
   },
-    {
+  {
     id: 11,
     name: "Furkan Usul",
     title: "Project Team Member",
