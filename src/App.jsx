@@ -1,17 +1,28 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/header";
 import Hero from "./sections/hero";
 import About from "./sections/about";
 import Team from "./sections/team";
+import NotFound from "./pages/notFound";
+
+const HomePage = () => (
+  <div className="min-h-screen bg-[#0a0d14]">
+    <Header />
+    <Hero />
+    <About />
+    <Team />
+  </div>
+);
+
 function App() {
   return (
-    <>
-      <div className="min-h-screen bg-slate-900">
-        <Header />
-        <Hero />
-        <About />
-        <Team />
-      </div>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
 
