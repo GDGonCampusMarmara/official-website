@@ -4,6 +4,7 @@ import Hero from "./sections/hero";
 import About from "./sections/about";
 import Team from "./sections/team";
 import NotFound from "./pages/notFound";
+import FAQ from "./sections/faq";
 
 const HomePage = () => (
   <div className="min-h-screen bg-[#0a0d14]">
@@ -11,6 +12,7 @@ const HomePage = () => (
     <Hero />
     <About />
     <Team />
+    <FAQ />
   </div>
 );
 
