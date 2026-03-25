@@ -1,8 +1,11 @@
 import FAQCard from "../components/faqCard";
+import StarField from "../components/starField";
 
 const FAQ = () => {
   return (
     <section id="faq" className="py-24 bg-[#0a0d14] relative overflow-hidden">
+            <StarField starCount={120} />
+
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-red-600/5 rounded-full blur-[150px]"></div>
 
       <div className="container mx-auto px-6 relative z-10 max-w-4xl">

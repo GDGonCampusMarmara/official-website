@@ -12,7 +12,7 @@ const FAQCard = () => {
       {faqs.map((faq, index) => (
         <div
           key={index}
-          className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300"
+          className="bg-white/10 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300"
         >
           <button
             onClick={() => toggleFAQ(index)}
