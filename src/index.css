@@ -2,6 +2,9 @@
 
 html {
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+  overflow-x: hidden;
+  margin: 0;
 }
 @keyframes pulse-slow {
   0%,

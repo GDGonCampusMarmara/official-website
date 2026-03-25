@@ -13,7 +13,7 @@ const Team = () => {
       />
 
       <div className="text-center mb-12">
-        <p className="text-base font-semibold tracking-widest uppercase mb-2 text-bg-blue-400">
+        <p className="text-base font-semibold tracking-widest uppercase mb-2 text-blue-400">
           Ekibimiz
         </p>
         <h2 className="text-6xl font-bold text-gray-900 font-['Google_Sans']">
