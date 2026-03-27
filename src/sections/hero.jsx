@@ -1,5 +1,6 @@
 import StarField from "../components/starField";
 import Button from "../components/common/button";
+import Icon from "../components/common/icon";
 
 const Hero = () => {
   return (

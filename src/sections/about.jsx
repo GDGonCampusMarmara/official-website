@@ -1,5 +1,8 @@
 import { focusAreas } from "../constants/aboutData";
 import FocusCard from "../components/focusCard";
+import Icon from "../components/common/icon";
+
+
 const About = () => {
   return (
     <section
