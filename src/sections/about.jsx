@@ -43,7 +43,7 @@ const About = () => {
             {focusAreas.map((area, index) => (
               <FocusCard
                 key={index}
-                icon={area.icon}
+                icon={<Icon name={area.icon} size={56} className={area.color === "border-yellow-600" ? "text-yellow-400" : area.color.replace("border-", "text-")} />}
                 title={area.title}
                 description={area.description}
                 borderColorClass={area.color}
