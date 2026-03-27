@@ -26,8 +26,8 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-wrap gap-6 mt-10">
-            <Button variant="primary">Etkinlikleri Keşfet →</Button>
-            <Button variant="secondary">Aramıza Katıl</Button>
+            <Button variant="primary">Etkinlikleri Keşfet <Icon name="ArrowRight" size={20} /></Button>
+            <Button variant="secondary">Aramıza Katıl <Icon name="UserPlus" size={20} /></Button>
           </div>
 
           <div className="flex flex-wrap gap-12 mt-16 border-t border-white/10 pt-10 w-full">

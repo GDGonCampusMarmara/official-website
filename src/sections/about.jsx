@@ -31,10 +31,10 @@ const About = () => {
             </p>
             <div className="flex gap-4 mt-4">
               <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm">
-                🚀 İnovasyon Odaklı
+                <Icon name="Zap" size={18} className="text-yellow-400" /> İnovasyon Odaklı
               </div>
               <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm">
-                🤝 Topluluk Ruhu
+                <Icon name="Users" size={18} className="text-blue-400" /> Topluluk Ruhu
               </div>
             </div>
           </div>
