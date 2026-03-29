@@ -1,17 +1,31 @@
-import React from "react";
 import { contactInfo } from "../constants/contactData";
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const sendEmail = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  emailjs.sendForm('SERVICE_ID', 'TEMPLATE_ID', e.target, 'PUBLIC_KEY')
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    emailjs.init(publicKey);
+
+    emailjs.sendForm(
+      serviceId,
+      templateId,
+      e.target
+    )
     .then((result) => {
-        alert("Mesaj başarıyla gönderildi! ✨");
+        alert("Mesaj başarıyla gönderildi!");
+        e.target.reset();
     }, (error) => {
-        alert("Bir hata oluştu, lütfen tekrar deneyin. ❌");
+        console.error("Hata Detayı:", error);
+        alert("Gönderim başarısız. Lütfen tekrar deneyin.");
     });
-};
+  };
+
+
   return (
     <section id="contact" className="py-24 bg-[#0a0d14] relative scroll-mt-20">
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px]"></div>
@@ -60,6 +74,7 @@ const Contact = () => {
                 <div className="space-y-2">
                   <label className="text-sm text-gray-400 ml-1">Adınız</label>
                   <input
+                    name="name"
                     type="text"
                     placeholder="John Doe"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
@@ -68,6 +83,7 @@ const Contact = () => {
                 <div className="space-y-2">
                   <label className="text-sm text-gray-400 ml-1">E-posta</label>
                   <input
+                    name="email"
                     type="email"
                     placeholder="john@example.com"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
@@ -78,6 +94,7 @@ const Contact = () => {
               <div className="space-y-2">
                 <label className="text-sm text-gray-400 ml-1">Konu</label>
                 <input
+                  name="title"
                   type="text"
                   placeholder="Nasıl yardımcı olabiliriz?"
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
@@ -87,6 +104,7 @@ const Contact = () => {
               <div className="space-y-2">
                 <label className="text-sm text-gray-400 ml-1">Mesajınız</label>
                 <textarea
+                  name="message"
                   rows="4"
                   placeholder="Mesajınızı buraya yazın..."
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none"
