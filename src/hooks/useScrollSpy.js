@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-export const useScrollSpy = (menuItems, offset = 85) => {
+export const useScrollSpy = (menuItems, offset = 70) => {
   const [activeSection, setActiveSection] = useState("hero");
   const [isScrolled, setIsScrolled] = useState(false);
 

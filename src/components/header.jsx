@@ -6,7 +6,8 @@ const menuItems = [
   { name: "Hakkımızda", href: "#about", id: "about" },
   { name: "Etkinlikler", href: "#events", id: "events" },
   { name: "Ekibimiz", href: "#team", id: "team" },
-  { name: "Blog", href: "#blog", id: "blog" },
+  { name: "SSS", href: "#faq", id: "faq" },
+  { name: "İletişim", href: "#contact", id: "contact" },
 ];
 
 const Header = () => {
