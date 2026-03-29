@@ -2,6 +2,16 @@ import React from "react";
 import { contactInfo } from "../constants/contactData";
 
 const Contact = () => {
+  const sendEmail = (e) => {
+  e.preventDefault();
+
+  emailjs.sendForm('SERVICE_ID', 'TEMPLATE_ID', e.target, 'PUBLIC_KEY')
+    .then((result) => {
+        alert("Mesaj başarıyla gönderildi! ✨");
+    }, (error) => {
+        alert("Bir hata oluştu, lütfen tekrar deneyin. ❌");
+    });
+};
   return (
     <section id="contact" className="py-24 bg-[#0a0d14] relative scroll-mt-20">
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px]"></div>
@@ -45,7 +55,7 @@ const Contact = () => {
           </div>
 
           <div className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-3xl backdrop-blur-sm">
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={sendEmail}>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm text-gray-400 ml-1">Adınız</label>
