@@ -1,5 +1,8 @@
 import { focusAreas } from "../constants/aboutData";
 import FocusCard from "../components/focusCard";
+import Icon from "../components/common/icon";
+
+
 const About = () => {
   return (
     <section
@@ -28,10 +31,10 @@ const About = () => {
             </p>
             <div className="flex gap-4 mt-4">
               <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm">
-                🚀 İnovasyon Odaklı
+                <Icon name="Zap" size={18} className="text-yellow-400" /> İnovasyon Odaklı
               </div>
               <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm">
-                🤝 Topluluk Ruhu
+                <Icon name="Users" size={18} className="text-blue-400" /> Topluluk Ruhu
               </div>
             </div>
           </div>
@@ -40,7 +43,7 @@ const About = () => {
             {focusAreas.map((area, index) => (
               <FocusCard
                 key={index}
-                icon={area.icon}
+                icon={<Icon name={area.icon} size={56} className={area.color === "border-yellow-600" ? "text-yellow-400" : area.color.replace("border-", "text-")} />}
                 title={area.title}
                 description={area.description}
                 borderColorClass={area.color}
