@@ -1,5 +1,6 @@
 import { contactInfo } from "../constants/contactData";
-import emailjs from '@emailjs/browser';
+import emailjs from '@emailjs/browser'
+import Icon from "../components/common/icon";
 
 const Contact = () => {
   const sendEmail = (e) => {
@@ -57,7 +58,12 @@ const Contact = () => {
                   className="flex items-start gap-4 group cursor-pointer"
                 >
                   <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-2xl group-hover:bg-blue-600/20 group-hover:border-blue-500/50 transition-all">
-                    {info.icon}
+                    <Icon
+                      name={info.icon}
+                      className="text-blue-500 group-hover:scale-110 transition-transform"
+                      size={22}
+                      strokeWidth={2}
+                    />
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">{info.label}</p>
