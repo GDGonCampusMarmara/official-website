@@ -1,5 +1,5 @@
 export const contactInfo = [
-    { icon: "📍", label: "Konum", value: "Marmara Üniversitesi, Göztepe Kampüsü" },
-    { icon: "📧", label: "E-posta", value: "gdgmarmara@gmail.com" },
-    { icon: "📱", label: "Instagram", value: "@gdgoncampusmarmara", link: "https://www.instagram.com/gdgoncampus_marmara/" },
+    { icon: "MapPin", label: "Konum", value: "Marmara Üniversitesi, Göztepe Kampüsü" },
+    { icon: "Mail", label: "E-posta", value: "gdgoncampusmarmarauniversity@gmail.com" },
+    { icon: "Camera", label: "Instagram", value: "@gdgoncampus_marmara", link: "https://www.instagram.com/gdgoncampus_marmara/" },
   ];
