@@ -25,7 +25,6 @@ export default function EventCard({ ev, posStr, onNavigate }) {
       ].join(' ')}
       onClick={handleClick}
     >
-      {/* Görsel */}
       <div className="relative w-full h-[190px] overflow-hidden">
         <img src={ev.img} alt={ev.title} loading="lazy" className="w-full h-full object-cover block" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_40%,rgba(5,5,5,0.85))]" />

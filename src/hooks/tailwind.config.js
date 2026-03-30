@@ -6,7 +6,6 @@ module.exports = {
       fontFamily: {
         bebas:    ['"Bebas Neue"', 'sans-serif'],
         dm:       ['"DM Sans"', 'sans-serif'],
-        playfair: ['"Playfair Display"', 'serif'],
       },
 
       colors: {

@@ -126,7 +126,7 @@ export default function Events() {
             Tüm Etkinlikler — <span>2026</span>
           </div>
           <div className="border border-white/10 rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-px">
-            {timelineEvents.map((ev) => <TimelineItem key={ev.id} ev={ev} />)}
+            {visibleEvents.map((ev) => <TimelineItem key={ev.id} ev={ev} />)}
           </div>
         </div>
       </div>
