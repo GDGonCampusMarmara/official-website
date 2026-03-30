@@ -36,13 +36,11 @@ export default function Events() {
   return (
     <section id="events" className="bg-[#0a0d14] text-[#f8f6f1] overflow-x-hidden font-['Google_Sans',sans-serif]">
 
-      {/* HERO */}
       <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-center">
 
-        {/* Glow blob */}
         <div className="absolute w-[700px] h-[700px] rounded-full pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] z-0 bg-[radial-gradient(circle,rgba(249,171,0,0.07)_0%,transparent_70%)]" />
 
-        {/* Noise overlay — uses @utility bg-ev-noise from index.css (SVG data-URL can't be an arbitrary class) */}
+
         <div className="absolute inset-0 bg-ev-noise pointer-events-none z-[1]" />
 
         <div className="relative z-[2] p-8">
@@ -70,10 +68,8 @@ export default function Events() {
         </button>
       </div>
 
-      {/* CALENDAR */}
       <div id="calendar-content" className="relative bg-[#0a0d14] py-24 pb-32">
 
-        {/* Top separator line */}
         <div className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),transparent)]" />
 
         <div className="max-w-[1200px] mx-auto px-8 pb-12 flex flex-wrap items-center gap-5 justify-center flex-col">

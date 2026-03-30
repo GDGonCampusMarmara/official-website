@@ -28,7 +28,6 @@ export default function EventCard({ ev, posStr, onNavigate }) {
       {/* Görsel */}
       <div className="relative w-full h-[190px] overflow-hidden">
         <img src={ev.img} alt={ev.title} loading="lazy" className="w-full h-full object-cover block" />
-        {/* bg-ev-img-overlay → Tailwind arbitrary gradient */}
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_40%,rgba(5,5,5,0.85))]" />
         <span className={[
           'absolute top-[14px] left-[14px]',
@@ -45,7 +44,6 @@ export default function EventCard({ ev, posStr, onNavigate }) {
         )}
       </div>
 
-      {/* İçerik */}
       <div className="px-6 pt-[1.4rem] pb-6">
         <div className={['text-[12px] tracking-[.1em] uppercase mb-2 font-medium', ev.past ? 'text-[#f8f6f1]/45' : fc.text].join(' ')}>
           {ev.date} · {ev.month}
