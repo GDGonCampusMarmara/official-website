@@ -11,8 +11,8 @@ const HomePage = () => (
     <Header />
     <Hero />
     <About />
-    <Team />
     <Events />
+    <Team />
   </div>
 );
 

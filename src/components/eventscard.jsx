@@ -25,38 +25,41 @@ export default function EventCard({ ev, posStr, onNavigate }) {
       ].join(' ')}
       onClick={handleClick}
     >
+      {/* Görsel */}
       <div className="relative w-full h-[190px] overflow-hidden">
         <img src={ev.img} alt={ev.title} loading="lazy" className="w-full h-full object-cover block" />
-        <div className="absolute inset-0 bg-ev-img-overlay" />
+        {/* bg-ev-img-overlay → Tailwind arbitrary gradient */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_40%,rgba(5,5,5,0.85))]" />
         <span className={[
           'absolute top-[14px] left-[14px]',
           'text-[11px] font-medium tracking-[.1em] uppercase',
           'py-[5px] px-3 rounded-full',
-          ev.past ? 'bg-white/[15%] text-ev-white/45' : `${fc.bg} ${fc.badgeText}`,
+          ev.past ? 'bg-white/[15%] text-[#f8f6f1]/45' : `${fc.bg} ${fc.badgeText}`,
         ].join(' ')}>
           {ev.focus}
         </span>
         {ev.attending && (
-          <span className="absolute top-[14px] right-[14px] text-[11px] tracking-[.06em] uppercase py-[5px] px-3 rounded-full bg-ev-green/[18%] border border-ev-green/45 text-ev-green">
+          <span className="absolute top-[14px] right-[14px] text-[11px] tracking-[.06em] uppercase py-[5px] px-3 rounded-full bg-[#34a853]/[18%] border border-[#34a853]/45 text-[#34a853]">
             ✓ Katılıyoruz
           </span>
         )}
       </div>
 
+      {/* İçerik */}
       <div className="px-6 pt-[1.4rem] pb-6">
-        <div className={['text-[12px] tracking-[.1em] uppercase mb-2 font-medium', ev.past ? 'text-ev-white/45' : fc.text].join(' ')}>
+        <div className={['text-[12px] tracking-[.1em] uppercase mb-2 font-medium', ev.past ? 'text-[#f8f6f1]/45' : fc.text].join(' ')}>
           {ev.date} · {ev.month}
         </div>
-        <div className="font-bebas text-[26px] leading-[1.05] text-ev-white mb-[.6rem] tracking-[.02em]">
+        <div className="font-['Google_Sans',sans-serif] text-[26px] leading-[1.05] text-[#f8f6f1] mb-[.6rem] tracking-[.02em]">
           {ev.title}
         </div>
-        <div className="flex items-center gap-[6px] text-[13px] text-ev-white/45 mb-[.9rem]">
+        <div className="flex items-center gap-[6px] text-[13px] text-[#f8f6f1]/45 mb-[.9rem]">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-[13px] h-[13px] flex-shrink-0">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
           </svg>
           {ev.location}
         </div>
-        <p className="text-[13.5px] text-ev-white/60 leading-[1.65] mb-[1.1rem] line-clamp-3">{ev.desc}</p>
+        <p className="text-[13.5px] text-[#f8f6f1]/60 leading-[1.65] mb-[1.1rem] line-clamp-3">{ev.desc}</p>
         <div className="h-px bg-white/10 mb-[1.1rem]" />
         <div className="flex gap-[.7rem]">
           <a
@@ -69,7 +72,7 @@ export default function EventCard({ ev, posStr, onNavigate }) {
           </a>
           <button
             onClick={() => window.open(ev.link, '_blank')}
-            className="bg-white/[4%] text-ev-white border border-white/10 rounded-xl py-[11px] px-[14px] text-[13px] transition-all duration-200 cursor-pointer hover:bg-white/[9%] hover:border-white/20"
+            className="bg-white/[4%] text-[#f8f6f1] border border-white/10 rounded-xl py-[11px] px-[14px] text-[13px] transition-all duration-200 cursor-pointer hover:bg-white/[9%] hover:border-white/20"
           >
             ↗
           </button>
