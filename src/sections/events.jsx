@@ -57,50 +57,23 @@ export default function Events() {
       id="events"
       className="bg-[#0a0d14] text-[#f8f6f1] overflow-x-hidden font-['Google_Sans',sans-serif]"
     >
-      <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-center bg-[#0a0d14]">
-        <div className="absolute w-[700px] h-[700px] rounded-full pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] z-0 bg-[radial-gradient(circle,rgba(249,171,0,0.07)_0%,transparent_70%)]" />
-
-        <div
-          className="absolute inset-0 pointer-events-none z-[1] opacity-[0.06]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
-        />
-
-        <div className="relative z-[2] p-8">
-          <div className="inline-flex items-center gap-2 rounded-full py-[6px] px-[18px] text-[12px] tracking-[.14em] uppercase text-[#f8f6f1]/45 border border-white/10 backdrop-blur-[12px] mb-10">
-            <span className="w-[6px] h-[6px] rounded-full inline-block bg-[#f9ab00] animate-[ev-pulse_2s_infinite]" />
-            Lorem ipsum dolor sit amet consectetur
-          </div>
-
-          <h1 className="font-['Google_Sans',sans-serif] text-[clamp(80px,16vw,220px)] leading-[.88] tracking-[-0.01em] text-[#f8f6f1]">
-            Events
-            <br />
-            <em className="font-['Google_Sans',serif] italic text-[#f9ab00] text-[.75em]">
-              Calendar
-            </em>
-          </h1>
-
-          <p className="mt-8 text-[16px] font-light tracking-[.04em] max-w-[420px] mx-auto text-[#f8f6f1]/45">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
-
-        <button
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[2] flex flex-col items-center gap-2 text-[11px] tracking-[.12em] uppercase text-[#f8f6f1]/45 border-0 bg-transparent cursor-pointer animate-[ev-fadein_2s_1s_both]"
-          onClick={scrollToCalendar}
-        >
-          <div className="w-px h-[50px] bg-[linear-gradient(to_bottom,rgba(255,255,255,0.3),transparent)] animate-[ev-scroll-down_2s_1s_infinite] origin-top" />
-          Keşfet
-        </button>
-      </div>
-
       <div id="calendar-content" className="relative bg-[#0a0d14] py-24 pb-32">
         <div className="absolute top-0 left-0 right-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),transparent)]" />
 
-        <div className="max-w-[1200px] mx-auto px-8 pb-12 flex flex-wrap items-center gap-5 justify-center flex-col">
-          <div className="flex flex-wrap gap-2 justify-center">
+        <div className="max-w-[1200px] mx-auto px-8 pb-12 flex flex-col items-center justify-center text-center">
+          <div className="mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#f8f6f1] mb-4">
+              Etkinlik{" "}
+              <em className="font-['Google_Sans',serif] italic text-[#f9ab00] not-italic">
+                Takvimi
+              </em>
+            </h2>
+            <p className="text-[#f8f6f1]/40 text-sm md:text-base max-w-[500px] mx-auto leading-relaxed">
+              Gelecek etkinlikleri keşfedin ve topluluğumuza katılın.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 justify-center mb-10">
             {FILTER_BUTTONS.map((btn) => {
               const fc = FOCUS_CLASSES[btn.focusKey];
               const isActive = activeFilter === btn.value;
