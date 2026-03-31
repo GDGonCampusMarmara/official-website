@@ -1,6 +1,8 @@
 import { FOCUS_CLASSES, CARD_POS } from "../constants/eventsdata";
+import { useNavigate } from "react-router-dom";
 
 export default function EventCard({ ev, posStr, onNavigate }) {
+  const navigate = useNavigate();
   const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["Affiliate Marketing"];
   const posClass = CARD_POS[posStr] ?? CARD_POS["3"];
 
@@ -8,6 +10,15 @@ export default function EventCard({ ev, posStr, onNavigate }) {
     if (e.target.tagName === "BUTTON" || e.target.tagName === "A") return;
     const pos = parseInt(posStr, 10);
     if (pos !== 0) onNavigate(pos > 0 ? 1 : -1);
+  };
+
+  const handleApplyClick = (e) => {
+    e.stopPropagation();
+    if (!ev.formLink || ev.formLink === "#") {
+      navigate("/basvuru-kapali");
+    } else {
+      window.open(ev.formLink, "_blank", "noopener,noreferrer");
+    }
   };
 
   return (
@@ -77,25 +88,17 @@ export default function EventCard({ ev, posStr, onNavigate }) {
           {ev.desc}
         </p>
         <div className="h-px bg-white/10 mb-[1.1rem]" />
-        <div className="flex gap-[.7rem]">
-          <a
-            href={ev.formLink}
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="flex">
+          <button
+            onClick={handleApplyClick}
             className={[
-              "flex-1 flex items-center justify-center rounded-xl",
+              "w-full flex items-center justify-center rounded-xl",
               "py-[11px] px-3 text-[13px] font-medium tracking-[.02em]",
-              "no-underline transition-all duration-200 hover:-translate-y-px",
+              "transition-all duration-200 hover:-translate-y-px cursor-pointer",
               fc.primaryBtn,
             ].join(" ")}
           >
-            Daha Fazla &amp; Başvur
-          </a>
-          <button
-            onClick={() => window.open(ev.link, "_blank")}
-            className="bg-white/[4%] text-[#f8f6f1] border border-white/10 rounded-xl py-[11px] px-[14px] text-[13px] transition-all duration-200 cursor-pointer hover:bg-white/[9%] hover:border-white/20"
-          >
-            ↗
+            Daha Fazla & Başvur
           </button>
         </div>
       </div>

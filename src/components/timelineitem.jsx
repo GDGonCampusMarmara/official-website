@@ -1,12 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import { FOCUS_CLASSES } from "../constants/eventsdata";
 
 export default function TimelineItem({ ev }) {
+  const navigate = useNavigate();
   const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["Affiliate Marketing"];
+
+  const handleClick = () => {
+    if (!ev.formLink || ev.formLink === "#") {
+      navigate("/basvuru-kapali");
+    } else {
+      window.open(ev.formLink, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <div
       className="cursor-pointer transition-colors duration-200 hover:bg-[#f9ab00]/[5%] p-[1.1rem_1.3rem] bg-white/[2%] flex flex-col justify-between h-full w-full"
-      onClick={() => window.open(ev.formLink, "_blank")}
+      onClick={handleClick}
     >
       <div className="flex flex-col gap-3">
         <div className={`text-[12px] tracking-[.06em] font-medium ${fc.text}`}>

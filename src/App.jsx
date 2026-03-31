@@ -5,6 +5,7 @@ import About from "./sections/about";
 import Team from "./sections/team";
 import NotFound from "./pages/notFound";
 import Events from "./sections/events";
+import RegistrationClosed from "./pages/registrationClosed";
 
 const HomePage = () => (
   <div className="min-h-screen bg-[#0a0d14]">
@@ -21,7 +22,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-
+        <Route path="/basvuru-kapali" element={<RegistrationClosed />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
