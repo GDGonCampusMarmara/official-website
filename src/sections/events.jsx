@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
-import { EVENTS } from "../constants/eventsdata";
+import { memo } from "react";
+import { useEvents } from "../hooks/useEvents";
 import { calcPos } from "../utils/calcpos";
 import EventCard from "../components/eventscard";
 import TimelineItem from "../components/timelineitem";
@@ -8,43 +8,14 @@ import EventsControls from "../components/eventsControl";
 const MemoizedTimelineItem = memo(TimelineItem);
 
 export default function Events() {
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [currentIdx, setCurrentIdx] = useState(2);
-  const touchStartX = useRef(0);
-  const isAnimRef = useRef(false);
-
-  const visibleEvents = useMemo(
-    () =>
-      activeFilter === "all"
-        ? EVENTS
-        : EVENTS.filter((e) => e.focus === activeFilter),
-    [activeFilter],
-  );
-
-  const safeIdx = Math.min(currentIdx, Math.max(0, visibleEvents.length - 1));
-
-  const navigate = useCallback(
-    (dir) => {
-      if (isAnimRef.current || visibleEvents.length <= 1) return;
-      isAnimRef.current = true;
-      setCurrentIdx(
-        (prev) => (prev + dir + visibleEvents.length) % visibleEvents.length,
-      );
-      setTimeout(() => {
-        isAnimRef.current = false;
-      }, 750);
-    },
-    [visibleEvents.length],
-  );
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.key === "ArrowLeft") navigate(-1);
-      if (e.key === "ArrowRight") navigate(1);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [navigate]);
+  const {
+    activeFilter,
+    visibleEvents,
+    safeIdx,
+    navigate,
+    handleFilter,
+    touchStartX,
+  } = useEvents();
 
   return (
     <section
@@ -67,10 +38,7 @@ export default function Events() {
 
           <EventsControls
             activeFilter={activeFilter}
-            onFilterChange={(val) => {
-              setActiveFilter(val);
-              setCurrentIdx(0);
-            }}
+            onFilterChange={handleFilter}
             currentMonth={visibleEvents[safeIdx]?.month}
             onNavigate={navigate}
           />
@@ -99,16 +67,30 @@ export default function Events() {
         </div>
 
         <footer className="max-w-[1200px] mx-auto mt-20 px-8">
-          <div className="text-[14px] tracking-[.14em] uppercase text-white/45 mb-6 flex justify-between">
+          <div className="text-[14px] uppercase text-white/45 mb-6 flex justify-between font-medium tracking-widest text-center md:text-left">
             <span>Tüm Etkinlikler</span>
             <span className="text-[#f9ab00]">2026</span>
           </div>
-          <ul className="border border-white/10 rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-px bg-white/5">
+
+          <ul className="border border-white/10 rounded-2xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 overflow-hidden list-none p-0 m-0">
             {visibleEvents.map((ev) => (
-              <li key={ev.id} className="bg-[#0a0d14]">
-                <MemoizedTimelineItem ev={ev} />
+              <li
+                key={ev.id}
+                className="bg-[#0a0d14] flex m-0 p-0 items-stretch"
+              >
+                <div className="w-full flex">
+                  <MemoizedTimelineItem ev={ev} />
+                </div>
               </li>
             ))}
+
+            {visibleEvents.length % 4 !== 0 &&
+              [...Array(4 - (visibleEvents.length % 4))].map((_, i) => (
+                <li
+                  key={`empty-${i}`}
+                  className="bg-[#0a0d14] hidden lg:block"
+                />
+              ))}
           </ul>
         </footer>
       </div>
