@@ -8,7 +8,6 @@ export default function EventsControls({
 }) {
   return (
     <div className="max-w-[1200px] mx-auto px-8 pb-12 flex flex-col items-center justify-center text-center">
-      {/* Filtre Butonları */}
       <nav
         className="flex flex-wrap gap-2 justify-center mb-10"
         aria-label="Etkinlik Filtreleri"
@@ -34,7 +33,6 @@ export default function EventsControls({
         })}
       </nav>
 
-      {/* Navigasyon (Ay Seçici) */}
       <div className="flex items-center gap-4 select-none">
         <button
           onClick={() => onNavigate(-1)}
