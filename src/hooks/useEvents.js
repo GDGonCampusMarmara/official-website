@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { EVENTS } from "../constants/eventsdata";
+import { EVENTS } from "../constants/eventsData";
 
 export function useEvents() {
   const [activeFilter, setActiveFilter] = useState("all");

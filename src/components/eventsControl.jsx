@@ -1,4 +1,4 @@
-import { FILTER_BUTTONS, FOCUS_CLASSES } from "../constants/eventsdata";
+import { FILTER_BUTTONS, FOCUS_CLASSES } from "../constants/eventsData";
 
 export default function EventsControls({
   activeFilter,

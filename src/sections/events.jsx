@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { useEvents } from "../hooks/useEvents";
 import { calcPos } from "../utils/calcpos";
-import EventCard from "../components/eventscard";
-import TimelineItem from "../components/timelineitem";
+import EventCard from "../components/eventsCard";
+import TimelineItem from "../components/timelineItem";
 import EventsControls from "../components/eventsControl";
 
 const MemoizedTimelineItem = memo(TimelineItem);

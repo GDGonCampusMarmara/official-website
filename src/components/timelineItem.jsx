@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FOCUS_CLASSES } from "../constants/eventsdata";
+import { FOCUS_CLASSES } from "../constants/eventsData";
 
 export default function TimelineItem({ ev }) {
   const navigate = useNavigate();

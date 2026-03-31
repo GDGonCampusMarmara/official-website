@@ -1,4 +1,4 @@
-import { FOCUS_CLASSES, CARD_POS } from "../constants/eventsdata";
+import { FOCUS_CLASSES, CARD_POS } from "../constants/eventsData";
 import { useNavigate } from "react-router-dom";
 
 export default function EventCard({ ev, posStr, onNavigate }) {
