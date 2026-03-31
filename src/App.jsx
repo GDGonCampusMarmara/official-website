@@ -4,8 +4,13 @@ import Hero from "./sections/hero";
 import About from "./sections/about";
 import Team from "./sections/team";
 import NotFound from "./pages/notFound";
+<<<<<<< events-section
 import Events from "./sections/events";
 import RegistrationClosed from "./pages/registrationClosed";
+=======
+import FAQ from "./sections/faq";
+import Contact from "./sections/contact";
+>>>>>>> main
 
 const HomePage = () => (
   <div className="min-h-screen bg-[#0a0d14]">
@@ -14,6 +19,8 @@ const HomePage = () => (
     <About />
     <Events />
     <Team />
+    <FAQ />
+    <Contact />
   </div>
 );
 
