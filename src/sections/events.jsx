@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { EVENTS, FILTER_BUTTONS, FOCUS_CLASSES } from "../constants/eventsdata";
 import { calcPos } from "../utils/calcpos";
 import EventCard from "../components/eventscard";
@@ -10,14 +10,11 @@ export default function Events() {
   const touchStartX = useRef(0);
   const isAnimRef = useRef(false);
 
-  const visibleEvents =
-    activeFilter === "all"
+  const visibleEvents = useMemo(() => {
+    return activeFilter === "all"
       ? EVENTS
       : EVENTS.filter((e) => e.focus === activeFilter);
-  const timelineEvents =
-    activeFilter === "all"
-      ? EVENTS
-      : EVENTS.filter((e) => e.focus === activeFilter);
+  }, [activeFilter]);
   const safeIdx = Math.min(currentIdx, Math.max(0, visibleEvents.length - 1));
 
   const navigate = useCallback(
