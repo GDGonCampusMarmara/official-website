@@ -177,22 +177,12 @@ export const FILTER_BUTTONS = [
   { label: 'Influencer', value: 'Influencer Marketing', focusKey: 'Influencer Marketing'},
 ];
 
-export const CARD_POS_DESKTOP = {
-  '0':  'w-[360px] [transform:translateX(0)_scale(1)_translateZ(0)] opacity-100 z-[5] [filter:blur(0px)] shadow-[0_0_0_1px_rgba(249,171,0,0.28),0_40px_80px_rgba(0,0,0,.7)]',
-  '1':  'w-[320px] [transform:translateX(340px)_scale(.82)_translateZ(-60px)] opacity-[.65] z-[4] [filter:blur(1.5px)]',
-  '2':  'w-[320px] [transform:translateX(580px)_scale(.66)_translateZ(-120px)] opacity-[.32] z-[3] [filter:blur(3px)]',
-  '-1': 'w-[320px] [transform:translateX(-340px)_scale(.82)_translateZ(-60px)] opacity-[.65] z-[4] [filter:blur(1.5px)]',
-  '-2': 'w-[320px] [transform:translateX(-580px)_scale(.66)_translateZ(-120px)] opacity-[.32] z-[3] [filter:blur(3px)]',
-  '3':  'w-[320px] [transform:translateX(0)_scale(.5)_translateZ(-200px)] opacity-0 z-[1] pointer-events-none',
-  '-3': 'w-[320px] [transform:translateX(0)_scale(.5)_translateZ(-200px)] opacity-0 z-[1] pointer-events-none',
-};
-
-export const CARD_POS_MOBILE = {
-  '0':  'w-[360px] [transform:translateX(0)_scale(1)_translateZ(0)] opacity-100 z-[5] [filter:blur(0px)] shadow-[0_0_0_1px_rgba(249,171,0,0.28),0_40px_80px_rgba(0,0,0,.7)]',
-  '1':  'w-[320px] [transform:translateX(220px)_scale(.8)_translateZ(-60px)] opacity-[.65] z-[4] [filter:blur(1.5px)]',
-  '2':  'w-[320px] [transform:translateX(0)_scale(.5)_translateZ(-200px)] opacity-0 z-[1] pointer-events-none',
-  '-1': 'w-[320px] [transform:translateX(-220px)_scale(.8)_translateZ(-60px)] opacity-[.65] z-[4] [filter:blur(1.5px)]',
-  '-2': 'w-[320px] [transform:translateX(0)_scale(.5)_translateZ(-200px)] opacity-0 z-[1] pointer-events-none',
-  '3':  'w-[320px] [transform:translateX(0)_scale(.5)_translateZ(-200px)] opacity-0 z-[1] pointer-events-none',
-  '-3': 'w-[320px] [transform:translateX(0)_scale(.5)_translateZ(-200px)] opacity-0 z-[1] pointer-events-none',
+export const CARD_POS = {
+  '0': 'w-[300px] md:w-[360px] z-[5] opacity-100 [filter:blur(0px)] shadow-[0_0_0_1px_rgba(249,171,0,0.28),0_40px_80px_rgba(0,0,0,.7)] [transform:translateX(0)_scale(1)_translateZ(0)]',
+  '1': 'w-[280px] md:w-[320px] z-[4] opacity-[.65] [filter:blur(1.5px)] [transform:translateX(220px)_scale(.8)_translateZ(-60px)] md:[transform:translateX(340px)_scale(.82)_translateZ(-60px)]',
+  '2': 'w-[280px] md:w-[320px] z-[1] md:z-[3] opacity-0 md:opacity-[.32] pointer-events-none md:pointer-events-auto [filter:blur(3px)] [transform:translateX(0)_scale(.5)_translateZ(-200px)] md:[transform:translateX(580px)_scale(.66)_translateZ(-120px)]',
+  '-1': 'w-[280px] md:w-[320px] z-[4] opacity-[.65] [filter:blur(1.5px)] [transform:translateX(-220px)_scale(.8)_translateZ(-60px)] md:[transform:translateX(-340px)_scale(.82)_translateZ(-60px)]',
+  '-2': 'w-[280px] md:w-[320px] z-[1] md:z-[3] opacity-0 md:opacity-[.32] pointer-events-none md:pointer-events-auto [filter:blur(3px)] [transform:translateX(0)_scale(.5)_translateZ(-200px)] md:[transform:translateX(-580px)_scale(.66)_translateZ(-120px)]',
+  '3': 'w-[280px] md:w-[320px] z-[1] opacity-0 pointer-events-none [transform:translateX(0)_scale(.5)_translateZ(-200px)]',
+  '-3': 'w-[280px] md:w-[320px] z-[1] opacity-0 pointer-events-none [transform:translateX(0)_scale(.5)_translateZ(-200px)]',
 };

@@ -1,15 +1,8 @@
-import {
-  FOCUS_CLASSES,
-  CARD_POS_DESKTOP,
-  CARD_POS_MOBILE,
-} from "../constants/eventsdata";
-import { useIsMobile } from "../hooks/useismobile";
+import { FOCUS_CLASSES, CARD_POS } from "../constants/eventsdata";
 
 export default function EventCard({ ev, posStr, onNavigate }) {
   const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["Affiliate Marketing"];
-  const isMobile = useIsMobile();
-  const posMap = isMobile ? CARD_POS_MOBILE : CARD_POS_DESKTOP;
-  const posClass = posMap[posStr] ?? posMap["3"];
+  const posClass = CARD_POS[posStr] ?? CARD_POS["3"];
 
   const handleClick = (e) => {
     if (e.target.tagName === "BUTTON" || e.target.tagName === "A") return;
@@ -65,7 +58,7 @@ export default function EventCard({ ev, posStr, onNavigate }) {
         >
           {ev.date} · {ev.month}
         </div>
-        <div className="font-['Google_Sans',sans-serif] text-[26px] leading-[1.05] text-[#f8f6f1] mb-[.6rem] tracking-[.02em]">
+        <div className="font-['Google_Sans',sans-serif] text-[22px] md:text-[26px] leading-[1.05] text-[#f8f6f1] mb-[.6rem] tracking-[.02em]">
           {ev.title}
         </div>
         <div className="flex items-center gap-[6px] text-[13px] text-[#f8f6f1]/45 mb-[.9rem]">
@@ -80,7 +73,7 @@ export default function EventCard({ ev, posStr, onNavigate }) {
           </svg>
           {ev.location}
         </div>
-        <p className="text-[13.5px] text-[#f8f6f1]/60 leading-[1.65] mb-[1.1rem] line-clamp-3">
+        <p className="text-[13px] md:text-[13.5px] text-[#f8f6f1]/60 leading-[1.65] mb-[1.1rem] line-clamp-3 font-light">
           {ev.desc}
         </p>
         <div className="h-px bg-white/10 mb-[1.1rem]" />
