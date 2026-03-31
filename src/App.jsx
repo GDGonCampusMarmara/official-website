@@ -4,6 +4,8 @@ import Hero from "./sections/hero";
 import About from "./sections/about";
 import Team from "./sections/team";
 import NotFound from "./pages/notFound";
+import Events from "./sections/events";
+import RegistrationClosed from "./pages/registrationClosed";
 import FAQ from "./sections/faq";
 import Contact from "./sections/contact";
 
@@ -12,6 +14,7 @@ const HomePage = () => (
     <Header />
     <Hero />
     <About />
+    <Events />
     <Team />
     <FAQ />
     <Contact />
@@ -23,7 +26,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-
+        <Route path="/basvuru-kapali" element={<RegistrationClosed />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

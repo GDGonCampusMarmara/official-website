@@ -1,4 +1,4 @@
-import { useScrollSpy } from "../hooks/useScrollSpy"; // Hook'u import et
+import { useScrollSpy } from "../hooks/useScrollSpy";
 import Button from "./common/button";
 
 const menuItems = [
