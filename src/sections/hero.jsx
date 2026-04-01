@@ -1,8 +1,10 @@
 import StarField from "../components/starField";
 import Button from "../components/common/button";
 import Icon from "../components/common/icon";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section
       id="hero"
@@ -26,8 +28,22 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-wrap gap-6 mt-10">
-            <Button variant="primary">Etkinlikleri Keşfet <Icon name="ArrowRight" size={20} /></Button>
-            <Button variant="secondary">Aramıza Katıl <Icon name="UserPlus" size={20} /></Button>
+            <Button
+              variant="primary"
+              onClick={() =>
+                document
+                  .getElementById("events")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Etkinlikleri Keşfet <Icon name="ArrowRight" size={20} />
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => navigate("/aramiza-katil")}
+            >
+              Aramıza Katıl
+            </Button>
           </div>
 
           <div className="flex flex-wrap gap-12 mt-16 border-t border-white/10 pt-10 w-full">

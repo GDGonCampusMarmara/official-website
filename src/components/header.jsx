@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import Button from "./common/button";
 
@@ -11,6 +12,7 @@ const menuItems = [
 ];
 
 const Header = () => {
+  const navigate = useNavigate();
   const { activeSection, isScrolled, scrollToSection } =
     useScrollSpy(menuItems);
 
@@ -63,7 +65,11 @@ const Header = () => {
           </ul>
         </nav>
 
-        <Button variant="primary" size="sm">
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={() => navigate("/aramiza-katil")}
+        >
           Aramıza Katıl
         </Button>
       </div>
