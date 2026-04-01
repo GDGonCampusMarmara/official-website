@@ -8,6 +8,7 @@ import Events from "./sections/events";
 import RegistrationClosed from "./pages/registrationClosed";
 import FAQ from "./sections/faq";
 import Contact from "./sections/contact";
+import JoinUs from "./pages/joinUs";
 
 const HomePage = () => (
   <div className="min-h-screen bg-[#0a0d14]">
@@ -27,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/basvuru-kapali" element={<RegistrationClosed />} />
+        <Route path="/aramiza-katil" element={<JoinUs />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
