@@ -70,7 +70,7 @@ const footer = () => {
                 <Icon name="Code" className="text-white" size={22} />
               </div>
               <span className="text-white font-black text-xl tracking-tighter">
-                GDG <span className="text-blue-500 font-medium">Marmara</span>
+                GDGoc<span className="text-blue-500 font-medium">Marmara</span>
               </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
