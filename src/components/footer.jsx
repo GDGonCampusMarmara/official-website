@@ -132,23 +132,6 @@ const footer = () => {
               </ul>
             </div>
           </div>
-
-          <div className="md:col-span-3 flex flex-col items-start md:items-end">
-            <h5 className="text-white font-bold text-xs uppercase tracking-widest mb-6">
-              Sosyal Medya
-            </h5>
-            <div className="flex gap-3">
-              {["Instagram", "Linkedin", "Youtube", "Github"].map((social) => (
-                <a
-                  key={social}
-                  href="#"
-                  className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all shadow-lg"
-                >
-                  <Icon name={social} size={18} />
-                </a>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-500 font-bold uppercase tracking-widest">
