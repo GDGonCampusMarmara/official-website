@@ -16,7 +16,7 @@ const SOCIALS = [
   },
 ];
 
-function GoogleAvatar({ photo, name }) {
+function GoogleAvatar({ photo = null, name }) {
   const initials = name
     .split(" ")
     .map((w) => w[0])
@@ -42,10 +42,6 @@ function GoogleAvatar({ photo, name }) {
 GoogleAvatar.propTypes = {
   photo: PropTypes.string,
   name: PropTypes.string.isRequired,
-};
-
-GoogleAvatar.defaultProps = {
-  photo: null,
 };
 
 const TeamCard = ({ member }) => {

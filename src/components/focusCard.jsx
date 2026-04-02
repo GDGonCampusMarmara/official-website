@@ -15,7 +15,7 @@ const FocusCard = ({ icon, title, description, borderColorClass }) => {
 };
 
 FocusCard.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.element.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   borderColorClass: PropTypes.string.isRequired,
