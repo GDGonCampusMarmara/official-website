@@ -1,6 +1,14 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
+const googleBoxShadow = `
+  -7px -7px 0px 2px #EA4335,
+   7px -7px 0px 2px #4285F4,
+  -7px  7px 0px 2px #f9ab00,
+   7px  7px 0px 6px #34A853,
+   0px  0px 24px 4px rgba(66,133,244,0.12)
+`;
+
 const SOCIALS = [
   {
     key: "linkedin",
