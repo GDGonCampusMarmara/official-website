@@ -10,6 +10,7 @@ import FAQ from "./sections/faq";
 import Contact from "./sections/contact";
 import JoinUs from "./pages/joinUs";
 import CookieConsent from "./components/common/cookieConsent";
+import Footer from "./components/footer";
 
 const HomePage = () => (
   <div className="min-h-screen bg-[#0a0d14]">
@@ -20,6 +21,7 @@ const HomePage = () => (
     <Team />
     <FAQ />
     <Contact />
+    <Footer />
   </div>
 );
 
