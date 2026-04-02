@@ -9,6 +9,7 @@ import RegistrationClosed from "./pages/registrationClosed";
 import FAQ from "./sections/faq";
 import Contact from "./sections/contact";
 import JoinUs from "./pages/joinUs";
+import CookieConsent from "./components/common/cookieConsent";
 
 const HomePage = () => (
   <div className="min-h-screen bg-[#0a0d14]">
@@ -31,6 +32,8 @@ function App() {
         <Route path="/aramiza-katil" element={<JoinUs />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      <CookieConsent />
     </Router>
   );
 }

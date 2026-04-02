@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../components/common/icon";
 
@@ -32,7 +31,6 @@ const JoinUs = () => {
     <div className="min-h-screen bg-[#0a0d14] text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
       <div className="absolute inset-0 z-0 opacity-20 [background-image:radial-gradient(#ffffff1a_1px,transparent_1px)] [background-size:40px_40px]"></div>
 
-      {/* 2. Renkli Işıklar (Glows) */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
