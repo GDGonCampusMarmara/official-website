@@ -12,23 +12,10 @@ export default function EventCard({ ev, posStr, onNavigate }) {
     if (pos !== 0) onNavigate(pos > 0 ? 1 : -1);
   };
 
-  const handleApplyClick = (e) => {
-    e.stopPropagation();
-    if (!ev.formLink || ev.formLink === "#") {
-      navigate("/basvuru-kapali");
-    } else {
-      window.open(ev.formLink, "_blank", "noopener,noreferrer");
-    }
-  };
-
   return (
     <article
       className={[
-        "absolute rounded-[24px] overflow-hidden cursor-pointer",
-        "bg-white/[4%] border border-white/10",
-        "transition-all duration-[750ms] ease-[cubic-bezier(.16,1,.3,1)]",
-        "[will-change:transform,opacity,filter]",
-        "select-none backdrop-blur-[20px]",
+        "absolute rounded-[24px] overflow-hidden cursor-pointer bg-white/[4%] border border-white/10 transition-all duration-[750ms] ease-[cubic-bezier(.16,1,.3,1)] [will-change:transform,opacity,filter] select-none backdrop-blur-[20px]",
         posClass,
       ].join(" ")}
       onClick={handleClick}
@@ -47,9 +34,7 @@ export default function EventCard({ ev, posStr, onNavigate }) {
         />
         <span
           className={[
-            "absolute top-[14px] left-[14px]",
-            "text-[11px] font-medium tracking-[.1em] uppercase",
-            "py-[5px] px-3 rounded-full",
+            "absolute top-[14px] left-[14px] text-[11px] font-medium tracking-[.1em] uppercase py-[5px] px-3 rounded-full",
             ev.past
               ? "bg-white/[15%] text-[#f8f6f1]/45"
               : `${fc.bg} ${fc.badgeText}`,
@@ -59,11 +44,10 @@ export default function EventCard({ ev, posStr, onNavigate }) {
         </span>
         {ev.attending && (
           <span className="absolute top-[14px] right-[14px] text-[11px] tracking-[.06em] uppercase py-[5px] px-3 rounded-full bg-[#34a853]/[18%] border border-[#34a853]/45 text-[#34a853]">
-            ✓ Attending
+            ✓ Katılıyoruz
           </span>
         )}
       </div>
-
       <div className="px-6 pt-[1.4rem] pb-6">
         <header>
           <div
@@ -83,7 +67,6 @@ export default function EventCard({ ev, posStr, onNavigate }) {
             {ev.title}
           </h4>
         </header>
-
         <div className="flex items-center gap-[6px] text-[13px] text-[#f8f6f1]/45 mb-[.9rem]">
           <svg
             viewBox="0 0 24 24"
@@ -97,26 +80,34 @@ export default function EventCard({ ev, posStr, onNavigate }) {
           </svg>
           <span aria-label={`Location: ${ev.location}`}>{ev.location}</span>
         </div>
-
         <p className="text-[13px] md:text-[13.5px] text-[#f8f6f1]/60 leading-[1.65] mb-[1.1rem] line-clamp-3 font-light">
           {ev.desc}
         </p>
-
         <div className="h-px bg-white/10 mb-[1.1rem]" aria-hidden="true" />
-
         <div className="flex">
-          <button
-            onClick={handleApplyClick}
+          <a
+            href={
+              ev.formLink && ev.formLink !== "#"
+                ? ev.formLink
+                : "/basvuru-kapali"
+            }
+            target={ev.formLink && ev.formLink !== "#" ? "_blank" : "_self"}
+            rel="noopener noreferrer"
             aria-label={`Details and application form for ${ev.title}`}
             className={[
-              "w-full flex items-center justify-center rounded-xl",
-              "py-[11px] px-3 text-[13px] font-medium tracking-[.02em]",
-              "transition-all duration-200 hover:-translate-y-px cursor-pointer",
+              "w-full flex items-center justify-center rounded-xl py-[11px] px-3 text-[13px] font-medium tracking-[.02em] transition-all duration-200 hover:-translate-y-px cursor-pointer",
               fc.primaryBtn,
             ].join(" ")}
+            onClick={(e) => {
+              if (!ev.formLink || ev.formLink === "#") {
+                e.preventDefault();
+                navigate("/basvuru-kapali");
+              }
+              e.stopPropagation();
+            }}
           >
-            Learn More & Apply
-          </button>
+            Daha Fazla & Başvur
+          </a>
         </div>
       </div>
     </article>
