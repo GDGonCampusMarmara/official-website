@@ -1,4 +1,3 @@
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import Icon from "./common/icon";
@@ -10,7 +9,7 @@ import "swiper/css/navigation";
 const footer = () => {
   const sponsorLogos = Array.from({ length: 17 }, (_, i) => ({
     id: i + 1,
-    path: `/src/assets/logos/logo-${i + 1}.webp`,
+    path: `/logos/logo-${i + 1}.webp`,
   }));
 
   const currentYear = new Date().getFullYear();

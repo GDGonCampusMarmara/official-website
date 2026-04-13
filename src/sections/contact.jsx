@@ -9,7 +9,6 @@ const Contact = () => {
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
     emailjs.init(publicKey);
-
     emailjs.sendForm(serviceId, templateId, e.target).then(
       (result) => {
         alert("Mesaj başarıyla gönderildi!");
@@ -32,28 +31,25 @@ const Contact = () => {
         className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px]"
         aria-hidden="true"
       ></div>
-
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16">
           <div className="space-y-8">
             <header>
-              <h2 className="text-blue-500 font-bold tracking-widest uppercase text-sm mb-4">
-                Bize Ulaşın
-              </h2>
-              <h3
+              <h2
                 id="contact-heading"
                 className="text-4xl md:text-5xl font-extrabold text-white mb-6"
               >
+                <span className="block text-blue-500 font-bold tracking-widest uppercase text-sm mb-4">
+                  Bize Ulaşın
+                </span>
                 Bir Sorumuz mu Var? <br />
                 <span className="text-gray-500">Hemen Yazın.</span>
-              </h3>
+              </h2>
               <p className="text-gray-400 text-lg max-w-md">
                 <strong>GDG Marmara</strong> etkinlikleri, projelerimiz veya
                 topluluğumuz hakkında merak ettiğiniz her şeyi sorabilirsiniz.
-                En kısa sürede dönüş yapacağız.
               </p>
             </header>
-
             <nav className="space-y-6" aria-label="Contact Information">
               {contactInfo.map((info, index) => (
                 <a
@@ -83,7 +79,6 @@ const Contact = () => {
               ))}
             </nav>
           </div>
-
           <div className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-3xl backdrop-blur-sm">
             <form
               className="space-y-6"
@@ -124,7 +119,6 @@ const Contact = () => {
                   />
                 </div>
               </div>
-
               <div className="space-y-2">
                 <label
                   htmlFor="msg_title"
@@ -141,7 +135,6 @@ const Contact = () => {
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
-
               <div className="space-y-2">
                 <label
                   htmlFor="user_message"
@@ -158,7 +151,6 @@ const Contact = () => {
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none"
                 ></textarea>
               </div>
-
               <button
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98]"

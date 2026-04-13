@@ -1,5 +1,4 @@
 import StarField from "../components/starField";
-import Button from "../components/common/button";
 import Icon from "../components/common/icon";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +11,6 @@ const Hero = () => {
       className="min-h-screen w-full pt-20 flex items-center justify-center bg-[#0a0d14] relative overflow-hidden z-10"
     >
       <StarField starCount={120} />
-
       <div className="container mx-auto px-6 relative z-10 flex justify-center">
         <div className="flex flex-col items-start text-left max-w-5xl w-full">
           <h1
@@ -24,35 +22,43 @@ const Hero = () => {
             <br />
             <span className="text-green-500">Üret.</span>
           </h1>
-
           <p className="text-gray-300 text-xl md:text-xl max-w-2xl mt-8 leading-relaxed font-normal opacity-90">
             Google Developer Groups tarafından desteklenen,{" "}
             <strong>Marmara Üniversitesi</strong>'nin teknoloji ve yazılım
             topluluğu. Öğren, geliştir ve ağını genişlet.
           </p>
-
           <div className="flex flex-wrap gap-6 mt-10">
-            <Button
-              variant="primary"
+            <a
+              href="#events"
               aria-label="Scroll down to explore events"
-              onClick={() =>
+              className="px-8 py-4 rounded-full font-bold text-lg bg-blue-600 hover:bg-blue-700 text-white shadow-xl shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center"
+              onClick={(e) => {
+                e.preventDefault();
                 document
                   .getElementById("events")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               Etkinlikleri Keşfet{" "}
-              <Icon name="ArrowRight" size={20} aria-hidden="true" />
-            </Button>
-            <Button
-              variant="secondary"
+              <Icon
+                name="ArrowRight"
+                size={20}
+                aria-hidden="true"
+                className="ml-2"
+              />
+            </a>
+            <a
+              href="/aramiza-katil"
               aria-label="Join the GDG Marmara community"
-              onClick={() => navigate("/aramiza-katil")}
+              className="px-8 py-4 rounded-full font-bold text-lg bg-white hover:bg-gray-100 text-black transition-all active:scale-95 flex items-center justify-center"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/aramiza-katil");
+              }}
             >
               Aramıza Katıl
-            </Button>
+            </a>
           </div>
-
           <div
             className="flex flex-wrap gap-12 mt-16 border-t border-white/10 pt-10 w-full"
             role="region"
