@@ -28,7 +28,6 @@ export default function Events() {
           className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
           aria-hidden="true"
         />
-
         <div className="flex flex-col items-center justify-center text-center">
           <header className="mb-12 px-8">
             <h2
@@ -43,7 +42,6 @@ export default function Events() {
               etkinlikleri keşfedin.
             </p>
           </header>
-
           <EventsControls
             activeFilter={activeFilter}
             onFilterChange={handleFilter}
@@ -53,7 +51,6 @@ export default function Events() {
             onNavigate={navigate}
           />
         </div>
-
         {visibleEvents.length > 0 ? (
           <>
             <div
@@ -71,6 +68,7 @@ export default function Events() {
               <div
                 className="relative w-full max-w-[1200px] h-full flex items-center justify-center"
                 role="list"
+                aria-label="List of events"
               >
                 {visibleEvents.map((ev, i) => (
                   <EventCard
@@ -78,22 +76,19 @@ export default function Events() {
                     ev={ev}
                     posStr={calcPos(i, safeIdx, visibleEvents.length)}
                     onNavigate={navigate}
-                    role="listitem"
                   />
                 ))}
               </div>
             </div>
-
             <footer className="max-w-[1200px] mx-auto mt-20 px-8">
               <div
                 className="text-[14px] uppercase text-white/45 mb-6 flex justify-between font-medium tracking-widest"
-                role="navigation"
+                role="region"
                 aria-label="Calendar summary"
               >
                 <span>Tüm Etkinlikler</span>
                 <span className="text-[#f9ab00]">2026</span>
               </div>
-
               <ul className="border border-white/10 rounded-2xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 overflow-hidden list-none p-0 m-0">
                 {visibleEvents.map((ev) => (
                   <li
@@ -105,7 +100,6 @@ export default function Events() {
                     </article>
                   </li>
                 ))}
-
                 {visibleEvents.length % 4 !== 0 &&
                   [...Array(4 - (visibleEvents.length % 4))].map((_, i) => (
                     <li

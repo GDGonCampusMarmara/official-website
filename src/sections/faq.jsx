@@ -9,29 +9,26 @@ const FAQ = () => {
       aria-labelledby="faq-title"
     >
       <StarField starCount={120} />
-
       <div
         className="absolute bottom-0 right-0 w-80 h-80 bg-red-600/5 rounded-full blur-[150px]"
         aria-hidden="true"
       ></div>
-
       <div className="container mx-auto px-6 relative z-10 max-w-4xl">
         <header className="text-center mb-16">
-          <h2 className="text-blue-500 font-bold tracking-widest uppercase text-sm mb-4">
-            Merak Edilenler
-          </h2>
-          <h3
+          <h2
             id="faq-title"
             className="text-4xl md:text-5xl font-extrabold text-white"
           >
+            <span className="block text-blue-500 font-bold tracking-widest uppercase text-sm mb-4">
+              Merak Edilenler
+            </span>
             Sıkça Sorulan Sorular
-          </h3>
+          </h2>
           <p className="sr-only">
             Answers to the most frequently asked questions about the GDG Marmara
             community and its events.
           </p>
         </header>
-
         <div
           className="faq-content-wrapper"
           role="region"

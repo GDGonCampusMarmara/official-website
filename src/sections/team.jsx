@@ -12,15 +12,14 @@ const Team = () => {
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap"
       />
-
       <header className="text-center mb-12">
-        <p className="text-base font-semibold tracking-widest uppercase mb-2 text-blue-400">
-          Ekibimiz
-        </p>
         <h2
           id="team-heading"
           className="text-6xl font-bold text-gray-900 font-['Google_Sans']"
         >
+          <span className="block text-base font-semibold tracking-widest uppercase mb-2 text-blue-400">
+            Ekibimiz
+          </span>
           Bizi <span className="text-black">Tanıyın</span>
         </h2>
         <div className="flex justify-center gap-1 mt-3" aria-hidden="true">
@@ -33,7 +32,6 @@ const Team = () => {
           Meet our core team leading the GDG Marmara community.
         </p>
       </header>
-
       <div
         className="max-w-screen-xl mx-auto flex flex-wrap justify-center gap-16"
         role="list"

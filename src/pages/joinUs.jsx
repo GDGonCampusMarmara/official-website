@@ -55,20 +55,16 @@ const JoinUs = () => {
           topluluğuna dahil ol.
         </p>
       </div>
-      <div
-        className="grid md:grid-cols-2 gap-8 w-full max-w-5xl relative z-10"
-        role="list"
-      >
+      <div className="grid md:grid-cols-2 gap-8 w-full max-w-5xl relative z-10">
         {options.map((option, index) => (
           <a
             key={index}
             href={option.link}
             target="_blank"
             rel="noopener noreferrer"
-            role="listitem"
             className={`group relative p-px rounded-[2.5rem] bg-gradient-to-b from-white/20 to-transparent transition-all duration-500 hover:-translate-y-3 ${option.glow}`}
           >
-            <div className="h-full w-full bg-[#0d111a]/90 backdrop-blur-xl rounded-[2.4rem] p-8 md:p-12 flex flex-col items-center text-center overflow-hidden relative">
+            <article className="h-full w-full bg-[#0d111a]/90 backdrop-blur-xl rounded-[2.4rem] p-8 md:p-12 flex flex-col items-center text-center overflow-hidden relative">
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${option.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                 aria-hidden="true"
@@ -96,7 +92,7 @@ const JoinUs = () => {
                   className="transform group-hover:translate-x-2 transition-transform"
                 />
               </div>
-            </div>
+            </article>
           </a>
         ))}
       </div>

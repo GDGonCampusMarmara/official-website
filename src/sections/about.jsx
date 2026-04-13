@@ -9,8 +9,10 @@ const About = () => {
       aria-labelledby="about-heading"
       className="min-h-screen w-full pt-20 bg-[#0a0d14] relative overflow-hidden"
     >
-      <div className="absolute top-1/2 left-0 w-72 h-72 bg-blue-600/5 rounded-full blur-[120px]"></div>
-
+      <div
+        className="absolute top-1/2 left-0 w-72 h-72 bg-blue-600/5 rounded-full blur-[120px]"
+        aria-hidden="true"
+      ></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <article className="flex flex-col gap-6 text-left">
@@ -35,11 +37,8 @@ const About = () => {
               ekosistemindeki en güncel gelişmeleri takip ederken, uygulamalı
               atölyelerle kendimizi geliştiriyoruz.
             </p>
-            <div className="flex gap-4 mt-4" role="list">
-              <div
-                role="listitem"
-                className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm flex items-center gap-2"
-              >
+            <div className="flex gap-4 mt-4" aria-label="Core values">
+              <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm flex items-center gap-2">
                 <Icon
                   name="Zap"
                   size={18}
@@ -48,10 +47,7 @@ const About = () => {
                 />
                 <span>İnovasyon Odaklı</span>
               </div>
-              <div
-                role="listitem"
-                className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm flex items-center gap-2"
-              >
+              <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-sm flex items-center gap-2">
                 <Icon
                   name="Users"
                   size={18}
@@ -62,7 +58,6 @@ const About = () => {
               </div>
             </div>
           </article>
-
           <div
             className="grid sm:grid-cols-2 gap-6"
             role="region"

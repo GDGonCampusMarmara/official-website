@@ -7,12 +7,11 @@ const FAQCard = () => {
     setActiveIndex(activeIndex === index ? null : index);
   };
   return (
-    <div className="space-y-4" role="list">
+    <div className="space-y-4">
       {faqs.map((faq, index) => (
         <div
           key={index}
           className="bg-white/10 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300"
-          role="listitem"
         >
           <button
             onClick={() => toggleFAQ(index)}
