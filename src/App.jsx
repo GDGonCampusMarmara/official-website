@@ -1,41 +1,49 @@
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/header";
-import Hero from "./sections/hero";
-import About from "./sections/about";
-import Team from "./sections/team";
-import NotFound from "./pages/notFound";
-import Events from "./sections/events";
-import RegistrationClosed from "./pages/registrationClosed";
-import FAQ from "./sections/faq";
-import Contact from "./sections/contact";
-import JoinUs from "./pages/joinUs";
-import CookieConsent from "./components/common/cookieConsent";
 import Footer from "./components/footer";
+import CookieConsent from "./components/common/cookieConsent";
+import Hero from "./sections/hero";
+
+const About = lazy(() => import("./sections/about"));
+const Events = lazy(() => import("./sections/events"));
+const Team = lazy(() => import("./sections/team"));
+const FAQ = lazy(() => import("./sections/faq"));
+const Contact = lazy(() => import("./sections/contact"));
+const JoinUs = lazy(() => import("./pages/joinUs"));
+const NotFound = lazy(() => import("./pages/notFound"));
+const RegistrationClosed = lazy(() => import("./pages/registrationClosed"));
 
 const HomePage = () => (
-  <main className="min-h-screen bg-[#0a0d14]">
-    <Header />
+  <>
     <Hero />
-    <About />
-    <Events />
-    <Team />
-    <FAQ />
-    <Contact />
-    <Footer />
-  </main>
+    <Suspense fallback={<div className="h-screen bg-[#0a0d14]" />}>
+      <Header />
+      <About />
+      <Events />
+      <Team />
+      <FAQ />
+      <Contact />
+      <Footer />
+    </Suspense>
+  </>
 );
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/basvuru-kapali" element={<RegistrationClosed />} />
-        <Route path="/aramiza-katil" element={<JoinUs />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <div className="bg-[#0a0d14] min-h-screen text-white selection:bg-blue-500/30">
+        <main id="main-content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/aramiza-katil" element={<JoinUs />} />
+            <Route path="/basvuru-kapali" element={<RegistrationClosed />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
 
-      <CookieConsent />
+        <CookieConsent />
+      </div>
     </Router>
   );
 }
