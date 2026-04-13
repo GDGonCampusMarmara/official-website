@@ -45,10 +45,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-## 📫 Contact
-
-**GDG on Campus Marmara University** [Official Website](https://gdgmarmara.com) | [Instagram](https://instagram.com/gdgmarmara) | [LinkedIn](https://linkedin.com/company/gdgmarmara)
-
-```
-
-```
