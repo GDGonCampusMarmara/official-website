@@ -1,27 +1,46 @@
-# GDG on Campus Marmara University - Web Project
+# GDG on Campus Marmara University - Official Website
 
-This is the official web repository for the **Google Developer Groups (GDG) on Campus at Marmara University**. Our goal is to provide a platform where students can learn, collaborate, and grow their technical skills through community-driven projects.
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
 
----
-
-## 🚧 Project Status: Work in Progress (WIP)
-
-Please note that this project is currently **under active development**. Some features might be missing or unstable as we continue to build and improve the platform.
-
-> **Current Focus:** Building the core UI components and setting up the backend integration.
+The official web platform for the **Google Developer Groups (GDG) on Campus Marmara University** community. Built with performance, accessibility, and modern aesthetics in mind, this site serves as the primary hub for our events, team introductions, and community registration.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Status: Initial Demo Ready
 
-_Instructions on how to run the project locally will be added soon._
+We are excited to announce that the **Initial Demo is now live!** While the core structure and primary sections (Hero, About, Events, Team, FAQ) are fully functional and optimized, the project is still an **active work in progress**. We are currently refining mobile responsiveness, adding dynamic content integration, and polishing advanced animations.
+
+### Why is work still continuing?
+
+Technology moves fast, and so do we. We are implementing:
+
+- **Performance Optimization:** Achieving 95+ scores on all Lighthouse metrics.
+- **Dynamic Event Tracking:** Moving from static data to a more flexible architecture.
+- **Accessibility (a11y):** Ensuring every student can navigate our site seamlessly.
 
 ---
 
-## 📞 Contact
+## ✨ Features
 
-If you have any questions or want to get involved, reach out to us via our official channels or visit the **Marmara University** campus office.
+- **Modern UI/UX:** Designed with "Google Sans" and Google's signature color palette.
+- **High Performance:** Optimized with React Lazy Loading and Vite for near-instant load times.
+- **SEO Optimized:** Meta-tags and structured data ready for search engines.
+- **Interactive Event Calendar:** A 3D-perspective carousel to browse upcoming community meetups.
+- **Responsive Design:** Fully adapted for Desktop and currently being polished for Mobile/Tablet.
 
 ---
 
-_Proudly supported by Google Developer Group on Campus Marmara Developers._
+## 🛠️ Project Structure
+
+```text
+src/
+├── components/     # Reusable UI units (Cards, Buttons, Navbar)
+├── sections/       # Main landing page segments (Hero, Events, etc.)
+├── pages/          # Full-page components (JoinUs, NotFound)
+├── hooks/          # Custom React hooks (useScrollSpy, useEvents)
+├── constants/      # Static data and configuration files
+└── utils/          # Helper functions (Position calculations, etc.)
+```
