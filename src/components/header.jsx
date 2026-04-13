@@ -25,7 +25,11 @@ const Header = () => {
       }`}
     >
       <div className="container mx-auto px-6 h-full flex items-center justify-between">
-        <a href="#hero" onClick={(e) => scrollToSection(e, "hero")}>
+        <a
+          href="#hero"
+          onClick={(e) => scrollToSection(e, "hero")}
+          aria-label="GDG Marmara Homepage"
+        >
           <img
             src="/logo.svg"
             className={`transition-all duration-500 ease-in-out object-contain ${
@@ -33,32 +37,33 @@ const Header = () => {
                 ? "h-18 w-auto opacity-90"
                 : "h-20 w-auto opacity-100 scale-110"
             }`}
-            alt="Logo"
+            alt="Google Developer Groups on Campus Marmara University Logo"
           />
         </a>
 
-        <nav className="hidden md:block">
+        <nav className="hidden md:block" aria-label="Main Navigation">
           <ul className="flex gap-10">
             {menuItems.map((item) => (
               <li key={item.id} className="relative py-2">
                 <a
                   href={item.href}
                   onClick={(e) => scrollToSection(e, item.id)}
+                  aria-current={activeSection === item.id ? "page" : undefined}
                   className={`text-sm font-semibold transition-all ${
                     activeSection === item.id
                       ? "text-blue-500"
-                      : "text-white/70"
+                      : "text-white/70 hover:text-white"
                   }`}
                 >
                   {item.name}
                 </a>
-                {/* Aktif çizgi animasyonu */}
                 <div
                   className={`absolute -bottom-1 left-0 h-[2px] bg-blue-500 transition-all ${
                     activeSection === item.id
                       ? "w-full opacity-100"
                       : "w-0 opacity-0"
                   }`}
+                  aria-hidden="true"
                 />
               </li>
             ))}
@@ -68,6 +73,7 @@ const Header = () => {
         <Button
           variant="primary"
           size="sm"
+          aria-label="Go to the application page to join the community"
           onClick={() => navigate("/aramiza-katil")}
         >
           Aramıza Katıl

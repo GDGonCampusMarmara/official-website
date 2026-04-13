@@ -20,19 +20,27 @@ export default function Events() {
   return (
     <section
       id="events"
+      aria-labelledby="events-title"
       className="bg-[#0a0d14] text-[#f8f6f1] overflow-x-hidden font-sans"
     >
       <div id="calendar-content" className="relative bg-[#0a0d14] py-24 pb-32">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div
+          className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          aria-hidden="true"
+        />
 
         <div className="flex flex-col items-center justify-center text-center">
           <header className="mb-12 px-8">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#f8f6f1] mb-4">
+            <h2
+              id="events-title"
+              className="text-4xl md:text-5xl font-bold tracking-tight text-[#f8f6f1] mb-4"
+            >
               Etkinlik{" "}
               <em className="italic text-[#f9ab00] not-italic">Takvimi</em>
             </h2>
             <p className="text-[#f8f6f1]/40 text-sm md:text-base max-w-[500px] mx-auto leading-relaxed font-light">
-              Gelecek etkinlikleri keşfedin ve topluluğumuza katılın.
+              <strong>GDG Marmara</strong> tarafından düzenlenen gelecek
+              etkinlikleri keşfedin.
             </p>
           </header>
 
@@ -50,6 +58,8 @@ export default function Events() {
           <>
             <div
               className="relative w-full h-[560px] flex items-center justify-center [perspective:1200px] touch-pan-y"
+              role="region"
+              aria-label="Event cards view"
               onTouchStart={(e) => {
                 touchStartX.current = e.touches[0].clientX;
               }}
@@ -58,20 +68,28 @@ export default function Events() {
                 if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
               }}
             >
-              <div className="relative w-full max-w-[1200px] h-full flex items-center justify-center">
+              <div
+                className="relative w-full max-w-[1200px] h-full flex items-center justify-center"
+                role="list"
+              >
                 {visibleEvents.map((ev, i) => (
                   <EventCard
                     key={ev.id}
                     ev={ev}
                     posStr={calcPos(i, safeIdx, visibleEvents.length)}
                     onNavigate={navigate}
+                    role="listitem"
                   />
                 ))}
               </div>
             </div>
 
             <footer className="max-w-[1200px] mx-auto mt-20 px-8">
-              <div className="text-[14px] uppercase text-white/45 mb-6 flex justify-between font-medium tracking-widest">
+              <div
+                className="text-[14px] uppercase text-white/45 mb-6 flex justify-between font-medium tracking-widest"
+                role="navigation"
+                aria-label="Calendar summary"
+              >
                 <span>Tüm Etkinlikler</span>
                 <span className="text-[#f9ab00]">2026</span>
               </div>
@@ -82,9 +100,9 @@ export default function Events() {
                     key={ev.id}
                     className="bg-[#0a0d14] flex m-0 p-0 items-stretch"
                   >
-                    <div className="w-full flex">
+                    <article className="w-full flex">
                       <MemoizedTimelineItem ev={ev} />
-                    </div>
+                    </article>
                   </li>
                 ))}
 
@@ -93,16 +111,14 @@ export default function Events() {
                     <li
                       key={`empty-${i}`}
                       className="bg-[#0a0d14] hidden lg:block"
+                      aria-hidden="true"
                     />
                   ))}
               </ul>
             </footer>
           </>
         ) : (
-          <div className="py-32 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 border border-white/10 mb-6">
-              <span className="text-[#f9ab00] text-2xl">!</span>
-            </div>
+          <div className="py-32 text-center" role="status" aria-live="polite">
             <p className="text-[#f8f6f1]/60 text-lg font-light tracking-wide">
               Şuan planlanan etkinlik yok
             </p>

@@ -28,9 +28,16 @@ function GoogleAvatar({ photo = null, name }) {
     <div className="rounded-full p-[3px] w-[76px] h-[76px] bg-white-500">
       <div className="w-full h-full rounded-full overflow-hidden bg-white flex items-center justify-center">
         {photo ? (
-          <img src={photo} alt={name} className="w-full h-full object-cover" />
+          <img
+            src={photo}
+            alt={`${name} profile`}
+            className="w-full h-full object-cover"
+          />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-white text-xl font-bold select-none bg-[conic-gradient(#EA4335_0deg_90deg,#f9ab00_90deg_180deg,#34A853_180deg_270deg,#4285F4_270deg_360deg)]">
+          <div
+            className="w-full h-full flex items-center justify-center text-white text-xl font-bold select-none bg-[conic-gradient(#EA4335_0deg_90deg,#f9ab00_90deg_180deg,#34A853_180deg_270deg,#4285F4_270deg_360deg)]"
+            aria-label={name}
+          >
             {initials}
           </div>
         )}
@@ -74,23 +81,30 @@ const TeamCard = ({ member }) => {
         </span>
       </div>
 
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+      <div
+        className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+        aria-hidden="true"
+      />
 
       <div className="flex items-center gap-2 w-full group/email">
         <svg
           className="w-3.5 h-3.5 text-gray-400 group-hover/email:text-blue-500 transition-colors flex-shrink-0"
           fill="none"
           stroke="currentColor"
+          strokeWidth="1.8"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={1.8}
             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
           />
         </svg>
-        <span className="text-xs text-gray-400 border-b border-dotted border-gray-200 pb-px w-full group-hover/email:border-blue-300 transition-colors font-['Google_Sans']">
+        <span
+          className="text-xs text-gray-400 border-b border-dotted border-gray-200 pb-px w-full group-hover/email:border-blue-300 transition-colors font-['Google_Sans']"
+          aria-label={`Email address: ${member.email}`}
+        >
           {member.email}
         </span>
       </div>
@@ -101,10 +115,16 @@ const TeamCard = ({ member }) => {
             key={s.key}
             href={member[s.key] || "#"}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
+            aria-label={`${member.name}'s ${s.key} profile`}
             className="w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95 bg-[#0A66C215]"
           >
-            <img src={s.icon} className="w-3.5 h-3.5" alt="linkedin" />
+            <img
+              src={s.icon}
+              className="w-3.5 h-3.5"
+              alt={`${s.key} icon`}
+              aria-hidden="true"
+            />
           </a>
         ))}
       </div>
