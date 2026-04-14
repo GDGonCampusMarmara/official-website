@@ -6,7 +6,7 @@ import SponsorCard from "./sponsorCard";
 import "swiper/css";
 import "swiper/css/navigation";
 
-const footer = () => {
+const Footer = () => {
   const sponsorLogos = Array.from({ length: 17 }, (_, i) => ({
     id: i + 1,
     path: `/logos/logo-${i + 1}.webp`,
@@ -15,14 +15,14 @@ const footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0d111a] border-t border-white/10 pt-24 pb-12 font-['Google_Sans']">
+    <footer className="bg-[#0d111a] border-t border-white/10 pt-16 md:pt-24 pb-12 font-['Google_Sans']">
       <div className="container mx-auto px-6">
         <div
-          className="mb-32 relative group"
+          className="mb-20 md:mb-32 relative group"
           role="region"
           aria-label="Our Sponsors"
         >
-          <div className="text-center mb-16 relative z-10">
+          <div className="text-center mb-10 md:mb-16 relative z-10">
             <h4 className="inline-block px-4 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-400 text-[10px] font-bold uppercase tracking-[0.3em]">
               Sponsorlarımız & Partnerlerimiz
             </h4>
@@ -30,8 +30,8 @@ const footer = () => {
 
           <Swiper
             modules={[Autoplay, Navigation]}
-            spaceBetween={24}
-            slidesPerView={2}
+            spaceBetween={20}
+            slidesPerView={2.5}
             loop={true}
             centeredSlides={true}
             autoplay={{
@@ -43,15 +43,15 @@ const footer = () => {
               prevEl: ".swiper-button-prev-custom",
             }}
             breakpoints={{
-              640: { slidesPerView: 3 },
-              1024: { slidesPerView: 5 },
+              640: { slidesPerView: 3, spaceBetween: 24 },
+              1024: { slidesPerView: 5, spaceBetween: 30 },
             }}
             className="px-0 md:px-12"
           >
             {sponsorLogos.map((logo) => (
               <SwiperSlide
                 key={logo.id}
-                className="flex items-center justify-center py-6"
+                className="flex items-center justify-center py-4 md:py-6"
                 role="listitem"
               >
                 <SponsorCard
@@ -64,21 +64,21 @@ const footer = () => {
           </Swiper>
 
           <button
-            className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition-all opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 shadow-xl backdrop-blur-md"
+            className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/5 border border-white/10 rounded-full hidden md:flex items-center justify-center text-white hover:bg-blue-600 transition-all opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 backdrop-blur-md"
             aria-label="Previous sponsors"
           >
-            <Icon name="ChevronLeft" size={24} aria-hidden="true" />
+            <Icon name="ChevronLeft" size={20} aria-hidden="true" />
           </button>
           <button
-            className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/10 border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 shadow-xl backdrop-blur-md"
+            className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/5 border border-white/10 rounded-full hidden md:flex items-center justify-center text-white hover:bg-blue-600 transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 backdrop-blur-md"
             aria-label="Next sponsors"
           >
-            <Icon name="ChevronRight" size={24} aria-hidden="true" />
+            <Icon name="ChevronRight" size={20} aria-hidden="true" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 border-t border-white/5 pt-20">
-          <div className="md:col-span-5 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 border-t border-white/5 pt-16">
+          <div className="md:col-span-5 space-y-6 text-center md:text-left flex flex-col items-center md:items-start">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
                 <Icon
@@ -99,7 +99,7 @@ const footer = () => {
           </div>
 
           <nav
-            className="md:col-span-4 grid grid-cols-2 gap-8"
+            className="md:col-span-7 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center md:text-left"
             aria-label="Footer Navigation"
           >
             <div className="space-y-4">
@@ -159,8 +159,8 @@ const footer = () => {
           </nav>
         </div>
 
-        <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-          <p>
+        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-center">
+          <p className="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] leading-loose">
             © {currentYear} GDG on Campus Marmara University. Tüm hakları
             saklıdır.
           </p>
@@ -170,4 +170,4 @@ const footer = () => {
   );
 };
 
-export default footer;
+export default Footer;
