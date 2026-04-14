@@ -83,7 +83,7 @@ By participating in this project, you agree to abide by the Google Open Source [
 
 - **Official GDG Guidelines:** [Google Developers](https://developers.google.com/community/gdg)
 - **Tailwind Documentation:** [Tailwind CSS Docs](https://tailwindcss.com/docs)
-- **React Documentation:** [Tailwind CSS Docs](https://tr.react.dev/)
+- **React Documentation:** [React Docs](https://tr.react.dev/)
 
 ### Additional Support
 
