@@ -12,14 +12,12 @@ const Hero = () => {
     >
       <StarField starCount={120} />
       <div className="container mx-auto px-6 relative z-10 flex justify-center">
-        {/* Mobilde text-center, desktopta text-left */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left max-w-5xl w-full">
           <h1
             id="hero-title"
             className="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-[1.2] md:leading-[1.1] tracking-tighter text-white"
           >
             <span className="text-blue-500">Bağlan.</span>
-            {/* Mobilde alt alta gelmesi için ml-0 md:ml-6 kullandık */}
             <span className="text-red-500 block md:inline md:ml-6">
               Paylaş.
             </span>
@@ -33,7 +31,6 @@ const Hero = () => {
             teknoloji ve yazılım topluluğu. Öğren, geliştir ve ağını genişlet.
           </p>
 
-          {/* Butonlar mobilde alt alta (flex-col), desktopta yan yana (flex-row) */}
           <div className="flex flex-col sm:flex-row gap-4 md:gap-6 mt-10 w-full sm:w-auto">
             <a
               href="#events"
@@ -60,7 +57,6 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* İstatistikler mobilde 3 sütunlu ızgara yapısı */}
           <div
             className="grid grid-cols-3 md:flex gap-4 md:gap-12 mt-16 border-t border-white/10 pt-10 w-full"
             role="region"
