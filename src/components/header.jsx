@@ -19,7 +19,6 @@ const Header = () => {
   const { activeSection, isScrolled, scrollToSection } =
     useScrollSpy(menuItems);
 
-  // Menü açıkken sayfanın arkadan kaymasını engelle (UX için kritik)
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -29,7 +28,7 @@ const Header = () => {
   }, [isMenuOpen]);
 
   const handleMobileNav = (e, id) => {
-    setIsMenuOpen(false); // Menü tıklandığında kapat
+    setIsMenuOpen(false);
     scrollToSection(e, id);
   };
 
@@ -42,7 +41,6 @@ const Header = () => {
       }`}
     >
       <div className="container mx-auto px-6 h-full flex items-center justify-between">
-        {/* Logo - Mobilde menü üstünde kalması için z-index yüksek tutuldu */}
         <a
           href="#hero"
           onClick={(e) => scrollToSection(e, "hero")}
@@ -58,7 +56,6 @@ const Header = () => {
           />
         </a>
 
-        {/* Masaüstü Navigasyon */}
         <nav className="hidden md:block">
           <ul className="flex gap-8 lg:gap-10">
             {menuItems.map((item) => (
@@ -74,7 +71,6 @@ const Header = () => {
                 >
                   {item.name}
                 </a>
-                {/* Alt çizgi animasyonu */}
                 <div
                   className={`absolute -bottom-1 left-0 h-[2px] bg-blue-500 transition-all duration-300 ${
                     activeSection === item.id
@@ -87,7 +83,6 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Masaüstü Buton */}
         <div className="hidden md:block">
           <Button
             variant="primary"
@@ -98,7 +93,6 @@ const Header = () => {
           </Button>
         </div>
 
-        {/* Hamburger Menü Butonu (Sadece Mobil) */}
         <button
           className="md:hidden relative z-[70] p-2 text-white outline-none"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -107,13 +101,11 @@ const Header = () => {
           <Icon name={isMenuOpen ? "X" : "Menu"} size={30} />
         </button>
 
-        {/* MOBİL MENÜ PANELİ */}
         <div
           className={`fixed inset-0 bg-[#0a0d14] z-[60] flex flex-col transition-transform duration-500 ease-in-out md:hidden ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          {/* Menü Elemanları Listesi */}
           <nav className="flex flex-col h-full pt-32 px-10 pb-12 overflow-y-auto">
             <ul className="flex flex-col gap-6">
               {menuItems.map((item, index) => (
@@ -141,7 +133,6 @@ const Header = () => {
               ))}
             </ul>
 
-            {/* Mobilde Menü Altındaki Buton */}
             <div
               className={`mt-12 transition-all duration-700 delay-300 ${
                 isMenuOpen
@@ -161,7 +152,6 @@ const Header = () => {
               </Button>
             </div>
 
-            {/* Küçük Bilgi Notu */}
             <div className="mt-auto text-center">
               <p className="text-gray-500 text-[10px] uppercase tracking-[0.3em] font-bold">
                 GDG on Campus Marmara
