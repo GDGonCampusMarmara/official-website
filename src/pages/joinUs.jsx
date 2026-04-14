@@ -27,74 +27,84 @@ const JoinUs = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0d14] text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0d14] text-white flex flex-col items-center justify-center p-6 relative overflow-hidden overflow-y-auto">
       <div
         className="absolute inset-0 z-0 opacity-20 [background-image:radial-gradient(#ffffff1a_1px,transparent_1px)] [background-size:40px_40px]"
         aria-hidden="true"
       ></div>
+
       <Link
         to="/"
-        aria-label="Return to Homepage"
-        className="absolute top-8 left-8 z-50 flex items-center gap-2 text-gray-400 hover:text-white transition-all group"
+        className="absolute top-6 left-6 md:top-8 md:left-8 z-50 flex items-center gap-2 text-gray-400 hover:text-white transition-all group"
       >
-        <div className="p-2 bg-white/5 rounded-lg border border-white/10 group-hover:border-white/20 transition-all">
-          <Icon name="ArrowLeft" size={18} />
+        <div className="p-2 bg-white/5 rounded-lg border border-white/10 group-hover:border-white/20">
+          <Icon name="ArrowLeft" size={16} />
         </div>
-        <span className="font-medium">Ana Sayfaya Dön</span>
+        <span className="font-medium text-sm md:text-base">Geri Dön</span>
       </Link>
-      <div className="text-center mb-16 relative z-10">
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-none">
+
+      <div className="text-center mt-20 mb-12 md:mb-16 relative z-10 w-full">
+        <h1 className="text-4xl md:text-7xl font-extrabold mb-4 md:mb-6 tracking-tight leading-tight md:leading-none">
           Geleceği <br className="md:hidden" />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-300">
             Birlikte
           </span>{" "}
           Kuralım
         </h1>
-        <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+        <p className="text-gray-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
           Sana en uygun yolu seç ve Marmara Üniversitesi'nin en aktif teknoloji
           topluluğuna dahil ol.
         </p>
       </div>
-      <div className="grid md:grid-cols-2 gap-8 w-full max-w-5xl relative z-10">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full max-w-5xl relative z-10">
         {options.map((option, index) => (
           <a
             key={index}
             href={option.link}
             target="_blank"
             rel="noopener noreferrer"
-            className={`group relative p-px rounded-[2.5rem] bg-gradient-to-b from-white/20 to-transparent transition-all duration-500 hover:-translate-y-3 ${option.glow}`}
+            className={`group relative p-px rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-b from-white/20 to-transparent transition-all duration-500 hover:-translate-y-2 active:scale-[0.98] ${option.glow}`}
           >
-            <article className="h-full w-full bg-[#0d111a]/90 backdrop-blur-xl rounded-[2.4rem] p-8 md:p-12 flex flex-col items-center text-center overflow-hidden relative">
+            <article className="h-full w-full bg-[#0d111a]/90 backdrop-blur-xl rounded-[1.9rem] md:rounded-[2.4rem] p-8 md:p-12 flex flex-col items-center text-center overflow-hidden relative">
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${option.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                 aria-hidden="true"
               ></div>
-              <div className="relative mb-8">
-                <div className="w-24 h-24 bg-white/5 rounded-3xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-all duration-500">
+
+              <div className="relative mb-6 md:mb-8">
+                <div className="w-20 h-20 md:w-24 md:h-24 bg-white/5 rounded-2xl md:rounded-3xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-all duration-500">
                   <Icon
                     name={option.icon}
-                    className={`${option.color} transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-500`}
-                    size={48}
+                    className={`${option.color} transform group-hover:scale-110 md:group-hover:scale-125 transition-all duration-500`}
+                    size={40}
                   />
                 </div>
               </div>
-              <h2 className="text-3xl font-bold mb-4 relative z-10">
+
+              <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 relative z-10">
                 {option.title}
               </h2>
-              <p className="text-gray-400 mb-10 leading-relaxed text-base relative z-10">
+
+              <p className="text-gray-400 mb-8 md:mb-10 leading-relaxed text-sm md:text-base relative z-10 px-2">
                 {option.description}
               </p>
-              <div className="mt-auto w-full py-4 rounded-2xl border border-white/10 bg-white/5 group-hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-3 font-bold text-sm uppercase tracking-widest relative z-10">
+
+              <div className="mt-auto w-full py-4 rounded-xl md:rounded-2xl border border-white/10 bg-white/5 group-hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-3 font-bold text-xs md:text-sm uppercase tracking-widest relative z-10">
                 <span>Başvuruyu Başlat</span>
                 <Icon
                   name="ArrowRight"
-                  size={18}
+                  size={16}
                   className="transform group-hover:translate-x-2 transition-transform"
                 />
               </div>
             </article>
           </a>
         ))}
+      </div>
+
+      <div className="mt-12 opacity-30 text-[10px] uppercase tracking-widest">
+        GDG Marmara • 2026
       </div>
     </div>
   );
