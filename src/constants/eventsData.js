@@ -41,7 +41,7 @@ export const EVENTS = [
     focus: 'Tech Talk',
     desc: 'Bu seri,değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 1. Oturumda Patterns, Trade-offs & Design Thinking konuları konuşulacaktır.',
     img: event1Svg,
-    formLink: '#',
+    formLink: 'https://forms.gle/Vs2e1ZCcR1My4yiQ7',
     link: '#',
   },
   {
