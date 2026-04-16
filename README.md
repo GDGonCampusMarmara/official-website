@@ -4,22 +4,27 @@ The official web platform for the **Google Developer Groups (GDG) on Campus Marm
 
 ---
 
-## Status: Initial Demo & Work in Progress (WIP)
+## 🚀 Status: Live & Under Continuous Development
 
-We are excited to announce that the core structure and primary sections (Hero, About, Events, Team, FAQ) are fully functional and optimized but the project is still an **active work in progress**.
+We are proud to announce that the website is now **live!** You can visit the official platform at:
+
+**🔗 [gdgocmarmara.com](https://gdgocmarmara.com)** 
+
+### Work in Progress (WIP) Notice
+While the core features (Hero, About, Events, Team, FAQ) are fully functional and optimized, the project is still undergoing active development. We are constantly shipping small improvements and new features to enhance the user experience.
+
+---
 
 ## Installation & Setup
 
 To run this project locally and explore the code:
 
 1. **Clone the repository:**
-
    ```bash
-   git clone [https://github.com/GDGonCampusMarmara/official-website.git](https://github.com/GDGonCampusMarmara/official-website.git)
+   git clone https://github.com/GDGonCampusMarmara/official-website.git
    ```
 
 2. **Install dependencies:**
-
    ```bash
    npm install
    ```
@@ -42,6 +47,3 @@ Please refer to our **[CONTRIBUTING.md](CONTRIBUTING.md)** for detailed submissi
 ## 📜 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
