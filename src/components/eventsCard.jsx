@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function EventCard({ ev, posStr, onNavigate }) {
   const navigate = useNavigate();
-  const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["Affiliate Marketing"];
+  const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["All"];
   const posClass = CARD_POS[posStr] ?? CARD_POS["3"];
 
   const handleClick = (e) => {
@@ -28,7 +28,7 @@ export default function EventCard({ ev, posStr, onNavigate }) {
             src={ev.img}
             alt={`${ev.title} event cover`}
             loading="lazy"
-            className="w-full h-full object-cover block"
+            className="w-full h-full object-cover object-top block"
           />
           <div
             className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_40%,rgba(5,5,5,0.85))]"
