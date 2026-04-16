@@ -3,26 +3,38 @@ import { EVENTS } from "../constants/eventsData";
 
 export function useEvents() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [currentIdx, setCurrentIdx] = useState(2);
+  const [currentIdx, setCurrentIdx] = useState(0);
   const touchStartX = useRef(0);
   const isAnimRef = useRef(false);
 
   const visibleEvents = useMemo(() => {
-    return activeFilter === "all"
-      ? EVENTS
-      : EVENTS.filter((e) => e.focus === activeFilter);
+    const today = new Date();
+
+    const sorted = [...EVENTS].sort((a, b) => {
+      return new Date(a.timestamp) - new Date(b.timestamp);
+    });
+
+    return sorted
+      .map((ev) => ({
+        ...ev,
+        past: new Date(ev.timestamp) < today,
+      }))
+      .filter((e) => (activeFilter === "all" ? true : e.focus === activeFilter));
   }, [activeFilter]);
 
   const safeIdx = Math.min(currentIdx, Math.max(0, visibleEvents.length - 1));
 
-  const navigate = useCallback((dir) => {
-    if (isAnimRef.current || visibleEvents.length <= 1) return;
-    isAnimRef.current = true;
-    setCurrentIdx((prev) => (prev + dir + visibleEvents.length) % visibleEvents.length);
-    setTimeout(() => {
-      isAnimRef.current = false;
-    }, 750);
-  }, [visibleEvents.length]);
+  const navigate = useCallback(
+    (dir) => {
+      if (isAnimRef.current || visibleEvents.length <= 1) return;
+      isAnimRef.current = true;
+      setCurrentIdx((prev) => (prev + dir + visibleEvents.length) % visibleEvents.length);
+      setTimeout(() => {
+        isAnimRef.current = false;
+      }, 750);
+    },
+    [visibleEvents.length]
+  );
 
   useEffect(() => {
     const handler = (e) => {
@@ -44,6 +56,6 @@ export function useEvents() {
     safeIdx,
     navigate,
     handleFilter,
-    touchStartX
+    touchStartX,
   };
 }
