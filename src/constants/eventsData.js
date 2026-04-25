@@ -55,7 +55,7 @@ export const EVENTS = [
     focus: 'Tech Talk',
     desc: 'Bu seri,değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 2. Oturumda; AI Agents,Platform Engineering konuları konuşulacaktır.',
     img: event1Svg,
-    formLink: '#',
+    formLink: 'https://forms.gle/YPdQBA6gUta5TeQU6',
     link: '#',
   },
  {
