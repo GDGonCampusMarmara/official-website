@@ -50,7 +50,6 @@ export default function EventCard({ ev, posStr, onNavigate }) {
           </span>
         </div>
 
-        {/* İçerik Alanı */}
         <div className="px-7 pt-6 pb-7">
           <header className="mb-4">
             <div
