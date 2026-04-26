@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { EVENTS, FOCUS_CLASSES } from "../constants/eventsData";
 import Icon from "../components/common/icon";
@@ -6,6 +6,7 @@ import Icon from "../components/common/icon";
 const EventDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [showMaterials, setShowMaterials] = useState(false);
 
   const ev = useMemo(() => {
     const found = EVENTS.find((item) => item.id === parseInt(id));
@@ -28,10 +29,10 @@ const EventDetail = () => {
   const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["all"];
 
   return (
-    <div className="min-h-screen bg-[#0a0d14] font-['Google_Sans'] text-white">
-      {/* ÜST BÖLÜM: Split Screen */}
-      <div className="flex flex-col md:flex-row min-h-screen">
-        {/* SOL TARAF */}
+    <div
+      className={`bg-[#0a0d14] font-['Google_Sans'] text-white ${!showMaterials ? "h-screen overflow-hidden" : "min-h-screen"}`}
+    >
+      <div className="flex flex-col md:flex-row h-screen">
         <div className="w-full md:w-1/2 flex flex-col p-8 md:p-16 lg:p-24 justify-center relative bg-[#0a0d14]">
           <button
             onClick={() => navigate(-1)}
@@ -57,7 +58,7 @@ const EventDetail = () => {
               </h1>
             </header>
 
-            <p className="text-white/60 font-light text-lg leading-relaxed">
+            <p className="text-white/60 font-light text-lg leading-relaxed line-clamp-4">
               {ev.desc}
             </p>
 
@@ -80,13 +81,20 @@ const EventDetail = () => {
 
             <div className="pt-4">
               {ev.past ? (
-                <a
-                  href="#materials"
+                <button
+                  onClick={() => {
+                    setShowMaterials(true);
+                    setTimeout(() => {
+                      document
+                        .getElementById("materials")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  }}
                   className="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-bold text-sm bg-white/10 text-white/80 border border-white/10 hover:bg-white/20 transition-all shadow-xl"
                 >
                   <Icon name="ChevronDown" size={18} />
                   Materyalleri Gör
-                </a>
+                </button>
               ) : (
                 <a
                   href={ev.formLink || "#"}
@@ -102,7 +110,6 @@ const EventDetail = () => {
           </div>
         </div>
 
-        {/* SAĞ TARAF */}
         <div className="w-full md:w-1/2 h-[400px] md:h-auto relative overflow-hidden bg-[#0d111a]">
           <img
             src={ev.img}
@@ -114,14 +121,12 @@ const EventDetail = () => {
         </div>
       </div>
 
-      {/* ALT BÖLÜM: Iframe Materyalleri (Minimalist) */}
-      {ev.past && ev.materialLink && (
+      {ev.past && ev.materialLink && showMaterials && (
         <div
           id="materials"
           className="bg-[#080a0f] py-24 px-8 border-t border-white/5 relative"
         >
           <div className="max-w-7xl mx-auto relative group">
-            {/* Büyütme Butonu (Maximize) - Sağ Üst Köşede Zarifçe Durur */}
             <a
               href={ev.materialLink}
               target="_blank"
@@ -132,7 +137,6 @@ const EventDetail = () => {
               <Icon name="Maximize" size={18} />
             </a>
 
-            {/* Iframe Kapsayıcısı */}
             <div className="w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black/40 shadow-2xl relative z-10">
               <iframe
                 src={ev.materialLink}
