@@ -50,6 +50,7 @@ const EventDetail = () => {
               className="transition-transform duration-300 group-hover:-translate-x-1"
             />
           </button>
+
           <div className="max-w-xl space-y-8 mt-16 md:mt-0">
             <header className="space-y-6">
               <span
@@ -87,6 +88,10 @@ const EventDetail = () => {
               {ev.past ? (
                 <button
                   onClick={() => {
+                    if (!ev.materialLink) {
+                      alert("Bu etkinlik için henüz materyal yüklenmedi.");
+                      return;
+                    }
                     setShowMaterials(true);
                     setTimeout(() => {
                       document
@@ -94,10 +99,14 @@ const EventDetail = () => {
                         ?.scrollIntoView({ behavior: "smooth" });
                     }, 100);
                   }}
-                  className="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-bold text-sm bg-white/10 text-white/80 border border-white/10 hover:bg-white/20 transition-all shadow-xl"
+                  className={`inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-bold text-sm transition-all shadow-xl ${
+                    ev.materialLink
+                      ? "bg-white/10 text-white/80 border border-white/10 hover:bg-white/20"
+                      : "bg-white/5 text-white/20 cursor-not-allowed opacity-50"
+                  }`}
                 >
                   <Icon name="ChevronDown" size={18} />
-                  Materyalleri Gör
+                  {ev.materialLink ? "Materyalleri Gör" : "Materyal Henüz Yok"}
                 </button>
               ) : (
                 <a
@@ -114,7 +123,7 @@ const EventDetail = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-1/2 h-[400px] md:h-auto relative overflow-hidden bg-[#0d111a]">
+        <div className="w-full md:w-1/2 h-[400px] md:h-auto relative overflow-hidden bg-[#0d111a] hidden md:block">
           <img
             src={ev.img}
             alt={ev.title}
