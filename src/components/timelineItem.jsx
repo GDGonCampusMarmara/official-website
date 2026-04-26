@@ -3,9 +3,7 @@ import { FOCUS_CLASSES } from "../constants/eventsData";
 
 export default function TimelineItem({ ev }) {
   const navigate = useNavigate();
-  const fc = ev.past
-    ? FOCUS_CLASSES["past"]
-    : FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["All"];
+  const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["all"];
 
   const handleClick = () => {
     navigate(`/etkinlik/${ev.id}`);

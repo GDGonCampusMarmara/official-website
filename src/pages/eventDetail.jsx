@@ -35,17 +35,21 @@ const EventDetail = () => {
       <div className="flex flex-col md:flex-row h-screen">
         <div className="w-full md:w-1/2 flex flex-col p-8 md:p-16 lg:p-24 justify-center relative bg-[#0a0d14]">
           <button
-            onClick={() => navigate(-1)}
-            className="absolute top-8 left-8 flex items-center gap-2 text-white/40 hover:text-white transition-colors group z-10"
+            onClick={() => navigate("/")}
+            className="absolute top-8 left-8 z-20 flex items-center justify-center w-12 h-12
+             bg-white/[0.03] hover:bg-white/[0.08]
+             border border-white/10 hover:border-white/20
+             backdrop-blur-md rounded-2xl
+             text-white/40 hover:text-white
+             transition-all duration-300 shadow-xl group"
+            title="Anasayfaya Dön"
           >
             <Icon
               name="ChevronLeft"
-              size={20}
-              className="group-hover:-translate-x-1 transition-transform"
+              size={24}
+              className="transition-transform duration-300 group-hover:-translate-x-1"
             />
-            <span className="text-sm font-medium">Geri Dön</span>
           </button>
-
           <div className="max-w-xl space-y-8 mt-16 md:mt-0">
             <header className="space-y-6">
               <span
@@ -53,7 +57,7 @@ const EventDetail = () => {
               >
                 {ev.focus} {ev.past && "• TAMAMLANDI"}
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-white">
                 {ev.title}
               </h1>
             </header>

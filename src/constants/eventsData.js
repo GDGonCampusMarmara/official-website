@@ -12,7 +12,7 @@ export const EVENTS = [
     desc: 'Teknoloji ve eğitimin kesiştiği noktada kariyerinizi nasıl şekillendirebilirsiniz? Eğitim dünyasında kariyer basamaklarını nasıl tırmanacağınızı keşfedin! Eğitim teknolojilerinden öğretim tasarımına kadar geniş bir yelpazede yeni nesil kariyer fırsatlarını uzman bakış açısıyla inceliyoruz.',
     img: "/events/defaultevent.svg",
     formLink: '#',
-    link: '#',
+    materialLink: '#',
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ export const EVENTS = [
     desc: 'Bu zirvede girişimcileri, teknoloji liderlerini ve vizyoner şirketleri bir araya getiriyoruz. Alışılmışın dışında bir atmosferde ağ kurma (networking) fırsatı bulacağınız bu özel etkinlikte; panel oturumlarından stratejik iş birliklerine kadar dolu bir içerik sizi bekliyor.',
     img: "/events/defaultevent.svg",
     formLink: '#',
-    link: '#',
+    materialLink: '#',
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ export const EVENTS = [
     desc: 'Bu seri,değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 1. Oturumda Patterns, Trade-offs & Design Thinking konuları konuşulacaktır.',
     img: "/events/event1.svg",
     formLink: 'https://forms.gle/Vs2e1ZCcR1My4yiQ7',
-    link: '#',
+    materialLink: '/materials/session_1.html',
   },
   {
     id: 4,
@@ -54,7 +54,7 @@ export const EVENTS = [
     desc: 'Bu seri,değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 2. Oturumda; AI Agents,Platform Engineering konuları konuşulacaktır.',
     img: "/events/event1.svg",
     formLink: 'https://forms.gle/YPdQBA6gUta5TeQU6',
-    link: '#',
+    materialLink: '#',
   },
  {
     id: 5,
@@ -68,7 +68,7 @@ export const EVENTS = [
     desc: 'Bu seri, tek tek teknolojileri öğretmekten çok, değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 3. Oturum Hala planlanmaktadır.',
     img: "/events/event1.svg",
     formLink: '#',
-    link: '#',
+    materialLink: '#',
   }
 ];
 
