@@ -28,7 +28,7 @@ export const EVENTS = [
     desc: 'Bu zirvede girişimcileri, teknoloji liderlerini ve vizyoner şirketleri bir araya getiriyoruz. Alışılmışın dışında bir atmosferde ağ kurma (networking) fırsatı bulacağınız bu özel etkinlikte; panel oturumlarından stratejik iş birliklerine kadar dolu bir içerik sizi bekliyor.',
     img: defaultevent,
     formLink: '#',
-    link: '#',
+    materialLink: '#',
   },
   {
     id: 3,
@@ -39,10 +39,10 @@ export const EVENTS = [
     title: 'Architecture Of Tomorrow: Session-1',
     location: 'Online',
     focus: 'Tech Talk',
-    desc: 'Bu seri,değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 1. Oturumda Patterns, Trade-offs & Design Thinking konuları konuşulacaktır.',
+    desc: 'Bu seri, değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. Etkinliğin ilk oturumu olan 1. Oturumda Patterns, Trade-offs & Design Thinking konuları konuşulacaktır.',
     img: event1Svg,
     formLink: 'https://forms.gle/Vs2e1ZCcR1My4yiQ7',
-    link: '#',
+    materialLink:'/materials/session_1.html',
   },
   {
     id: 4,
@@ -56,7 +56,7 @@ export const EVENTS = [
     desc: 'Bu seri,değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 2. Oturumda; AI Agents,Platform Engineering konuları konuşulacaktır.',
     img: event1Svg,
     formLink: 'https://forms.gle/YPdQBA6gUta5TeQU6',
-    link: '#',
+    materialLink:'#',
   },
  {
     id: 5,
@@ -70,7 +70,7 @@ export const EVENTS = [
     desc: 'Bu seri, tek tek teknolojileri öğretmekten çok, değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 3. Oturum Hala planlanmaktadır.',
     img: event1Svg,
     formLink: '#',
-    link: '#',
+    materialLink:'#',
   }
 ];
 
@@ -140,7 +140,15 @@ export const FOCUS_CLASSES = {
     activeBtn: 'bg-[#ea4335] border-[#ea4335] text-white',
     hoverBtn: 'hover:border-[#ea4335] hover:text-[#ea4335]',
     primaryBtn: 'bg-[#ea4335] text-white hover:bg-[#ea4335]/90',
-  }
+  },
+  'past': {
+    text: 'text-gray-500',
+    bg: 'bg-gray-500/10',
+    badgeText: 'text-gray-400',
+    activeBtn: 'bg-gray-600 border-gray-600 text-white',
+    hoverBtn: 'hover:border-gray-400 hover:text-gray-400',
+    primaryBtn: 'bg-gray-700 text-gray-300 cursor-not-allowed',
+  },
 };
 
 export const CARD_POS = {

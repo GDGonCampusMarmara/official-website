@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture of Tomorrow · Session 1</title>
+  <style>
+    :root {
+      --bg: #0e0f1a;
+      --panel: rgba(255,255,255,0.07);
+      --panel-strong: rgba(255,255,255,0.12);
+      --text: #f6f7fb;
+      --muted: #dde2f0;
+      --muted-soft: #b7bfd3;
+      --accent: #86efac;
+      --accent-2: #7dd3fc;
+      --accent-3: #f9a8d4;
+      --accent-4: #fcd34d;
+      --border: rgba(255,255,255,0.14);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 24px;
+      --section-gap: 140px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(125,211,252,0.18), transparent 25%),
+        radial-gradient(circle at 80% 10%, rgba(249,168,212,0.16), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(134,239,172,0.14), transparent 24%),
+        linear-gradient(180deg, #101222 0%, #0a0b13 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+    body { padding: 28px; }
+    .wrap { max-width: 1260px; margin: 0 auto; }
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 44px; position: relative; overflow: hidden; min-height: 78vh;
+      display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 24px; align-items: center;
+      scroll-snap-align: start;
+    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(18px); opacity: 0.8; pointer-events: none; }
+    .orb.one { width: 260px; height: 260px; right: -40px; top: -40px; background: rgba(125,211,252,0.18); }
+    .orb.two { width: 220px; height: 220px; left: -30px; bottom: -50px; background: rgba(249,168,212,0.14); }
+    .eyebrow { display: inline-flex; gap: 10px; align-items: center; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem; font-weight: 800; }
+    h1 { font-size: clamp(2.45rem, 4.35vw, 4.55rem); line-height: 0.93; margin: 14px 0 14px; letter-spacing: -0.045em; text-wrap: balance; max-width: 14ch; }
+    .hero-subline { font-size: 1rem; line-height: 1.7; color: var(--muted); font-style: italic; max-width: 64ch; margin-bottom: 18px; }
+    .lead { font-size: 1.14rem; line-height: 1.8; color: var(--muted); max-width: 64ch; }
+    .hero-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      appearance: none; border: 0; border-radius: 999px; padding: 14px 18px; font-weight: 800; cursor: pointer;
+      transition: transform .2s ease, opacity .2s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #091018; }
+    .btn.ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); }
+    .hero-panel { display: grid; gap: 16px; }
+    .hero-box {
+      padding: 20px; border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .hero-box small, .milestone-year, .group-frame, .tertiary {
+      display: block; color: var(--muted-soft); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .hero-box strong { font-size: 1.08rem; display: block; margin-bottom: 6px; }
+    .hero-box p { margin: 0; color: var(--muted); line-height: 1.65; }
+
+    .nav {
+      position: sticky; top: 14px; z-index: 10; margin: 22px 0 34px; background: rgba(9,11,20,0.64);
+      border: 1px solid var(--border); border-radius: 999px; padding: 6px; display: flex; flex-wrap: nowrap; gap: 2px; backdrop-filter: blur(16px);
+      overflow: hidden; align-items: center; scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a { text-decoration: none; color: var(--muted); padding: 8px 9px; border-radius: 999px; font-weight: 700; font-size: 0.73rem; white-space: nowrap; flex: 1 1 0; min-width: 0; text-align: center; letter-spacing: -0.01em; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,0.09); color: var(--text); }
+
+    section { margin: var(--section-gap) 0; scroll-margin-top: 96px; position: relative; scroll-snap-align: start; }
+    section::before {
+      content: ""; position: absolute; left: 18px; top: -42px; bottom: -42px; width: 2px;
+      background: linear-gradient(180deg, rgba(125,211,252,0.35), rgba(249,168,212,0.18), rgba(134,239,172,0.22));
+      opacity: 0.55;
+    }
+    section > * { position: relative; z-index: 1; }
+    .section-head {
+      display: grid; grid-template-columns: 90px 1fr;
+      align-items: start; gap: 24px; margin-bottom: 28px;
+    }
+    .section-index {
+      width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(125,211,252,0.18), rgba(134,239,172,0.18));
+      border: 1px solid rgba(255,255,255,0.12);
+      font-weight: 900; color: var(--text); margin-left: -10px;
+    }
+    .section-head h2 { margin: 0 0 10px; font-size: clamp(1.95rem, 3vw, 2.9rem); letter-spacing: -0.03em; }
+    .section-head p { margin: 0; color: var(--muted); max-width: 68ch; line-height: 1.7; }
+
+    .grid { display: grid; gap: 22px; grid-template-columns: repeat(12, 1fr); }
+    .card { padding: 26px; }
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+
+    .tag { display: inline-block; padding: 8px 11px; border-radius: 999px; font-size: 0.8rem; font-weight: 800; margin-bottom: 12px; color: #091018; background: linear-gradient(135deg, var(--accent-4), var(--accent-3)); }
+    .card h3 { margin: 0 0 10px; font-size: 1.22rem; }
+    .card p, .card li { color: var(--muted); line-height: 1.75; }
+    ul.clean { padding-left: 20px; margin: 0; }
+    .quote { font-size: clamp(1.25rem, 2.5vw, 1.95rem); line-height: 1.48; color: #fff; letter-spacing: -0.02em; }
+    .sticky-note { border-radius: 18px; padding: 18px; background: linear-gradient(135deg, rgba(252,211,77,0.18), rgba(134,239,172,0.12)); border: 1px solid rgba(252,211,77,0.22); color: #fefce8; line-height: 1.7; }
+
+    .timeline { display: grid; gap: 18px; }
+    .timeline-item {
+      display: grid; grid-template-columns: 130px 1fr; gap: 18px; align-items: start;
+      padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .timeline-time { font-weight: 900; color: var(--accent-4); letter-spacing: 0.02em; }
+
+    .poll { display: grid; gap: 12px; margin-top: 16px; }
+    .poll button {
+      width: 100%; background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid rgba(255,255,255,0.1);
+      padding: 14px 16px; border-radius: 16px; text-align: left; cursor: pointer; font-weight: 700;
+    }
+    .poll button:hover { background: rgba(255,255,255,0.09); }
+    .poll-result { margin-top: 12px; color: var(--accent); font-weight: 700; min-height: 24px; }
+
+    .trend { padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .trend .name { font-weight: 800; margin-bottom: 8px; color: #fff; }
+    .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:.72rem; font-weight:800; margin-bottom:10px; }
+    .badge.signal { background: rgba(34,197,94,.15); color: #bbf7d0; }
+    .badge.caution { background: rgba(245,158,11,.14); color: #fde68a; }
+    .badge.context { background: rgba(125,211,252,.14); color: #bfdbfe; }
+
+    .resource-list { display:grid; gap:12px; }
+    .resource {
+      display:flex; justify-content:space-between; gap:16px; align-items:center; padding:14px 16px;
+      border-radius:16px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    }
+    .resource-title { color: var(--accent-2); text-decoration: none; font-weight: 800; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .pill { padding:9px 12px; border-radius:999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-weight:700; font-size:.9rem; }
+    .footer { padding: 28px; text-align: center; color: var(--muted); }
+
+    .pattern-card { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: 18px; align-items: stretch; min-height: 260px; }
+    .diagram {
+      border-radius: 18px; border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      padding: 14px;
+      display: grid; place-items: center;
+    }
+    .diagram svg { width: 100%; max-width: 420px; height: 190px; }
+    .diagram text { fill: #f6f7fb; font-size: 12px; font-family: Inter, sans-serif; font-weight: 700; }
+    .diagram .muted { fill: var(--muted-soft); font-weight: 600; font-size: 11px; }
+    .diagram rect, .diagram circle { stroke: rgba(255,255,255,0.25); stroke-width: 1.4; }
+    .diagram .box-a { fill: rgba(125,211,252,0.12); }
+    .diagram .box-b { fill: rgba(134,239,172,0.12); }
+    .diagram .box-c { fill: rgba(249,168,212,0.12); }
+    .diagram .box-d { fill: rgba(252,211,77,0.12); }
+    .diagram .line { stroke: rgba(255,255,255,0.45); stroke-width: 1.6; fill: none; marker-end: url(#arrow); }
+
+    .insight-quote {
+      padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      font-size: 1.02rem; line-height: 1.8; color: #edf2ff;
+    }
+    .milestone-grid { display: grid; gap: 20px; grid-template-columns: repeat(12, 1fr); }
+    .milestone-card { min-height: 250px; display: grid; gap: 14px; }
+    .milestone-card .diagram svg { height: 124px; }
+    .bridge-line { margin-top: 22px; color: #fff; font-size: 1.08rem; line-height: 1.8; }
+    .group-head {
+      grid-column: span 12; padding: 6px 4px 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      margin-top: 10px;
+    }
+    .group-head h3 { margin: 14px 0 6px; font-size: 1.18rem; letter-spacing: -0.01em; }
+    .group-head p { margin: 0 0 4px; color: var(--muted-soft); }
+    .qr-card { display: grid; place-items: center; text-align: center; min-height: 280px; }
+    .qr-placeholder {
+      width: 200px; height: 200px; border: 2px dashed rgba(255,255,255,0.24);
+      border-radius: 18px; display: grid; place-items: center; color: var(--muted-soft);
+      background: rgba(255,255,255,0.02);
+      margin: 0 auto 14px;
+    }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding: 28px; }
+      .section-head { grid-template-columns: 1fr; }
+      section::before { left: 6px; }
+      .pattern-card { grid-template-columns: 1fr; }
+      .span-3, .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: span 12; }
+      .timeline-item { grid-template-columns: 1fr; }
+      body { padding: 16px; }
+      .nav { border-radius: 24px; padding: 8px; }
+      .resource { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (min-width: 1400px) {
+      body { padding: 18px 20px; }
+      .card p, .card li, .insight-quote { font-size: 1.25rem; }
+      .lead { font-size: 1.35rem; }
+    }
+
+    .qr-block { display: grid; place-items: center; gap: 14px; padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .qr-img { width: 200px; height: 200px; border-radius: 12px; background: #fff; padding: 10px; }
+    .qr-caption { text-align: center; line-height: 1.5; }
+    .qr-caption strong { display: block; color: var(--text); font-weight: 800; margin-bottom: 4px; }
+    .qr-caption span { color: var(--muted); font-size: 0.92rem; }
+    .qr-caption code { background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 6px; color: var(--accent); font-family: ui-monospace, monospace; }
+
+    .poll-prompt { padding: 14px 16px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; }
+    .poll-prompt .badge { margin-bottom: 8px; }
+    .poll-prompt p { margin: 0; color: var(--text); line-height: 1.55; }
+    .poll-prompt .options { margin-top: 10px; padding-left: 18px; color: var(--muted); }
+    .poll-prompt .options li { line-height: 1.7; }
+
+    .movement-card { border-left: 4px solid var(--accent); }
+    .movement-card.movement-1 { border-left-color: var(--accent-2); }
+    .movement-card.movement-2 { border-left-color: var(--accent-3); }
+    .movement-card.movement-3 { border-left-color: var(--accent); }
+
+    .takehome-card { border-left: 4px solid var(--accent); padding: 22px; font-style: italic; font-size: 1.18rem; line-height: 1.7; color: var(--text); background: rgba(255,255,255,0.05); border-radius: 18px; }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero" id="top">
+      <div class="orb one"></div>
+      <div class="orb two"></div>
+      <div style="grid-column: 1 / -1;">
+        <div class="eyebrow">Architecture of Tomorrow · Session 1</div>
+        <h1>You were trained to write code.<br>This session is about deciding what to build.</h1>
+        <div style="font-size:1.05rem;color:var(--muted);font-weight:700;letter-spacing:0.01em;margin-top:4px;">Barış Güler</div>
+      </div>
+      <div style="grid-column: 1 / -1;" class="grid">
+        <div class="span-6">
+          <div class="takehome-card">You do not need a fixed answer for every trend. You need a stronger way to evaluate what is worth learning, applying, or ignoring.</div>
+        </div>
+        <div class="span-6">
+          <div class="hero-box">
+            <small>Main question</small>
+            <strong>How do you stop being someone who is told what to build?</strong>
+            <p>Architecture is the practice of making good decisions over time instead of trying to guess the final diagram on day one.</p>
+          </div>
+        </div>
+      </div>
+      <div style="grid-column: 1 / -1;">
+        <div class="hero-actions">
+          <a class="btn primary" href="#flow">Start the session</a>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <a href="#why">Why architecture is hard</a>
+      <a href="#history">How we got here</a>
+      <a href="#flow">Live flow</a>
+      <a href="#trends">Current tendencies</a>
+      <a href="#paradigms">Paradigms</a>
+      <a href="#build">Learning by building</a>
+      <a href="#insights">Insights</a>
+      <a href="#resources">Resources</a>
+      <a href="#close">Closing</a>
+    </nav>
+
+    <section id="why">
+      <div class="section-head">
+        <div class="section-index">01</div>
+        <div>
+          <h2>Why architecture feels difficult today</h2>
+          <p>Students are not short on information. The harder part is learning how to choose, compare, and adapt ideas when the conditions keep changing.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-8">
+          <span class="tag">Starting point</span>
+          <p class="quote">Architecture starts mattering the moment software outlives the first version that made it work.</p>
+          <p>
+            Requirements change. Teams change. Traffic changes. Data shape changes. The cost of early design decisions usually appears later, when change arrives faster than the system can absorb it. That is why architecture stays tied to delivery across time.
+          </p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">Useful framing</span>
+          <ul class="clean">
+            <li>Architecture defines boundaries and responsibilities.</li>
+            <li>Architecture affects how fast a team can change a system.</li>
+            <li>Architecture decides what becomes easy and what becomes expensive.</li>
+            <li>Architecture is connected to delivery, migration, and operations.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="history">
+      <div class="section-head">
+        <div class="section-index">02</div>
+        <div>
+          <h2>How we got here</h2>
+          <p>This is a short history of people refusing inherited defaults and reorganizing software around different constraints.</p>
+        </div>
+      </div>
+      <div class="milestone-grid">
+        <div class="card span-4 milestone-card">
+          <div>
+            <span class="milestone-year">Parnas, 1972</span>
+            <h3>Information Hiding</h3>
+            <p>The boundaries between modules matter more than the code inside them.</p>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 124" role="img" aria-label="Information hiding diagram">
+              <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="32" y="26" rx="12" ry="12" width="120" height="64"></rect>
+              <rect class="box-b" x="268" y="26" rx="12" ry="12" width="120" height="64"></rect>
+              <line class="line" x1="152" y1="58" x2="268" y2="58"></line>
+              <text x="56" y="62">Module A</text>
+              <text x="292" y="62">Module B</text>
+              <text class="muted" x="170" y="48">interface</text>
+              <text class="muted" x="162" y="70">hide internals</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-4 milestone-card">
+          <div>
+            <span class="milestone-year">Conway, 1968</span>
+            <h3>Conway's Law</h3>
+            <p>Organizations ship their org chart. Probably the most important sentence ever written about software architecture.</p>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 124" role="img" aria-label="Conway's law diagram">
+              <defs><marker id="arrowC" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-c" x="34" y="24" rx="10" ry="10" width="88" height="34"></rect>
+              <rect class="box-c" x="34" y="68" rx="10" ry="10" width="88" height="34"></rect>
+              <rect class="box-a" x="298" y="24" rx="10" ry="10" width="88" height="34"></rect>
+              <rect class="box-a" x="298" y="68" rx="10" ry="10" width="88" height="34"></rect>
+              <line class="line" x1="122" y1="41" x2="298" y2="41"></line>
+              <line class="line" x1="122" y1="85" x2="298" y2="85"></line>
+              <text x="57" y="46">Team A</text>
+              <text x="57" y="90">Team B</text>
+              <text x="319" y="46">Service A</text>
+              <text x="319" y="90">Service B</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-4 milestone-card">
+          <div>
+            <span class="milestone-year">Fielding, 2000</span>
+            <h3>REST</h3>
+            <p>Architecture as a constraint system, not a stack.</p>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 124" role="img" aria-label="REST diagram">
+              <defs><marker id="arrowR" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="32" y="32" rx="10" ry="10" width="108" height="56"></rect>
+              <rect class="box-d" x="156" y="42" rx="18" ry="18" width="108" height="36"></rect>
+              <rect class="box-b" x="280" y="32" rx="10" ry="10" width="108" height="56"></rect>
+              <line class="line" x1="140" y1="60" x2="156" y2="60"></line>
+              <line class="line" x1="264" y1="60" x2="280" y2="60"></line>
+              <text x="62" y="64">Client</text>
+              <text x="188" y="65">HTTP</text>
+              <text x="310" y="64">Resource</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-4 milestone-card">
+          <div>
+            <span class="milestone-year">Brewer, 2000</span>
+            <h3>CAP Theorem</h3>
+            <p>The first widely felt impossibility theorem in distributed systems.</p>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 124" role="img" aria-label="CAP theorem diagram">
+              <polygon points="210,18 340,96 80,96" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.25)" stroke-width="1.4"></polygon>
+              <circle class="box-a" cx="210" cy="24" r="16"></circle>
+              <circle class="box-b" cx="84" cy="96" r="16"></circle>
+              <circle class="box-c" cx="336" cy="96" r="16"></circle>
+              <text x="203" y="28">C</text>
+              <text x="77" y="100">A</text>
+              <text x="329" y="100">P</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-4 milestone-card">
+          <div>
+            <span class="milestone-year">Evans, 2003</span>
+            <h3>Domain-Driven Design</h3>
+            <p>Boundaries belong to the business, not the database.</p>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 124" role="img" aria-label="DDD diagram">
+              <rect class="box-a" x="30" y="26" rx="14" ry="14" width="104" height="66"></rect>
+              <rect class="box-b" x="158" y="26" rx="14" ry="14" width="104" height="66"></rect>
+              <rect class="box-c" x="286" y="26" rx="14" ry="14" width="104" height="66"></rect>
+              <text x="56" y="60">Sales</text>
+              <text x="181" y="60">Billing</text>
+              <text x="310" y="60">Support</text>
+              <text class="muted" x="53" y="78">bounded context</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-4 milestone-card">
+          <div>
+            <span class="milestone-year">Fowler &amp; Lewis, 2014</span>
+            <h3>Microservices</h3>
+            <p>The decade of breakup. Useful, overused, sometimes both.</p>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 124" role="img" aria-label="Microservices diagram">
+              <rect class="box-d" x="34" y="32" rx="12" ry="12" width="86" height="54"></rect>
+              <rect class="box-a" x="146" y="32" rx="12" ry="12" width="86" height="54"></rect>
+              <rect class="box-b" x="258" y="32" rx="12" ry="12" width="86" height="54"></rect>
+              <rect class="box-c" x="258" y="32" rx="12" ry="12" width="128" height="54" opacity="0"></rect>
+              <text x="53" y="63">Service 1</text>
+              <text x="165" y="63">Service 2</text>
+              <text x="277" y="63">Service 3</text>
+              <text class="muted" x="118" y="108">more autonomy, more coordination</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 milestone-card">
+          <div>
+            <span class="milestone-year">2020s</span>
+            <h3>AI-aware architecture and agents</h3>
+            <p>Patterns blur with probabilistic execution. New rules are still being written.</p>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 124" role="img" aria-label="AI-aware architecture diagram">
+              <defs><marker id="arrowAI" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="28" y="36" rx="10" ry="10" width="88" height="52"></rect>
+              <rect class="box-b" x="156" y="20" rx="10" ry="10" width="104" height="34"></rect>
+              <rect class="box-d" x="156" y="70" rx="10" ry="10" width="104" height="34"></rect>
+              <rect class="box-c" x="300" y="36" rx="10" ry="10" width="92" height="52"></rect>
+              <line class="line" x1="116" y1="62" x2="156" y2="37"></line>
+              <line class="line" x1="116" y1="62" x2="156" y2="87"></line>
+              <line class="line" x1="260" y1="37" x2="300" y2="62"></line>
+              <line class="line" x1="260" y1="87" x2="300" y2="62"></line>
+              <text x="49" y="66">Intent</text>
+              <text x="184" y="42">Planner</text>
+              <text x="188" y="92">Evaluate</text>
+              <text x="323" y="66">Tools</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <p class="bridge-line">Every move in this history was someone deciding to organize software differently than they were told. That is the role this session is preparing you for.</p>
+    </section>
+
+    <section id="flow">
+      <div class="section-head">
+        <div class="section-index">03</div>
+        <div>
+          <h2>Live session flow</h2>
+          <p>A timed structure with enough distance between blocks so the room can breathe and each idea can land.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-time">0 to 3 min</div><div><h3>Opening poll</h3><p>Three quick questions to read the room before the talk starts.</p></div></div>
+
+          <div class="timeline-item"><div class="timeline-time">0 to 8 min</div><div><h3>Opening discussion</h3><p>Ask the room what feels most unclear right now: architecture, distributed systems, cloud, AI systems, or career direction.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">8 to 18 min</div><div><h3>What architecture really means</h3><p>Present architecture as decisions about boundaries, dependencies, communication, failure, and change, not as a static diagram.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">18 to 32 min</div><div><h3>Trade-offs and system pressures</h3><p>Use a simple product example and discuss speed versus maintainability, consistency versus autonomy, and short-term delivery versus long-term adaptability.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">32 to 50 min</div><div><h3>Current tendencies</h3><p>Move into distributed systems, cloud-native constraints, platform engineering, AI-aware design, modernization, and data ownership.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">50 to 68 min</div><div><h3>Patterns and examples</h3><p>Introduce selected patterns with simple diagrams so they feel concrete instead of abstract.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">68 to 78 min</div><div><h3>Learning through projects</h3><p>Show how architectural choices emerged from real project pressures, not from trying to use fashionable words.</p></div></div>
+          <div class="timeline-item"><div class="timeline-time">78 to 82 min</div><div><h3>Closing poll and Q&amp;A</h3><p>Word cloud, rating, audience questions.</p></div></div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="trends">
+      <div class="section-head">
+        <div class="section-index">04</div>
+        <div>
+          <h2>Current tendencies shaping system architecture</h2>
+          <p>These reflect recurring pressures that real systems and teams face today.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-4 trend">
+          <span class="badge signal">Important</span>
+          <div class="name">Distributed computing is a normal baseline</div>
+          <p>Multiple services, queues, async jobs, external APIs, and partial failure are common. Latency, retries, idempotency, and observability are standard concerns.</p>
+        </div>
+        <div class="card span-4 trend">
+          <span class="badge signal">Important</span>
+          <div class="name">Cloud-native thinking is mostly about operating constraints</div>
+          <p>Elasticity, failure handling, managed services, and operational visibility shape design choices. Cloud changes how software is structured.</p>
+        </div>
+        <div class="card span-4 trend">
+          <span class="badge signal">Important</span>
+          <div class="name">Platform engineering tries to reduce delivery friction</div>
+          <p>Teams build internal platforms, templates, and paved paths so development becomes more repeatable and less dependent on tribal knowledge.</p>
+        </div>
+        <div class="card span-4 trend">
+          <span class="badge signal">Important</span>
+          <div class="name">AI-aware architecture adds new system concerns</div>
+          <p>Probabilistic outputs, tool usage, evaluation, permission boundaries, memory, and observability change how systems are tested and operated.</p>
+        </div>
+        <div class="card span-4 trend">
+          <span class="badge context">Context</span>
+          <div class="name">Modernization is continuous, not a one-time rewrite</div>
+          <p>Code, data, and architecture evolve while the system keeps running. Migration patterns and compatibility strategies become part of architecture.</p>
+        </div>
+        <div class="card span-4 trend">
+          <span class="badge caution">Context-sensitive</span>
+          <div class="name">Specialized patterns must answer a real pressure</div>
+          <p>CQRS, event sourcing, data mesh, actor systems, plugin architectures, and FaaS can be strong fits when their complexity is worth the cost.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="paradigms" style="max-width:100%; overflow:hidden;">
+      <div class="section-head">
+        <div class="section-index">05</div>
+        <div>
+          <h2>Paradigms worth exploring in this first session</h2>
+          <p>Each pattern below shows a different answer to a different pressure. The diagrams are intentionally simple, just enough to make the shape visible during the talk.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="group-head">
+          <h3>Patterns that shape how teams work</h3>
+          <p>These are less about clever code and more about deciding who owns what, how fast change can move, and how teams stay autonomous without chaos.</p>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Vertical slicing</span>
+            <h3>Deliver value through end-to-end slices</h3>
+            <p>Instead of organizing the project around technical layers first, vertical slicing cuts through UI, application logic, and data for one feature at a time. This supports early value delivery and easier adaptation when requirements move.</p>
+            <ul class="clean">
+              <li>feature-focused structure</li>
+              <li>works well when priorities change often</li>
+              <li>keeps business capability closer to code boundaries</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Vertical slicing diagram">
+              <defs><marker id="arrowVS" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect x="20" y="14" width="110" height="162" rx="14" ry="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"></rect>
+              <rect x="155" y="14" width="110" height="162" rx="14" ry="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"></rect>
+              <rect x="290" y="14" width="110" height="162" rx="14" ry="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"></rect>
+              <rect class="box-a" x="20" y="20" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-b" x="20" y="74" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-c" x="20" y="128" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-a" x="155" y="20" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-b" x="155" y="74" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-c" x="155" y="128" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-a" x="290" y="20" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-b" x="290" y="74" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-c" x="290" y="128" rx="10" ry="10" width="110" height="42"></rect>
+              <text x="45" y="46">Feature A UI</text><text x="33" y="101">Feature A Logic</text><text x="40" y="155">Feature A Data</text>
+              <text x="180" y="46">Feature B UI</text><text x="168" y="101">Feature B Logic</text><text x="175" y="155">Feature B Data</text>
+              <text x="315" y="46">Feature C UI</text><text x="303" y="101">Feature C Logic</text><text x="310" y="155">Feature C Data</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Self-Contained Systems</span>
+            <h3>Package a business capability with its own UI, logic, and data</h3>
+            <p>Self-Contained Systems aim for stronger autonomy than a shared layered application. Each system owns a business area end to end, which improves team independence and keeps change boundaries clearer.</p>
+            <ul class="clean">
+              <li>end-to-end ownership</li>
+              <li>team autonomy</li>
+              <li>clear business boundaries</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Self-contained systems diagram">
+              <defs><marker id="arrowSCS" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="26" y="30" rx="14" ry="14" width="110" height="130"></rect>
+              <rect class="box-b" x="155" y="30" rx="14" ry="14" width="110" height="130"></rect>
+              <rect class="box-c" x="284" y="30" rx="14" ry="14" width="110" height="130"></rect>
+              <text x="63" y="57">SCS A</text><text x="192" y="57">SCS B</text><text x="321" y="57">SCS C</text>
+              <text class="muted" x="53" y="88">UI</text><text class="muted" x="48" y="108">Logic</text><text class="muted" x="52" y="128">Data</text>
+              <text class="muted" x="182" y="88">UI</text><text class="muted" x="177" y="108">Logic</text><text class="muted" x="181" y="128">Data</text>
+              <text class="muted" x="311" y="88">UI</text><text class="muted" x="306" y="108">Logic</text><text class="muted" x="310" y="128">Data</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Data mesh</span>
+            <h3>Domain ownership sounds great until the governance bill arrives</h3>
+            <p>Data mesh is usually pitched as liberation from the central data team. Sometimes it is. Sometimes it just distributes confusion. It only works when teams can actually own data quality, contracts, and operational responsibility.</p>
+            <ul class="clean">
+              <li>domain ownership</li>
+              <li>data as a product</li>
+              <li>federated governance</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Data mesh diagram">
+              <defs><marker id="arrowDM" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <circle class="box-d" cx="210" cy="95" r="38"></circle>
+              <rect class="box-a" x="40" y="28" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-b" x="270" y="28" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-c" x="40" y="120" rx="10" ry="10" width="110" height="42"></rect>
+              <rect class="box-a" x="270" y="120" rx="10" ry="10" width="110" height="42"></rect>
+              <line class="line" marker-end="url(#arrowDM)" x1="150" y1="49" x2="176" y2="77"></line>
+              <line class="line" marker-end="url(#arrowDM)" x1="270" y1="49" x2="244" y2="77"></line>
+              <line class="line" marker-end="url(#arrowDM)" x1="150" y1="141" x2="176" y2="113"></line>
+              <line class="line" marker-end="url(#arrowDM)" x1="270" y1="141" x2="244" y2="113"></line>
+              <text x="67" y="53">Team A Data</text>
+              <text x="297" y="53">Team B Data</text>
+              <text x="67" y="145">Team C Data</text>
+              <text x="297" y="145">Team D Data</text>
+              <text x="210" y="94" text-anchor="middle">Shared</text>
+              <text x="210" y="109" text-anchor="middle">Rules</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="group-head">
+          <h3>Patterns that shape how data flows</h3>
+          <p>These patterns matter when reads, writes, history, and runtime workload start pulling in different directions.</p>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Event sourcing</span>
+            <h3>Great for audit trails. Dangerous when used as a personality trait.</h3>
+            <p>Event sourcing can be excellent when the history itself matters: auditability, replay, temporal debugging, and systems where the business cares about how state changed. Outside that, it often buys more ceremony than value.</p>
+            <ul class="clean">
+              <li>append-only event history</li>
+              <li>strong fit for traceability and replay</li>
+              <li>costly when the domain does not need history as a first-class concept</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Event sourcing diagram">
+              <defs><marker id="arrowES" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="30" y="72" rx="10" ry="10" width="92" height="46"></rect>
+              <rect class="box-d" x="160" y="28" rx="10" ry="10" width="108" height="42"></rect>
+              <rect class="box-d" x="160" y="78" rx="10" ry="10" width="108" height="42"></rect>
+              <rect class="box-d" x="160" y="128" rx="10" ry="10" width="108" height="42"></rect>
+              <rect class="box-b" x="308" y="72" rx="10" ry="10" width="82" height="46"></rect>
+              <path class="line" marker-end="url(#arrowES)" d="M122 95 H160"></path>
+              <path class="line" marker-end="url(#arrowES)" d="M268 49 C292 49,292 95,308 95"></path>
+              <path class="line" marker-end="url(#arrowES)" d="M268 99 H308"></path>
+              <path class="line" marker-end="url(#arrowES)" d="M268 149 C292 149,292 95,308 95"></path>
+              <text x="54" y="100">Command</text>
+              <text x="194" y="54">Event 1</text>
+              <text x="194" y="104">Event 2</text>
+              <text x="194" y="154">Event 3</text>
+              <text x="332" y="100">State</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">CQRS</span>
+            <h3>Most teams adopt CQRS for the wrong reasons</h3>
+            <p>It earns its complexity in roughly one system in ten. Read and write models split cleanly when the workloads, scaling profiles, or business rules are genuinely different. Knowing the other nine is the architectural skill.</p>
+            <ul class="clean">
+              <li>separates reads from writes</li>
+              <li>useful when read and write pressures diverge sharply</li>
+              <li>not a free upgrade for ordinary CRUD systems</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="CQRS diagram">
+              <defs><marker id="arrowCQRS" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="30" y="30" rx="10" ry="10" width="110" height="44"></rect>
+              <rect class="box-b" x="170" y="24" rx="10" ry="10" width="100" height="56"></rect>
+              <rect class="box-c" x="170" y="112" rx="10" ry="10" width="100" height="56"></rect>
+              <rect class="box-d" x="300" y="30" rx="10" ry="10" width="90" height="44"></rect>
+              <rect class="box-d" x="300" y="118" rx="10" ry="10" width="90" height="44"></rect>
+              <path class="line" marker-end="url(#arrowCQRS)" d="M140 52 H170"></path>
+              <path class="line" marker-end="url(#arrowCQRS)" d="M140 52 C170 52,150 140,170 140"></path>
+              <path class="line" marker-end="url(#arrowCQRS)" d="M270 52 H300"></path>
+              <path class="line" marker-end="url(#arrowCQRS)" d="M270 140 H300"></path>
+              <text x="54" y="56">Client</text>
+              <text x="201" y="55">Write Side</text>
+              <text x="203" y="144">Read Side</text>
+              <text x="316" y="56">Write DB</text>
+              <text x="319" y="144">Read DB</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">FaaS</span>
+            <h3>Useful tool. Terrible religion.</h3>
+            <p>Functions as a Service shine when triggered work is small, event-shaped, and operationally spiky. The mistake is treating them as the default unit of architecture instead of one execution model among many.</p>
+            <ul class="clean">
+              <li>small focused execution units</li>
+              <li>good fit for event handling and automation</li>
+              <li>works best as part of a larger design, not the whole philosophy</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="FaaS diagram">
+              <defs><marker id="arrowF" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="26" y="72" rx="10" ry="10" width="84" height="46"></rect>
+              <rect class="box-b" x="160" y="72" rx="10" ry="10" width="100" height="46"></rect>
+              <rect class="box-c" x="310" y="30" rx="10" ry="10" width="84" height="42"></rect>
+              <rect class="box-c" x="310" y="118" rx="10" ry="10" width="84" height="42"></rect>
+              <path class="line" marker-end="url(#arrowF)" d="M110 95 H160"></path>
+              <path class="line" marker-end="url(#arrowF)" d="M260 95 C290 95,290 51,310 51"></path>
+              <path class="line" marker-end="url(#arrowF)" d="M260 95 C290 95,290 139,310 139"></path>
+              <text x="43" y="100">Event</text><text x="194" y="100">Function</text><text x="326" y="55">Store</text><text x="328" y="143">Notify</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="group-head">
+          <h3>Patterns that shape how systems coordinate</h3>
+          <p>Once the system crosses process boundaries, coordination becomes the real tax collector: latency, retries, ordering, visibility, and failure.</p>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Distributed computing</span>
+            <h3>Design for latency, failure, and coordination</h3>
+            <p>As soon as a system spans multiple nodes or services, assumptions change. Retries, ordering, duplication, and consistency trade-offs become normal design concerns.</p>
+            <ul class="clean">
+              <li>partial failure is expected</li>
+              <li>communication has cost</li>
+              <li>coordination and observability become central</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Distributed computing diagram">
+              <defs><marker id="arrowDC" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect x="52" y="34" width="316" height="122" rx="18" ry="18" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.12)" stroke-width="1.2"></rect>
+              <text class="muted" x="74" y="54">Cluster</text>
+              <rect class="box-a" x="78" y="72" rx="12" ry="12" width="92" height="42"></rect>
+              <rect class="box-b" x="246" y="52" rx="12" ry="12" width="92" height="42"></rect>
+              <rect class="box-c" x="246" y="116" rx="12" ry="12" width="92" height="42"></rect>
+              <rect class="box-d" x="162" y="72" rx="12" ry="12" width="92" height="42"></rect>
+              <path class="line" marker-end="url(#arrowDC)" d="M170 93 H162"></path>
+              <path class="line" marker-end="url(#arrowDC)" d="M254 84 H246"></path>
+              <path class="line" marker-end="url(#arrowDC)" d="M254 102 C280 102,280 128,246 137"></path>
+              <path class="line" marker-end="url(#arrowDC)" d="M292 94 V116"></path>
+              <text x="103" y="98">Node A</text>
+              <text x="187" y="98">Node B</text>
+              <text x="271" y="78">Node C</text>
+              <text x="271" y="142">Node D</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Actor-based model</span>
+            <h3>Model behavior as isolated actors that communicate by messages</h3>
+            <p>Actor-based systems can be a useful alternative to object-centric thinking when concurrency, isolation, and message flow matter more than shared mutable state.</p>
+            <ul class="clean">
+              <li>isolation by default</li>
+              <li>message-driven behavior</li>
+              <li>good fit for concurrency-heavy systems</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Actor model diagram">
+              <defs><marker id="arrowActor" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <circle class="box-a" cx="88" cy="64" r="28"></circle>
+              <rect class="box-a" x="62" y="105" rx="8" ry="8" width="52" height="22"></rect>
+              <circle class="box-b" cx="212" cy="64" r="28"></circle>
+              <rect class="box-b" x="186" y="105" rx="8" ry="8" width="52" height="22"></rect>
+              <circle class="box-c" cx="88" cy="142" r="28"></circle>
+              <rect class="box-c" x="62" y="169" rx="8" ry="8" width="52" height="16"></rect>
+              <circle class="box-d" cx="312" cy="103" r="30"></circle>
+              <rect class="box-d" x="286" y="146" rx="8" ry="8" width="52" height="22"></rect>
+              <path class="line" marker-end="url(#arrowActor)" d="M116 64 H176"></path>
+              <path class="line" marker-end="url(#arrowActor)" d="M212 92 V119"></path>
+              <path class="line" marker-end="url(#arrowActor)" d="M116 142 C162 142,168 118,282 108"></path>
+              <path class="line" marker-end="url(#arrowActor)" d="M240 64 C272 64,278 84,282 92"></path>
+              <text x="68" y="69">Actor A</text>
+              <text x="192" y="69">Actor B</text>
+              <text x="68" y="147">Actor C</text>
+              <text x="292" y="108">Actor D</text>
+              <text class="muted" x="69" y="120">mailbox</text>
+              <text class="muted" x="193" y="120">mailbox</text>
+              <text class="muted" x="293" y="161">mailbox</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Event-driven agent systems</span>
+            <h3>Communication through events with looser connections</h3>
+            <p>For agent systems, event-driven communication can be useful when you want extension, monitoring, and evolution to stay manageable. New listeners can join without every participant needing to know every other participant.</p>
+            <ul class="clean">
+              <li>looser coupling between participants</li>
+              <li>easier to extend with new consumers</li>
+              <li>better fit when workflows need observability</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Event-driven agent systems diagram">
+              <defs><marker id="arrowEVA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <circle class="box-a" cx="70" cy="95" r="30"></circle>
+              <rect class="box-d" x="165" y="66" rx="12" ry="12" width="90" height="58"></rect>
+              <circle class="box-b" cx="332" cy="50" r="26"></circle>
+              <circle class="box-c" cx="332" cy="140" r="26"></circle>
+              <path class="line" marker-end="url(#arrowEVA)" d="M100 95 H165"></path>
+              <path class="line" marker-end="url(#arrowEVA)" d="M255 95 C286 95,286 56,306 56"></path>
+              <path class="line" marker-end="url(#arrowEVA)" d="M255 95 C286 95,286 134,306 134"></path>
+              <text x="49" y="100">Agent</text>
+              <text x="190" y="100">Events</text>
+              <text x="314" y="55">Agent</text>
+              <text x="314" y="145">Tool</text>
+            </svg>
+          </div>
+        </div>
+<div class="group-head">
+          <h3>Patterns that shape how systems evolve</h3>
+          <p>Most architecture work is not greenfield design. It is deciding how change enters an already running system without wrecking the business.</p>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Strangler Fig Pattern</span>
+            <h3>Modernize while the existing system keeps running</h3>
+            <p>New behavior grows around the legacy system and traffic is gradually moved. Functional expectations stay stable for users while the system changes underneath.</p>
+            <ul class="clean">
+              <li>incremental migration</li>
+              <li>legacy remains live during transition</li>
+              <li>modernization becomes a flow, not a big-bang event</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Strangler fig pattern diagram">
+              <defs><marker id="arrowStrangler" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-c" x="150" y="55" rx="12" ry="12" width="120" height="80"></rect>
+              <rect class="box-a" x="18" y="28" rx="10" ry="10" width="122" height="38"></rect>
+              <rect class="box-b" x="292" y="28" rx="10" ry="10" width="100" height="38"></rect>
+              <rect class="box-b" x="292" y="124" rx="10" ry="10" width="100" height="38"></rect>
+              <path class="line" marker-end="url(#arrowStrangler)" d="M140 47 H145"></path>
+              <path class="line" marker-end="url(#arrowStrangler)" d="M270 95 H288"></path>
+              <path class="line" marker-end="url(#arrowStrangler)" d="M270 95 C315 95,315 143,292 143"></path>
+              <text x="174" y="100">Legacy System</text>
+              <text x="34" y="51">Incoming Traffic</text>
+              <text x="308" y="51">New Service A</text>
+              <text x="308" y="147">New Service B</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Emerging architecture</span>
+            <h3>Design enough to move, then refine through feedback</h3>
+            <p>Emerging architecture is useful when requirements are still settling. It avoids pretending that everything can be known upfront and treats architecture as something clarified through delivery and iteration.</p>
+            <ul class="clean">
+              <li>iterative design</li>
+              <li>feedback-driven</li>
+              <li>adaptable to learning and change</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Emerging architecture diagram">
+              <defs><marker id="arrowEA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="25" y="74" rx="10" ry="10" width="90" height="42"></rect>
+              <rect class="box-b" x="155" y="74" rx="10" ry="10" width="100" height="42"></rect>
+              <rect class="box-c" x="295" y="74" rx="10" ry="10" width="100" height="42"></rect>
+              <path class="line" marker-end="url(#arrowEA)" d="M115 95 H155"></path>
+              <path class="line" marker-end="url(#arrowEA)" d="M255 95 H295"></path>
+              <path class="line" marker-end="url(#arrowEA)" d="M345 116 C345 152,60 152,60 116"></path>
+              <text x="41" y="100">Build</text><text x="182" y="100">Learn</text><text x="325" y="100">Adjust</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Microkernel / Plugin architecture</span>
+            <h3>Keep a stable core and extend around it</h3>
+            <p>This approach works well when a system needs many extensions, custom rules, or product variations. The core stays focused while plugins add specialized behavior.</p>
+            <ul class="clean">
+              <li>stable core</li>
+              <li>extensibility</li>
+              <li>good for long-lived products</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 420 190" role="img" aria-label="Microkernel plugin architecture diagram">
+              <defs><marker id="arrowMicro" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-d" x="145" y="55" rx="16" ry="16" width="130" height="80"></rect>
+              <rect class="box-a" x="30" y="30" rx="10" ry="10" width="90" height="44"></rect>
+              <rect class="box-b" x="300" y="30" rx="10" ry="10" width="90" height="44"></rect>
+              <rect class="box-c" x="30" y="116" rx="10" ry="10" width="90" height="44"></rect>
+              <rect class="box-a" x="300" y="116" rx="10" ry="10" width="90" height="44"></rect>
+              <line class="line" marker-end="url(#arrowMicro)" x1="120" y1="52" x2="145" y2="75"></line>
+              <line class="line" marker-end="url(#arrowMicro)" x1="300" y1="52" x2="275" y2="75"></line>
+              <line class="line" marker-end="url(#arrowMicro)" x1="120" y1="138" x2="145" y2="115"></line>
+              <line class="line" marker-end="url(#arrowMicro)" x1="300" y1="138" x2="275" y2="115"></line>
+              <text x="177" y="98">Core</text>
+              <text x="54" y="56">Plugin 1</text>
+              <text x="324" y="56">Plugin 2</text>
+              <text x="54" y="142">Plugin 3</text>
+              <text x="324" y="142">Plugin 4</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="build">
+      <div class="section-head">
+        <div class="section-index">06</div>
+        <div>
+          <h2>Learning architecture by building</h2>
+          <p>The most useful architectural skill is recognizing a missing layer before the industry has named it. These three movements show how that skill is built — through past projects, through the gaps still open, and through what current work is teaching.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12 movement-card movement-1">
+          <span class="tag">Movement 1 · Early</span>
+          <h3>Building before the ecosystem catches up</h3>
+          <p>At the time, the work looks too early, too niche, or slightly out of phase with the market. Then a few years later, the language changes, the tooling improves, the surrounding constraints soften, and suddenly the same ideas no longer seem eccentric. They seem inevitable.</p>
+          <p><em>In infrastructure, the real engineering pressure shows up at the edges first — execution safety, tenancy boundaries, runtime assumptions, the uncomfortable details polished abstractions prefer not to mention.</em></p>
+        </div>
+        <div class="card span-4">
+          <h3><a class="resource-title" href="https://github.com/hwclass/docktor" target="_blank" rel="noopener">Docktor</a></h3>
+          <p>Isolation, execution environments, and operational boundaries — before those concerns became central in mainstream container conversations.</p>
+          <div class="pill-row">
+            <div class="pill">execution safety</div>
+            <div class="pill">tenancy</div>
+            <div class="pill">runtime boundaries</div>
+          </div>
+        </div>
+        <div class="card span-4">
+          <h3><a class="resource-title" href="https://github.com/hwclass/sal" target="_blank" rel="noopener">SAL</a></h3>
+          <p>Lightweight browser-oriented execution and automation. Treating the browser as an operational environment, an observation surface, a proto-runtime — not just a place where humans click things.</p>
+          <div class="pill-row">
+            <div class="pill">browser-native</div>
+            <div class="pill">automation</div>
+            <div class="pill">proto-runtime</div>
+          </div>
+        </div>
+        <div class="card span-4">
+          <h3><a class="resource-title" href="https://github.com/hwclass/wasm-browser-agents-blueprint" target="_blank" rel="noopener">3W</a></h3>
+          <p>The browser as a serious runtime environment, not a presentation layer. Agent behavior, state handling, isolation, and portability across runtime boundaries.</p>
+          <div class="pill-row">
+            <div class="pill">wasm</div>
+            <div class="pill">agent runtime</div>
+            <div class="pill">cross-host</div>
+          </div>
+        </div>
+
+        <div class="card span-12 movement-card movement-2">
+          <span class="tag">Movement 2 · Missing</span>
+          <h3>Naming the layers the ecosystem still has not built</h3>
+          <p>You can see the shape of a missing layer before the industry has named it. That is the frustrating part of infrastructure work — and also the part that makes the next decade of architecture interesting. The skill is seeing the gap clearly and naming it early.</p>
+          <p><em>Once systems become more distributed and more delegated, communication patterns shape the architecture itself. A weak communication layer quietly makes everything above it harder to reason about and operate.</em></p>
+        </div>
+        <div class="card span-4">
+          <h3><a class="resource-title" href="https://github.com/hwclass/open-serverless" target="_blank" rel="noopener">Open Serverless</a></h3>
+          <p>A dependable, engineering-first, EU-based serverless foundation. Not just a regional wish — a question of trust, operational quality, regulatory context, and infrastructure that feels durable rather than opportunistic.</p>
+          <div class="pill-row">
+            <div class="pill">EU-based</div>
+            <div class="pill">engineering-first</div>
+            <div class="pill">durable</div>
+          </div>
+        </div>
+        <div class="card span-4">
+          <h3><a class="resource-title" href="https://github.com/hwclass/a2a-bus" target="_blank" rel="noopener">A2A Bus</a></h3>
+          <p>An agent communication layer shaped by engineering reality, not conceptual elegance alone. The thing that turns multi-agent systems from turbulence into something operable.</p>
+          <div class="pill-row">
+            <div class="pill">agent communication</div>
+            <div class="pill">coordination</div>
+            <div class="pill">practical</div>
+          </div>
+        </div>
+        <div class="card span-4">
+          <h3><a class="resource-title" href="https://github.com/hwclass/agent.rs" target="_blank" rel="noopener">agent.rs</a></h3>
+          <p>A serious multi-host agent architecture, built against the assumption that agents live in one process, one host, one loop. Once agents become operationally meaningful, the architecture drifts toward multiple hosts, multiple contexts, multiple execution surfaces.</p>
+          <div class="pill-row">
+            <div class="pill">multi-host</div>
+            <div class="pill">explicit coordination</div>
+            <div class="pill">correctness</div>
+          </div>
+        </div>
+
+        <div class="card span-12 movement-card movement-3">
+          <span class="tag">Movement 3 · Concrete</span>
+          <h3>Building the system that teaches you what trade-offs really cost</h3>
+          <p>The important part of any new technology is usually where the abstractions are still too soft, and where the real engineering pressure will eventually show up. The only way to find those places is to build something real and let it push back.</p>
+          <p><em>Building real systems is the fastest way to understand architecture, because trade-offs stop being theoretical.</em></p>
+        </div>
+        <div class="card span-6">
+          <h3><a class="resource-title" href="https://docmate.app" target="_blank" rel="noopener">Docmate</a></h3>
+          <p>Document RAG on a runtime OLAP database — DuckDB plus vector similarity search. The architectural lesson goes beyond vector search itself. An in-process engine plus VSS says something important about system shape: sometimes a simpler local architecture teaches more than adding distributed infrastructure too early.</p>
+          <div class="pill-row">
+            <div class="pill">embedded analytics</div>
+            <div class="pill">fast iteration</div>
+            <div class="pill">less infrastructure gravity</div>
+          </div>
+        </div>
+        <div class="card span-6">
+          <h3><a class="resource-title" href="https://hwclass.dev/posts/event-driven-agent-systems-scaling-beyond-a2a-and-acp" target="_blank" rel="noopener">EVA</a></h3>
+          <p>Event-driven agent systems as an alternative to direct agent-to-agent coupling. The lesson is to choose the communication style that keeps the system easier to evolve, observe, and change over time.</p>
+          <div class="pill-row">
+            <div class="pill">event-driven</div>
+            <div class="pill">loose coupling</div>
+            <div class="pill">observability</div>
+          </div>
+        </div>
+
+        <div class="card span-12 movement-card movement-3">
+          <p class="quote"><em>First, a pattern appears in isolated work. Then it shows up in slightly more people's frustrations. Then vendors package pieces of it. Then the language stabilizes. Then the thing that once felt "too early" becomes a category. That is what an architect learns to recognize — before everyone else does.</em></p>
+        </div>
+
+        <div class="card span-4"><span class="tag">Lens</span><p>What architectural pressure created this design choice?</p></div>
+        <div class="card span-4"><span class="tag">Lens</span><p>What would need to change if the team, traffic, or domain complexity grew tenfold?</p></div>
+        <div class="card span-4"><span class="tag">Lens</span><p>What lesson from this project generalizes beyond this stack?</p></div>
+      </div>
+    </section>
+
+    <section id="insights">
+      <div class="section-head">
+        <div class="section-index">07</div>
+        <div>
+          <h2>Insights from experience</h2>
+          <p>These are the kind of sentences that become true after enough systems push back.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-6 insight-quote">“Patterns are scaffolding for thinking, not commandments. The moment you treat them as commandments, you stop being an architect and become a parrot.”</div>
+        <div class="card span-6 insight-quote">“Most teams adopt CQRS for the wrong reasons. It earns its complexity in maybe one system in ten. Knowing the other nine is the architectural skill.”</div>
+        <div class="card span-6 insight-quote">“A clean diagram and a painful codebase are not a contradiction. They are the most common outcome.”</div>
+        <div class="card span-6 insight-quote">“Distributed systems are mostly about coordination costs. Every network boundary buys you time, failure, and uncertainty whether you wanted them or not.”</div>
+        <div class="card span-6 insight-quote">“Modernization is not a project. It is a posture you adopt for the rest of your career.”</div>
+        <div class="card span-6 insight-quote">“The job is rarely choosing the most advanced option. The job is choosing the option that keeps the next change possible.”</div>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="section-head">
+        <div class="section-index">08</div>
+        <div>
+          <h2>Resource deck</h2>
+          <p>These links can be opened during the talk or shared afterward for deeper reading.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12">
+          <div class="resource-list">
+            <div class="resource"><div><a class="resource-title" href="https://cloud.google.com/architecture/framework" target="_blank" rel="noopener">Google Cloud Well-Architected Framework</a><br><span>Modern cloud design pillars: security, reliability, performance, cost, operations, sustainability.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://openpracticelibrary.com/practice/emerging-architecture/" target="_blank" rel="noopener">Open Practice Library · Emerging Architecture</a><br><span>Design enough to move, learn, and adapt.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://fermatslibrary.com/s/on-the-criteria-to-be-used-in-decomposing-systems-into-modules" target="_blank" rel="noopener">Parnas, 1972 · Information Hiding</a><br><span>The classic paper on decomposing systems into modules and why boundaries matter.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://www.melconway.com/Home/Conways_Law.html" target="_blank" rel="noopener">Conway, 1968 · Conway’s Law</a><br><span>The original observation that organizations tend to ship systems that mirror their communication structure.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://ics.uci.edu/~fielding/pubs/dissertation/top.htm" target="_blank" rel="noopener">Fielding, 2000 · REST</a><br><span>The dissertation that frames REST as an architectural style built around constraints.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://people.eecs.berkeley.edu/~brewer/cs262b-2004/PODC-keynote.pdf" target="_blank" rel="noopener">Brewer, 2000 · CAP Theorem</a><br><span>The well-known keynote that shaped how engineers think about trade-offs in distributed systems.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://www.dddcommunity.org/book/evans_2003/" target="_blank" rel="noopener">Evans, 2003 · Domain-Driven Design</a><br><span>Bounded contexts and the idea that system boundaries should follow the business domain.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://martinfowler.com/articles/microservices.html" target="_blank" rel="noopener">Fowler &amp; Lewis, 2014 · Microservices</a><br><span>A practical introduction to microservices and the trade-offs around independent services.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">2020s · AI-aware architecture and agents</a><br><span>A current perspective on designing agent systems with clear roles, tools, and evaluation loops.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://hwclass.dev/posts/event-driven-agent-systems-scaling-beyond-a2a-and-acp" target="_blank" rel="noopener">EVA</a><br><span>Event-driven agent systems as an alternative communication model.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://hwclass.github.io/agent.rs/" target="_blank" rel="noopener">agent.rs</a><br><span>Explicit and correctness-focused agent architecture.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://docmate.app/" target="_blank" rel="noopener">Docmate</a><br><span>Project example for discussing document RAG and architecture through building.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://duckdb.org/" target="_blank" rel="noopener">DuckDB</a><br><span>In-process OLAP engine for runtime analytics and lightweight experimentation.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://duckdb.org/docs/stable/core_extensions/vss.html" target="_blank" rel="noopener">DuckDB VSS</a><br><span>Vector similarity search extension for DuckDB.</span></div></div>
+          </div>
+        </div>
+        <div class="card span-12 qr-card">
+          <div>
+            <a href="https://app.sli.do/event/9GnBPnNhktVUXtppKauYPB" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+              <img src="QR Code for Architecture of Tomorrow.png" alt="Session feedback poll QR code" style="width:200px; height:200px; object-fit:contain; border-radius:18px; background:#fff; padding:10px; display:block; margin:0 auto 14px;" />
+            </a>
+            <div class="tertiary">How much did you like the session?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="close">
+      <div class="section-head">
+        <div class="section-index">09</div>
+        <div>
+          <h2>Closing the session</h2>
+          <p>End with a reusable set of questions students can apply to any new tool, trend, or pattern.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>Four useful questions</h3>
+          <ul class="clean">
+            <li>What problem is this approach trying to solve?</li>
+            <li>What trade-off does it introduce?</li>
+            <li>What kind of team, domain, or scale makes it a good fit?</li>
+            <li>What kind of future change does it make easier or harder?</li>
+          </ul>
+        </div>
+        <div class="card span-6">
+          <h3>Bridge to the next session</h3>
+          <p>The next session can take these questions and apply them more directly to the near future of software: AI agents, platform engineering, event-driven communication, and the changing role of developers.</p>
+          <div class="sticky-note">You do not need a fixed answer for every trend. You need a stronger way to evaluate what is worth learning, applying, or ignoring.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer card">
+    </div>
+  </div>
+
+  <script>
+    const pollButtons = document.querySelectorAll('#poll button');
+    const pollResult = document.getElementById('pollResult');
+    pollButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        pollResult.textContent = btn.dataset.answer;
+      });
+    });
+
+    const sections = [...document.querySelectorAll('section')];
+    const navLinks = [...document.querySelectorAll('.nav a')];
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY + 140;
+      let current = sections[0]?.id;
+      sections.forEach(sec => {
+        if (sec.offsetTop <= y) current = sec.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+</body>
+</html>
