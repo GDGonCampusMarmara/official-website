@@ -8,12 +8,7 @@ export default function TimelineItem({ ev }) {
     : FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["All"];
 
   const handleClick = () => {
-    if (ev.past) return;
-    if (!ev.formLink || ev.formLink === "#") {
-      navigate("/basvuru-kapali");
-    } else {
-      window.open(ev.formLink, "_blank", "noopener,noreferrer");
-    }
+    navigate(`/etkinlik/${ev.id}`);
   };
 
   return (
