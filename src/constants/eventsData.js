@@ -140,7 +140,15 @@ export const FOCUS_CLASSES = {
     activeBtn: 'bg-[#ea4335] border-[#ea4335] text-white',
     hoverBtn: 'hover:border-[#ea4335] hover:text-[#ea4335]',
     primaryBtn: 'bg-[#ea4335] text-white hover:bg-[#ea4335]/90',
-  }
+  },
+  'past': {
+    text: 'text-gray-500',
+    bg: 'bg-gray-500/10',
+    badgeText: 'text-gray-400',
+    activeBtn: 'bg-gray-600 border-gray-600 text-white',
+    hoverBtn: 'hover:border-gray-400 hover:text-gray-400',
+    primaryBtn: 'bg-gray-700 text-gray-300 cursor-not-allowed',
+  },
 };
 
 export const CARD_POS = {

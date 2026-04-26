@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function EventCard({ ev, posStr, onNavigate }) {
   const navigate = useNavigate();
   const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["All"];
+  const pastClasses = FOCUS_CLASSES["past"];
   const posClass = CARD_POS[posStr] ?? CARD_POS["3"];
 
   const handleClick = (e) => {
@@ -18,6 +19,7 @@ export default function EventCard({ ev, posStr, onNavigate }) {
       className={[
         "absolute rounded-[24px] overflow-hidden cursor-pointer bg-white/[4%] border border-white/10 transition-all duration-[750ms] ease-[cubic-bezier(.16,1,.3,1)] [will-change:transform,opacity,filter] select-none backdrop-blur-[20px]",
         posClass,
+        ev.past ? "grayscale-[0.8] opacity-80" : "",
       ].join(" ")}
       onClick={handleClick}
       aria-labelledby={`event-title-${ev.id}`}
@@ -64,7 +66,10 @@ export default function EventCard({ ev, posStr, onNavigate }) {
             </div>
             <h4
               id={`event-title-${ev.id}`}
-              className="font-['Google_Sans',sans-serif] text-[22px] md:text-[26px] leading-[1.05] text-[#f8f6f1] mb-[.6rem] tracking-[.02em]"
+              className={[
+                "font-['Google_Sans',sans-serif] text-[22px] md:text-[26px] leading-[1.05] mb-[.6rem] tracking-[.02em]",
+                ev.past ? "text-[#f8f6f1]/45" : "text-[#f8f6f1]",
+              ].join(" ")}
             >
               {ev.title}
             </h4>
@@ -89,26 +94,37 @@ export default function EventCard({ ev, posStr, onNavigate }) {
           <div className="flex">
             <a
               href={
-                ev.formLink && ev.formLink !== "#"
-                  ? ev.formLink
-                  : "/basvuru-kapali"
+                ev.past
+                  ? "#"
+                  : ev.formLink && ev.formLink !== "#"
+                    ? ev.formLink
+                    : "/basvuru-kapali"
               }
-              target={ev.formLink && ev.formLink !== "#" ? "_blank" : "_self"}
+              target={
+                !ev.past && ev.formLink && ev.formLink !== "#"
+                  ? "_blank"
+                  : "_self"
+              }
               rel="noopener noreferrer"
-              aria-label={`Details and application form for ${ev.title}`}
               className={[
-                "w-full flex items-center justify-center rounded-xl py-[11px] px-3 text-[13px] font-medium tracking-[.02em] transition-all duration-200 hover:-translate-y-px cursor-pointer",
-                fc.primaryBtn,
+                "w-full flex items-center justify-center rounded-xl py-[11px] px-3 text-[13px] font-medium tracking-[.02em] transition-all duration-200",
+                ev.past
+                  ? pastClasses.primaryBtn
+                  : `${fc.primaryBtn} hover:-translate-y-px cursor-pointer`,
               ].join(" ")}
               onClick={(e) => {
+                e.stopPropagation();
+                if (ev.past) {
+                  e.preventDefault();
+                  return;
+                }
                 if (!ev.formLink || ev.formLink === "#") {
                   e.preventDefault();
                   navigate("/basvuru-kapali");
                 }
-                e.stopPropagation();
               }}
             >
-              Daha Fazla & Başvur
+              {ev.past ? "Etkinlik Tamamlandı" : "Daha Fazla & Başvur"}
             </a>
           </div>
         </div>
