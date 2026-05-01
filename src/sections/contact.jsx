@@ -24,20 +24,20 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="py-24 bg-[#0a0d14] relative scroll-mt-20"
+      className="py-16 md:py-24 bg-[#0a0d14] relative scroll-mt-20"
       aria-labelledby="contact-heading"
     >
       <div
         className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px]"
         aria-hidden="true"
       ></div>
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
           <div className="space-y-8">
             <header>
               <h2
                 id="contact-heading"
-                className="text-4xl md:text-5xl font-extrabold text-white mb-6"
+                className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-6"
               >
                 <span className="block text-blue-500 font-bold tracking-widest uppercase text-sm mb-4">
                   Bize Ulaşın
@@ -60,7 +60,7 @@ const Contact = () => {
                   className="flex items-start gap-4 group cursor-pointer"
                   aria-label={`${info.label}: ${info.value}`}
                 >
-                  <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-2xl group-hover:bg-blue-600/20 group-hover:border-blue-500/50 transition-all">
+                  <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-2xl group-hover:bg-blue-600/20 group-hover:border-blue-500/50 transition-all">
                     <Icon
                       name={info.icon}
                       className="text-blue-500 group-hover:scale-110 transition-transform"
@@ -69,9 +69,9 @@ const Contact = () => {
                       aria-hidden="true"
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-gray-500 text-sm">{info.label}</p>
-                    <p className="text-white font-medium group-hover:text-blue-400 transition-colors">
+                    <p className="text-white font-medium group-hover:text-blue-400 transition-colors break-all sm:break-normal">
                       {info.value}
                     </p>
                   </div>
@@ -79,13 +79,13 @@ const Contact = () => {
               ))}
             </nav>
           </div>
-          <div className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-3xl backdrop-blur-sm">
+          <div className="bg-white/5 border border-white/10 p-5 sm:p-8 md:p-10 rounded-3xl backdrop-blur-sm">
             <form
               className="space-y-6"
               onSubmit={sendEmail}
               aria-label="Contact Form"
             >
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
                 <div className="space-y-2">
                   <label
                     htmlFor="user_name"
