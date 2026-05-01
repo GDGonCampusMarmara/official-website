@@ -109,15 +109,19 @@ const EventDetail = () => {
                   {ev.materialLink ? "Materyalleri Gör" : "Materyal Henüz Yok"}
                 </button>
               ) : (
-                <a
-                  href={ev.formLink || "#"}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  onClick={() => {
+                    if (!ev.formLink || ev.formLink === "#") {
+                      navigate("/basvuru-kapali");
+                      return;
+                    }
+                    window.open(ev.formLink, "_blank", "noreferrer");
+                  }}
                   className={`inline-flex items-center justify-center gap-3 px-12 py-5 rounded-2xl font-bold text-sm transition-all hover:scale-[1.02] shadow-2xl ${fc.primaryBtn}`}
                 >
                   <Icon name="UserPlus" size={18} />
                   Başvuru Yap
-                </a>
+                </button>
               )}
             </div>
           </div>
