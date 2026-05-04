@@ -84,30 +84,48 @@ const EventDetail = () => {
               </div>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 flex flex-col items-start gap-4">
               {ev.past ? (
-                <button
-                  onClick={() => {
-                    if (!ev.materialLink) {
-                      alert("Bu etkinlik için henüz materyal yüklenmedi.");
-                      return;
-                    }
-                    setShowMaterials(true);
-                    setTimeout(() => {
-                      document
-                        .getElementById("materials")
-                        ?.scrollIntoView({ behavior: "smooth" });
-                    }, 100);
-                  }}
-                  className={`inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-bold text-sm transition-all shadow-xl ${
-                    ev.materialLink
-                      ? "bg-white/10 text-white/80 border border-white/10 hover:bg-white/20"
-                      : "bg-white/5 text-white/20 cursor-not-allowed opacity-50"
-                  }`}
-                >
-                  <Icon name="ChevronDown" size={18} />
-                  {ev.materialLink ? "Materyalleri Gör" : "Materyal Henüz Yok"}
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      if (!ev.materialLink) {
+                        alert("Bu etkinlik için henüz materyal yüklenmedi.");
+                        return;
+                      }
+                      setShowMaterials(true);
+                      setTimeout(() => {
+                        document
+                          .getElementById("materials")
+                          ?.scrollIntoView({ behavior: "smooth" });
+                      }, 100);
+                    }}
+                    className={`w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-bold text-sm transition-all shadow-xl ${
+                      ev.materialLink
+                        ? "bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white"
+                        : "bg-white/5 text-white/20 cursor-not-allowed opacity-50"
+                    }`}
+                  >
+                    <Icon name="ChevronDown" size={18} />
+                    {ev.materialLink
+                      ? "Materyalleri Gör"
+                      : "Materyal Henüz Yok"}
+                  </button>
+
+                  {ev.videoLink && (
+                    <a
+                      href={ev.videoLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-bold text-sm transition-all shadow-xl
+               bg-white/[0.03] text-white/80 border border-white/10
+               hover:bg-red-500/[0.08] hover:text-red-500 hover:border-red-500/30"
+                    >
+                      <Icon name="Youtube" size={18} />
+                      Etkinlik Kaydını İzle
+                    </a>
+                  )}
+                </>
               ) : (
                 <button
                   onClick={() => {
@@ -117,7 +135,7 @@ const EventDetail = () => {
                     }
                     window.open(ev.formLink, "_blank", "noreferrer");
                   }}
-                  className={`inline-flex items-center justify-center gap-3 px-12 py-5 rounded-2xl font-bold text-sm transition-all hover:scale-[1.02] shadow-2xl ${fc.primaryBtn}`}
+                  className={`w-full sm:w-auto inline-flex items-center justify-center gap-3 px-12 py-5 rounded-2xl font-bold text-sm transition-all hover:scale-[1.02] shadow-2xl ${fc.primaryBtn}`}
                 >
                   <Icon name="UserPlus" size={18} />
                   Başvuru Yap

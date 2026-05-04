@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture of Tomorrow · Session 2</title>
+  <style>
+    :root {
+      --bg: #0e0f1a;
+      --panel: rgba(255,255,255,0.07);
+      --panel-strong: rgba(255,255,255,0.12);
+      --text: #f6f7fb;
+      --muted: #dde2f0;
+      --muted-soft: #b7bfd3;
+      --accent: #86efac;
+      --accent-2: #7dd3fc;
+      --accent-3: #f9a8d4;
+      --accent-4: #fcd34d;
+      --border: rgba(255,255,255,0.14);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 24px;
+      --section-gap: 132px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(125,211,252,0.18), transparent 25%),
+        radial-gradient(circle at 80% 10%, rgba(249,168,212,0.16), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(134,239,172,0.14), transparent 24%),
+        linear-gradient(180deg, #101222 0%, #0a0b13 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+    body { padding: 28px; }
+    .wrap { max-width: 1260px; margin: 0 auto; }
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 44px; position: relative; overflow: hidden; min-height: 78vh;
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 24px; align-items: center;
+      scroll-snap-align: start;
+    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(18px); opacity: 0.8; pointer-events: none; }
+    .orb.one { width: 260px; height: 260px; right: -40px; top: -40px; background: rgba(125,211,252,0.18); }
+    .orb.two { width: 220px; height: 220px; left: -30px; bottom: -50px; background: rgba(249,168,212,0.14); }
+    .eyebrow { display: inline-flex; gap: 10px; align-items: center; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem; font-weight: 800; }
+    h1 { font-size: clamp(2.6rem, 4.7vw, 5.1rem); line-height: 0.96; margin: 14px 0 14px; letter-spacing: -0.045em; text-wrap: balance; max-width: 12ch; }
+    h2 { margin: 0 0 10px; font-size: clamp(1.95rem, 3vw, 2.9rem); letter-spacing: -0.03em; }
+    .hero-subline { font-size: 1.02rem; line-height: 1.75; color: var(--muted); font-style: italic; max-width: 62ch; margin-bottom: 18px; }
+    .lead { font-size: 1.12rem; line-height: 1.82; color: var(--muted); max-width: 66ch; }
+    .hero-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      appearance: none; border: 0; border-radius: 999px; padding: 14px 18px; font-weight: 800; cursor: pointer;
+      transition: transform .2s ease, opacity .2s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #091018; }
+    .btn.ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); }
+    .hero-panel { display: grid; gap: 16px; }
+    .hero-box {
+      padding: 20px; border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .hero-box small, .section-kicker, .tertiary, .resource-note {
+      display: block; color: var(--muted-soft); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .hero-box strong { font-size: 1.08rem; display: block; margin-bottom: 6px; }
+    .hero-box p { margin: 0; color: var(--muted); line-height: 1.68; }
+
+    .nav {
+      position: sticky; top: 14px; z-index: 10; margin: 22px 0 34px; background: rgba(9,11,20,0.64);
+      border: 1px solid var(--border); border-radius: 999px; padding: 6px; display: flex; flex-wrap: nowrap; gap: 2px; backdrop-filter: blur(16px);
+      overflow: hidden; align-items: center; scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a { text-decoration: none; color: var(--muted); padding: 8px 9px; border-radius: 999px; font-weight: 700; font-size: 0.75rem; white-space: nowrap; flex: 1 1 0; min-width: 0; text-align: center; letter-spacing: -0.01em; }
+    .nav a:hover, .nav a.active { background: rgba(255,255,255,0.09); color: var(--text); }
+
+    section { margin: var(--section-gap) 0; scroll-margin-top: 96px; position: relative; scroll-snap-align: start; }
+    section::before {
+      content: ""; position: absolute; left: 18px; top: -42px; bottom: -42px; width: 2px;
+      background: linear-gradient(180deg, rgba(125,211,252,0.35), rgba(249,168,212,0.18), rgba(134,239,172,0.22));
+      opacity: 0.55;
+    }
+    section > * { position: relative; z-index: 1; }
+    .section-head {
+      display: grid; grid-template-columns: 90px 1fr;
+      align-items: start; gap: 24px; margin-bottom: 28px;
+    }
+    .section-index {
+      width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(125,211,252,0.18), rgba(134,239,172,0.18));
+      border: 1px solid rgba(255,255,255,0.12);
+      font-weight: 900; color: var(--text); margin-left: -10px;
+    }
+    .section-head p { margin: 0; color: var(--muted); max-width: 72ch; line-height: 1.72; }
+
+    .grid { display: grid; gap: 22px; grid-template-columns: repeat(12, 1fr); }
+    .card { padding: 26px; }
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    .tag { display: inline-block; padding: 8px 11px; border-radius: 999px; font-size: 0.8rem; font-weight: 800; margin-bottom: 12px; color: #091018; background: linear-gradient(135deg, var(--accent-4), var(--accent-3)); }
+    .card h3 { margin: 0 0 10px; font-size: 1.22rem; }
+    .card p, .card li { color: var(--muted); line-height: 1.75; }
+    ul.clean { padding-left: 20px; margin: 0; }
+    .quote { font-size: clamp(1.25rem, 2.5vw, 1.95rem); line-height: 1.5; color: #fff; letter-spacing: -0.02em; }
+    .sticky-note { border-radius: 18px; padding: 18px; background: linear-gradient(135deg, rgba(252,211,77,0.18), rgba(134,239,172,0.12)); border: 1px solid rgba(252,211,77,0.22); color: #fefce8; line-height: 1.7; }
+    .accent-card { border-left: 4px solid var(--accent); }
+    .accent-card.blue { border-left-color: var(--accent-2); }
+    .accent-card.pink { border-left-color: var(--accent-3); }
+    .accent-card.yellow { border-left-color: var(--accent-4); }
+
+    .pattern-card { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 18px; align-items: stretch; min-height: 250px; }
+    .diagram {
+      border-radius: 18px; border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      padding: 14px;
+      display: grid; place-items: center;
+    }
+    .diagram svg { width: 100%; max-width: 430px; height: 200px; }
+    .diagram text { fill: #f6f7fb; font-size: 12px; font-family: Inter, sans-serif; font-weight: 700; }
+    .diagram .muted { fill: var(--muted-soft); font-weight: 600; font-size: 11px; }
+    .diagram rect, .diagram circle { stroke: rgba(255,255,255,0.25); stroke-width: 1.4; }
+    .diagram .box-a { fill: rgba(125,211,252,0.12); }
+    .diagram .box-b { fill: rgba(134,239,172,0.12); }
+    .diagram .box-c { fill: rgba(249,168,212,0.12); }
+    .diagram .box-d { fill: rgba(252,211,77,0.12); }
+    .diagram .line { stroke: rgba(255,255,255,0.45); stroke-width: 1.6; fill: none; marker-end: url(#arrow); }
+
+    .pill-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .pill { padding:9px 12px; border-radius:999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-weight:700; font-size:.9rem; }
+    .resource-list { display:grid; gap:12px; }
+    .resource {
+      display:flex; justify-content:space-between; gap:16px; align-items:center; padding:14px 16px;
+      border-radius:16px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    }
+    .resource-title { color: var(--accent-2); text-decoration: none; font-weight: 800; }
+    .footer { padding: 28px; text-align: center; color: var(--muted); }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding: 28px; }
+      .section-head { grid-template-columns: 1fr; }
+      section::before { left: 6px; }
+      .pattern-card { grid-template-columns: 1fr; }
+      .span-3, .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: span 12; }
+      body { padding: 16px; }
+      .nav { border-radius: 24px; }
+      .resource { flex-direction: column; align-items: flex-start; }
+      h1 { max-width: 100%; }
+    }
+
+    @media (min-width: 1400px) {
+      body { padding: 18px 20px; }
+      .card p, .card li { font-size: 1.18rem; }
+      .lead { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero" id="top">
+      <div class="orb one"></div>
+      <div class="orb two"></div>
+      <div>
+        <div class="eyebrow">Architecture of Tomorrow · Session 2</div>
+        <h1>What's Shaping Software Now?<br>AI Agents, Platform Engineering &amp; the Near Future</h1>
+        <div class="hero-subline">This session is about learning how to read the direction of software without treating every new term like a commandment.</div>
+        <p class="lead">Software is being reorganized around loops, context, internal platforms, agent orchestration, and stronger control over where decisions actually run. The point is not to memorize a trend list. The point is to recognize which shifts are structural, which are temporary, and which are worth building around.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#agent-loops">Start with agents</a>
+          <a class="btn ghost" href="#resources">Jump to sources</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-box">
+          <small>Main tension</small>
+          <strong>Software is becoming more autonomous, but also more operational.</strong>
+          <p>That means the interesting questions are no longer only about frameworks and APIs. They are about control, coordination, boundaries, runtime placement, and how teams keep shipping without drowning in complexity.</p>
+        </div>
+        <div class="hero-box">
+          <small>Session frame</small>
+          <strong>Three lenses for reading what matters now</strong>
+          <p>Agents as loops, platforms as force multipliers, and the near future as a set of choices about governance, locality, interoperability, and developer experience.</p>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <a href="#why-now">Why now</a>
+      <a href="#agent-loops">AI agents</a>
+      <a href="#agent-anatomy">Agent anatomy</a>
+      <a href="#placement">Loop placement</a>
+      <a href="#platform">Platform engineering</a>
+      <a href="#near-future">Near future</a>
+      <a href="#false-signals">Common traps</a>
+      <a href="#what-to-watch">What to watch</a>
+      <a href="#resources">Resources</a>
+      <a href="#close">Closing</a>
+    </nav>
+
+    <section id="why-now">
+      <div class="section-head">
+        <div class="section-index">01</div>
+        <div>
+          <h2>Why this conversation matters right now</h2>
+          <p>Some changes are cosmetic. Some change how software gets built, run, and governed. The current wave around agents and platforms matters because it changes both system design and engineering culture at the same time.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-8 accent-card blue">
+          <span class="tag">Working claim</span>
+          <p class="quote">The next few years are less about choosing a favorite stack and more about deciding what kind of engineering culture can survive agents, distributed systems, and faster product cycles.</p>
+          <p>That is why agents, context protocols, internal platforms, and well-architected simplification are showing up in the same conversation. They all deal with the same pressure: more moving parts, less patience for friction, and a much higher cost for weak boundaries or missing guardrails.</p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">What feels durable</span>
+          <ul class="clean">
+            <li>Agent systems need governance, data architecture, and measurable control.</li>
+            <li>Agents are also becoming a delivery culture question: review, traceability, ownership, and recovery matter more now.</li>
+            <li>Platform engineering keeps growing because teams need paved roads, shared defaults, and a way to spread working practices.</li>
+            <li>Interoperability is becoming a real architectural concern because tools, context, and permissions now cross more boundaries.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="agent-loops">
+      <div class="section-head">
+        <div class="section-index">02</div>
+        <div>
+          <h2>AI agents: the useful mental model is the loop</h2>
+          <p>This section borrows its backbone from your Mozilla Berlin talk: feedback systems before AI, the agent as a loop with memory, isolation and determinism, and the importance of where the loop closes. The extra claim here is that agents are also teaching teams a new set of development habits.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">From your earlier deck</span>
+            <h3>An agent is a loop with memory</h3>
+            <p>The clean version is still the best one: input arrives, the system interprets it using memory and model context, decides the next action, acts, then folds the outcome back into the next iteration. This makes the agent easier to reason about than if we talk about it like a personality.</p>
+            <ul class="clean">
+              <li>input</li>
+              <li>interpret</li>
+              <li>decide</li>
+              <li>act</li>
+              <li>update memory</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 430 200" role="img" aria-label="Agent loop diagram">
+              <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="20" y="78" rx="12" ry="12" width="84" height="44"></rect>
+              <rect class="box-b" x="126" y="30" rx="12" ry="12" width="94" height="44"></rect>
+              <rect class="box-c" x="126" y="126" rx="12" ry="12" width="94" height="44"></rect>
+              <rect class="box-d" x="246" y="78" rx="12" ry="12" width="86" height="44"></rect>
+              <rect class="box-a" x="348" y="78" rx="12" ry="12" width="62" height="44"></rect>
+              <path class="line" d="M104 100 H126"></path>
+              <path class="line" d="M220 52 C244 52,244 86,246 94"></path>
+              <path class="line" d="M220 148 C244 148,244 114,246 106"></path>
+              <path class="line" d="M332 100 H348"></path>
+              <path class="line" d="M380 122 C380 170,176 184,176 170"></path>
+              <text x="44" y="104">Input</text>
+              <text x="153" y="56">Interpret</text>
+              <text x="161" y="152">Memory</text>
+              <text x="274" y="104">Decide</text>
+              <text x="364" y="104">Act</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-6 accent-card pink">
+          <span class="tag">Feedback systems</span>
+          <h3>Feedback loops existed long before AI agents</h3>
+          <p>A thermostat measures temperature, compares it to a target, then adjusts. CI/CD deploys, observes, and rolls back when needed. Autocorrect watches what you type, compares it to patterns, then suggests a correction. Agents belong to the same family: they observe, decide, act, and check the result again. The new part is that one step in that loop is now probabilistic instead of fully hand-written.</p>
+        </div>
+        <div class="card span-6 accent-card yellow">
+          <span class="tag">Why this matters</span>
+          <h3>An agent is not just an LLM call</h3>
+          <p>The LLM helps interpret and propose the next move. The agent decides how to use that output inside a goal, a set of tools, and a control loop. Then the correction layer checks whether the step was safe, useful, and worth continuing. That is why validation, guardrails, tool boundaries, and replayable traces matter so much in agent systems.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="agent-anatomy">
+      <div class="section-head">
+        <div class="section-index">03</div>
+        <div>
+          <h2>The anatomy of an agent</h2>
+          <p>Once the loop idea is clear, the next step is to make each part concrete. This is where the architecture gets real: what the LLM does, what the agent owns, and where the control and correction loop has to step in. It is also where teams start discovering the new rules their engineering culture has to absorb.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12 accent-card yellow">
+          <span class="tag">Striking sentence</span>
+          <p class="quote">The LLM predicts. The agent organizes. The control loop decides whether the system should trust, correct, continue, or stop.</p>
+          <p>That framing keeps the discussion technical. It also lines up with the strongest parts of the 12-factor-agents guide: own your prompts and context, keep tools structured, keep execution state close to business state, own your control flow, and make it easy to pause, resume, observe, and recover. <span class="resource-note">Use the principles as design pressure, not as a badge collection.</span></p>
+        </div>
+
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Merged view</span>
+            <h3>LLM + agent + control and correction loop</h3>
+            <p>This is the practical shape you can explain on a whiteboard and still defend in production. A request enters the system, the LLM helps interpret the situation, the agent chooses the next step, a tool or action gets executed, and then a control layer checks what happened before the next turn continues. In short: gather feedback, analyze it, act on it, then repeat with better context.</p>
+            <ul class="clean">
+              <li><strong>LLM:</strong> interprets intent, summarizes context, proposes next actions</li>
+              <li><strong>Agent:</strong> holds the goal, chooses tools, tracks state, sequences steps</li>
+              <li><strong>Control and correction loop:</strong> validates, scores, retries, asks for approval, or stops</li>
+              <li>memory and execution state keep the loop from starting from zero every turn</li>
+              <li>evaluation and handoff decide whether the result is good enough to keep</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 430 200" role="img" aria-label="Agent anatomy diagram">
+              <defs><marker id="arrowAnat" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="18" y="78" rx="12" ry="12" width="78" height="42"></rect>
+              <rect class="box-b" x="112" y="26" rx="12" ry="12" width="96" height="42"></rect>
+              <rect class="box-c" x="112" y="132" rx="12" ry="12" width="96" height="42"></rect>
+              <rect class="box-d" x="224" y="78" rx="12" ry="12" width="88" height="42"></rect>
+              <rect class="box-a" x="328" y="36" rx="12" ry="12" width="82" height="36"></rect>
+              <rect class="box-b" x="328" y="124" rx="12" ry="12" width="82" height="36"></rect>
+              <path class="line" d="M96 99 H112"></path>
+              <path class="line" d="M208 47 C220 47,220 85,224 92"></path>
+              <path class="line" d="M208 153 C220 153,220 113,224 106"></path>
+              <path class="line" d="M312 92 C320 80,320 64,328 54"></path>
+              <path class="line" d="M312 106 C320 118,320 136,328 142"></path>
+              <path class="line" d="M369 72 C369 106,178 188,160 174"></path>
+              <text x="42" y="103">Goal</text>
+              <text x="140" y="52">Context</text>
+              <text x="142" y="158">Memory</text>
+              <text x="252" y="103">Plan</text>
+              <text x="351" y="58">Tools</text>
+              <text x="339" y="146">Evaluate</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-4 accent-card blue">
+          <span class="tag">LLM layer</span>
+          <h3>Interpret the situation and propose the next move</h3>
+          <p>This is the part that reads the prompt, absorbs context, and predicts the next reasonable step. Good teams do not treat prompts as throwaway strings. They version them, test them, and deliberately shape the context window using retrieval, model routing, and structured context exposure. The model can only reason over what actually reaches it.</p>
+          <div class="pill-row"><div class="pill">prompt versioning</div><div class="pill">retrieval</div><div class="pill">model routing</div><div class="pill">prompt registries</div></div>
+        </div>
+        <div class="card span-4 accent-card pink">
+          <span class="tag">Agent layer</span>
+          <h3>Choose tools, hold state, and move the work forward</h3>
+          <p>The agent is the part that turns prediction into procedure. It decides which tool to call, what step comes next, what should be remembered, and when a task is done. This is where typed tools, JSON Schema, OpenAPI-shaped interfaces, Pydantic or Zod validators, workflow state, and MCP servers start to matter.</p>
+          <div class="pill-row"><div class="pill">JSON Schema</div><div class="pill">tool registries</div><div class="pill">Pydantic/Zod</div><div class="pill">MCP servers</div></div>
+        </div>
+        <div class="card span-4 accent-card yellow">
+          <span class="tag">Control + correction</span>
+          <h3>Check the result before the loop continues</h3>
+          <p>This is the part many demos skip. Validation, retries, approvals, rollback, and stop conditions belong here. Once an agent touches real work, pause and resume are not luxury features. Teams increasingly use state machines, checkpointers, event logs, evals, and human review to keep the loop safe and recoverable.</p>
+          <div class="pill-row"><div class="pill">state machines</div><div class="pill">checkpoints</div><div class="pill">approval gates</div><div class="pill">durable execution</div></div>
+        </div>
+
+        <div class="card span-6">
+          <span class="tag">Concrete analogies</span>
+          <h3>The same loop in simpler systems</h3>
+          <ul class="clean">
+            <li><strong>Thermostat:</strong> measure, compare, adjust</li>
+            <li><strong>CI/CD:</strong> deploy, observe, roll back</li>
+            <li><strong>Autocorrect:</strong> read text, compare pattern, suggest fix</li>
+          </ul>
+          <p>Agents feel new because one part of the loop is now language-driven and probabilistic, but the larger engineering shape is already familiar.</p>
+        </div>
+        <div class="card span-6">
+          <span class="tag">Established tools and patterns</span>
+          <h3>What teams are already standardizing around</h3>
+          <ul class="clean">
+            <li>OpenTelemetry, Langfuse, or similar tracing and replay tools for understanding runs</li>
+            <li>schema validation, policy checks, and approval workflows before side effects</li>
+            <li>workflow engines and state machines when a loop needs durable checkpoints</li>
+            <li>retrieval, scoped memory, and MCP-style tool/context boundaries instead of stuffing everything into one prompt</li>
+            <li>event-driven coordination when multiple workers or agents react to new facts</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="placement">
+      <div class="section-head">
+        <div class="section-index">04</div>
+        <div>
+          <h2>Where the loop closes changes the system</h2>
+          <p>One of the strongest ideas in your earlier presentation is that intelligence is not simply where the model is. It is where the loop closes. That changes privacy, cost, latency, portability, and control.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Loop placement</span>
+            <h3>Local, edge, cloud</h3>
+            <p>Local loops can improve privacy and latency. Edge loops can reduce round trips. Cloud loops still handle heavy compute and shared services. The architectural question is not which one is morally best. It is which one fits the system pressure.</p>
+            <ul class="clean">
+              <li>local loop: private, close to user, constrained by device</li>
+              <li>edge loop: regional, lower latency, shared execution</li>
+              <li>cloud loop: heavy compute, coordination, central memory and tools</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 430 200" role="img" aria-label="Loop placement diagram">
+              <defs><marker id="arrowPlace" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-a" x="22" y="74" rx="14" ry="14" width="92" height="54"></rect>
+              <rect class="box-b" x="170" y="74" rx="14" ry="14" width="92" height="54"></rect>
+              <rect class="box-c" x="316" y="74" rx="14" ry="14" width="92" height="54"></rect>
+              <path class="line" d="M114 101 H170"></path>
+              <path class="line" d="M262 101 H316"></path>
+              <text x="41" y="97">Local Loop</text>
+              <text class="muted" x="45" y="113">private, low latency</text>
+              <text x="193" y="97">Edge Loop</text>
+              <text class="muted" x="194" y="113">shared, nearby</text>
+              <text x="341" y="97">Cloud Loop</text>
+              <text class="muted" x="330" y="113">heavy compute</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-6">
+          <span class="tag">Six taxes of local loops</span>
+          <ul class="clean">
+            <li>memory</li>
+            <li>distribution</li>
+            <li>variance across machines</li>
+            <li>energy</li>
+            <li>heat</li>
+            <li>context limits</li>
+          </ul>
+          <p>Those are not reasons to avoid locality. They are the price of moving intelligence closer to the user.</p>
+        </div>
+        <div class="card span-6">
+          <span class="tag">Browser-native angle</span>
+          <p>The browser already exposes primitives that make it worth taking seriously as a runtime. The 3W idea makes that concrete: <strong>WebLLM</strong> for local inference, <strong>WebAssembly</strong> for portable agent logic, and <strong>WebWorkers</strong> for keeping execution isolated and responsive off the main thread. Add IndexedDB for longer-lived local state and normal Web APIs as tools, and the browser stops looking like a thin client and starts looking like a real execution surface.</p>
+          <div class="pill-row">
+            <div class="pill">WebLLM</div>
+            <div class="pill">WASM</div>
+            <div class="pill">WebWorkers</div>
+            <div class="pill">IndexedDB</div>
+            <div class="pill">Web APIs</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="platform">
+      <div class="section-head">
+        <div class="section-index">05</div>
+        <div>
+          <h2>Platform engineering: where good agent work becomes repeatable team practice</h2>
+          <p>Agents and platforms belong in the same story. Once a team discovers what actually works with prompts, tools, evaluation, permissions, tracing, and deployment, that knowledge has to become repeatable. Otherwise the next team forgets the lesson, rebuilds the same mistakes, and calls it innovation. Platform engineering is what turns agent experiments into engineering culture.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Internal platforms</span>
+            <h3>Catalogs, paved roads, and shared memory for the organization</h3>
+            <p>A platform team is needed when local wins do not spread on their own. One team learns how to trace an agent loop, another learns safe tool boundaries, another learns how to keep deploys calm, and none of it compounds unless someone turns those lessons into defaults that other teams can actually reuse. That is not just tooling work. It is cultural memory turned into software.</p>
+            <ul class="clean">
+              <li>software catalog so teams know what already exists and who owns it</li>
+              <li>golden paths for common tasks like service setup, tracing, evaluation, and deploy</li>
+              <li>shared policy, docs, ownership, and observability in one place</li>
+              <li>self-service templates so good practice travels faster than folklore</li>
+              <li>guardrails that stop anti-patterns from becoming normal team behavior</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 430 200" role="img" aria-label="Platform engineering diagram">
+              <defs><marker id="arrowPlat" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"/></marker></defs>
+              <rect class="box-d" x="160" y="72" rx="16" ry="16" width="110" height="56"></rect>
+              <rect class="box-a" x="28" y="28" rx="10" ry="10" width="92" height="40"></rect>
+              <rect class="box-b" x="310" y="28" rx="10" ry="10" width="92" height="40"></rect>
+              <rect class="box-c" x="28" y="132" rx="10" ry="10" width="92" height="40"></rect>
+              <rect class="box-a" x="310" y="132" rx="10" ry="10" width="92" height="40"></rect>
+              <line class="line" x1="120" y1="48" x2="160" y2="86"></line>
+              <line class="line" x1="310" y1="48" x2="270" y2="86"></line>
+              <line class="line" x1="120" y1="152" x2="160" y2="114"></line>
+              <line class="line" x1="310" y1="152" x2="270" y2="114"></line>
+              <text x="188" y="96">Platform</text>
+              <text class="muted" x="175" y="112">catalog + paths</text>
+              <text x="46" y="53">Team A</text>
+              <text x="328" y="53">Team B</text>
+              <text x="46" y="157">Team C</text>
+              <text x="328" y="157">Team D</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card span-4 accent-card blue">
+          <span class="tag">Why it matters</span>
+          <p>Without a platform approach, every strong technical decision stays local. The organization keeps paying for repeated setup work, scattered documentation, incompatible tooling, and deployment rituals that only a few people know how to survive. Broken culture usually looks like uncontrolled software units multiplying faster than teams can understand them.</p>
+        </div>
+        <div class="card span-4 accent-card pink">
+          <span class="tag">Where it meets agents</span>
+          <p>If you build a great agent product but have no way to spread the winning patterns, tomorrow another team will re-learn prompt versioning, tool contracts, evaluations, tracing, and guardrails from scratch. Platform engineering is how agent lessons become cultural infrastructure, so success is repeatable instead of accidental.</p>
+        </div>
+        <div class="card span-4 accent-card yellow">
+          <span class="tag">Good question</span>
+          <p>Does this platform make the next team faster and safer, or does it just centralize complexity behind a more polished interface? The answer usually tells you whether you are building culture or bureaucracy.</p>
+        </div>
+        <div class="card span-12 accent-card">
+          <span class="tag">The connection</span>
+          <p>Agents create new operational lessons very quickly: where to keep state, how to validate tool calls, how to trace loops, how to review outcomes, how to recover from bad actions. Platform engineering is what keeps those lessons from disappearing into one team&apos;s memory. Without that shared foundation, teams drift into fear, ceremony, and avoidable friction, and the culture starts training people to hide uncertainty instead of managing it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="near-future">
+      <div class="section-head">
+        <div class="section-index">06</div>
+        <div>
+          <h2>The near future: not one trend, but a stack of pressures</h2>
+          <p>The next phase looks less like one big winner and more like a set of pressures that will keep colliding: agent governance, context interoperability, simpler cloud choices, and the need to turn successful practices into something teams can reuse without copying each other badly.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-6 accent-card">
+          <span class="tag">Governance</span>
+          <h3>Agents need policy, permissions, evaluation, and data architecture</h3>
+          <p>Once an agent can act instead of merely suggest, governance becomes a systems problem. Who can it access? Which tools may it call? What gets logged? How do you review outcomes? How do you measure whether it is helping?</p>
+        </div>
+        <div class="card span-6 accent-card blue">
+          <span class="tag">Interoperability</span>
+          <h3>Context and tool protocols are becoming real architecture</h3>
+          <p>Tool calling used to feel ad hoc. Now protocol design is becoming part of the conversation, because agents need standard ways to discover context, tools, and workflows without every team reinventing the same plumbing.</p>
+        </div>
+        <div class="card span-12 pattern-card">
+          <div>
+            <span class="tag">Near-future picture</span>
+            <h3>What will probably matter more than hype</h3>
+            <ul class="clean">
+              <li>clear boundaries between prediction and deterministic control</li>
+              <li>measured use of managed services to keep complexity survivable</li>
+              <li>agent systems that are observable, auditable, and portable</li>
+              <li>developer platforms that capture what worked and make it reusable</li>
+              <li>protocols and interfaces that make tools and context reusable</li>
+            </ul>
+          </div>
+          <div class="diagram">
+            <svg viewBox="0 0 430 200" role="img" aria-label="Near future architecture stack">
+              <rect class="box-a" x="38" y="24" rx="10" ry="10" width="354" height="28"></rect>
+              <rect class="box-b" x="38" y="62" rx="10" ry="10" width="354" height="28"></rect>
+              <rect class="box-c" x="38" y="100" rx="10" ry="10" width="354" height="28"></rect>
+              <rect class="box-d" x="38" y="138" rx="10" ry="10" width="354" height="28"></rect>
+              <text x="62" y="42">Apps and products</text>
+              <text x="62" y="80">Agent runtime + tools + memory</text>
+              <text x="62" y="118">Platform, policy, observability</text>
+              <text x="62" y="156">Cloud and edge infrastructure</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="false-signals">
+      <div class="section-head">
+        <div class="section-index">07</div>
+        <div>
+          <h2>What often looks advanced but quietly slows teams down</h2>
+          <p>When teams lack clear paths, shared defaults, and good complexity management, they usually compensate in expensive ways. These are the patterns of drag that appear when learning does not turn into repeatable practice and when platform guardrails are missing, weak, or ignored.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12 accent-card pink">
+          <span class="tag">A useful warning</span>
+          <p class="quote">If a team cannot preserve what worked, it will mistake repeated pain for normal engineering life. In agent-heavy systems, that pain compounds very quickly.</p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">Techno-bureaucracy</span>
+          <h3>Process pretending to be engineering</h3>
+          <p>When diagrams, tickets, approvals, and extra layers multiply faster than product learning, the work starts serving paperwork instead of the problem. Good platform work should remove this, not decorate it, by making the safe path easier than the ceremonial one.</p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">FOD</span>
+          <h3>Fear of deploy</h3>
+          <p>If shipping feels dangerous, teams stop learning from reality. A healthy platform usually shows up here first: safe deploy paths, rollback, traces, checks, and smaller changes that make release feel ordinary again. Fear of deploy is often a sign that culture has no trusted mechanism for controlled change.</p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">Auth too early</span>
+          <h3>Security detail before product shape</h3>
+          <p>Authentication and authorization matter, but not every prototype needs enterprise-grade identity design in week one. Teams often hide uncertainty behind security work because it feels respectable. Clear platform defaults help you delay the heavy parts until the workflow is real, then add them without panic.</p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">Missing complexity management</span>
+          <h3>Complexity left unmanaged becomes culture</h3>
+          <p>If naming, boundaries, ownership, and scope are fuzzy early, teams end up paying compound interest later. Platform thinking helps because it forces reusable boundaries, not just reusable code. Complexity management is one of the first guardrails an engineering culture has to formalize.</p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">Problem spread</span>
+          <h3>Too many problems at once</h3>
+          <p>Teams often slow themselves down by chasing adjacent challenges before proving the main solution. Breadth feels productive. Focus wins more often. A strong platform approach protects focus by making the boring parts easy to reuse so attention can stay on the core problem.</p>
+        </div>
+        <div class="card span-4">
+          <span class="tag">Time management</span>
+          <h3>Architecture without pacing becomes drift</h3>
+          <p>Time is an architectural input. If no one protects decision windows, review cadence, and delivery rhythm, the system gets shaped by interruption instead of intent. Platform work matters here too because it shortens the path from decision to safe execution and gives teams fewer chances to drift into chaos.</p>
+        </div>
+        <div class="card span-12 accent-card blue">
+          <span class="tag">Vibe-coding</span>
+          <h3>Letting AI write code you no longer understand</h3>
+          <p>If you can move fast with AI-generated code, great. But the first real bug will ask a harder question: can your team resume from where the model stopped? Healthy engineering culture answers that with traces, tests, reviewable diffs, ownership, runnable local setups, and enough operational history to debug what the agent helped create. Without those guardrails, speed turns into a maintenance trap.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="what-to-watch">
+      <div class="section-head">
+        <div class="section-index">08</div>
+        <div>
+          <h2>What to watch without becoming trend-blind</h2>
+          <p>Students do not need to chase every launch. They need a tighter filter. These questions are a stronger compass than any list of buzzwords.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-3"><span class="tag">Filter 1</span><h3>What system pressure does this answer?</h3><p>Latency, privacy, team friction, scale, governance, cost, or simply novelty.</p></div>
+        <div class="card span-3"><span class="tag">Filter 2</span><h3>What new complexity does it import?</h3><p>Every helpful abstraction drags in a maintenance bill. Try to spot it early.</p></div>
+        <div class="card span-3"><span class="tag">Filter 3</span><h3>Who does this make stronger?</h3><p>The end user, the product team, the platform team, or mostly the vendor story.</p></div>
+        <div class="card span-3"><span class="tag">Filter 4</span><h3>Will this still matter when the naming changes?</h3><p>Good architectural ideas survive rebranding. Weak ones depend on slogans.</p></div>
+        <div class="card span-12 sticky-note">You do not need a perfect forecast. You need stronger judgment about which shifts are structural enough to build around and which ones are just temporarily loud.</div>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="section-head">
+        <div class="section-index">09</div>
+        <div>
+          <h2>Resource deck</h2>
+          <p>These are the anchors behind the session: your own AI-in-the-browser talk, plus current official material on agents, platforms, architectural simplicity, and context/tool interoperability.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-12">
+          <div class="resource-list">
+            <div class="resource"><div><a class="resource-title" href="https://slides.com/hwclass/mozilla-berlin-meetup-no-servers-no-apis-ai-in-the-browser-f7df7f" target="_blank" rel="noopener">Your Mozilla Berlin deck · No Servers, No APIs: AI in the Browser</a><br><span>Feedback loops, loop placement, browser runtimes, isolation, determinism, and the six taxes of local loops.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://blog.mozilla.ai/3w-for-in-browser-ai-webllm-wasm-webworkers/" target="_blank" rel="noopener">3W for In-Browser AI: WebLLM + WASM + WebWorkers</a><br><span>A browser-native architecture for local inference, portable agent logic, and isolated worker-based execution.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://github.com/humanlayer/12-factor-agents" target="_blank" rel="noopener">12-Factor Agents</a><br><span>A practical set of principles for prompt ownership, context design, tool interfaces, control flow, state, human contact, and smaller focused agents.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/" target="_blank" rel="noopener">Microsoft Cloud Adoption Framework · AI Agents</a><br><span>Planning, governance, integration, measurement, and data architecture for agent adoption.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ai-agents/governance-security-across-organization" target="_blank" rel="noopener">Governance and security for AI agents</a><br><span>Security and governance patterns for agent systems across an organization.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://docs.cloud.google.com/architecture/framework" target="_blank" rel="noopener">Google Cloud Well-Architected Framework</a><br><span>Design for change, simplify your architecture, decouple your systems, and use managed services deliberately.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://backstage.io/docs/overview/what-is-backstage/" target="_blank" rel="noopener">Backstage · What is Backstage?</a><br><span>Developer portals, software catalog thinking, and self-service platform experience.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://www.cncf.io/projects/backstage/" target="_blank" rel="noopener">CNCF · Backstage</a><br><span>Why platform engineering and internal developer portals keep showing up in production conversations.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank" rel="noopener">Model Context Protocol · Introduction</a><br><span>The current standardization effort around context and tool integration for AI applications.</span></div></div>
+            <div class="resource"><div><a class="resource-title" href="https://modelcontextprotocol.io/development/roadmap" target="_blank" rel="noopener">MCP Roadmap</a><br><span>Transport, governance, scale, and enterprise-readiness priorities.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="close">
+      <div class="section-head">
+        <div class="section-index">10</div>
+        <div>
+          <h2>Closing the session</h2>
+          <p>The point of this session is not to turn students into trend reporters. It is to give them a better vocabulary for deciding where to look, what to build, and what to ignore.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card span-6">
+          <h3>What a strong ending sounds like</h3>
+          <ul class="clean">
+            <li>Agents are easier to reason about when treated as loops with memory.</li>
+            <li>Loop placement changes privacy, latency, cost, and control.</li>
+            <li>Platform engineering matters because team friction is an architectural problem.</li>
+            <li>The near future belongs to systems that balance autonomy with governance.</li>
+          </ul>
+        </div>
+        <div class="card span-6">
+          <h3>Bridge to Session 3</h3>
+          <p>The third session can now go deep on one path with enough context to make it meaningful: agent systems in practice, event-driven coordination, platform engineering, or another focused architectural choice that deserves a full close-up.</p>
+          <div class="sticky-note">The real upgrade is not learning more names. It is learning how to organize your judgment before the industry finishes organizing the vocabulary.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer card"></div>
+  </div>
+
+  <script>
+    const sections = [...document.querySelectorAll('section')];
+    const navLinks = [...document.querySelectorAll('.nav a')];
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY + 140;
+      let current = sections[0]?.id;
+      sections.forEach(sec => {
+        if (sec.offsetTop <= y) current = sec.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+</body>
+</html>
