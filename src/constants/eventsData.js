@@ -11,7 +11,7 @@ export const EVENTS = [
     focus: 'Conference',
     desc: 'Teknoloji ve eğitimin kesiştiği noktada kariyerinizi nasıl şekillendirebilirsiniz? Eğitim dünyasında kariyer basamaklarını nasıl tırmanacağınızı keşfedin! Eğitim teknolojilerinden öğretim tasarımına kadar geniş bir yelpazede yeni nesil kariyer fırsatlarını uzman bakış açısıyla inceliyoruz.',
     img: "/events/defaultevent.svg",
-    formLink: '#',
+    formLink: 'https://forms.gle/yhsiC2zt6Gx6bbCe9',
     materialLink: '#',
   },
 
@@ -28,6 +28,7 @@ export const EVENTS = [
     img: "/events/event1.svg",
     formLink: 'https://forms.gle/Vs2e1ZCcR1My4yiQ7',
     materialLink: '/materials/session_1.html',
+    videoLink: 'https://www.youtube.com/watch?v=GzMiT5PoiMM&t=6535s'
   },
   {
     id: 4,
@@ -41,7 +42,10 @@ export const EVENTS = [
     desc: 'Bu seri,değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 2. Oturumda; AI Agents,Platform Engineering konuları konuşulacaktır.',
     img: "/events/event1.svg",
     formLink: 'https://forms.gle/YPdQBA6gUta5TeQU6',
-    materialLink: '#',
+    materialLink: '/materials/session_2.html',
+
+    videoLink: 'https://youtu.be/N0bB1cOoJXQ'
+
   },
  {
     id: 5,
@@ -54,7 +58,7 @@ export const EVENTS = [
     focus: 'Tech Talk',
     desc: 'Bu seri, tek tek teknolojileri öğretmekten çok, değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 3. Oturum Hala planlanmaktadır.',
     img: "/events/event1.svg",
-    formLink: '#',
+    formLink: 'https://forms.gle/JFr4Re2zB77dbiot9',
     materialLink: '#',
   },
   {
