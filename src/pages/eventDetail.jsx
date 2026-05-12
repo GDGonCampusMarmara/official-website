@@ -29,11 +29,9 @@ const EventDetail = () => {
   const fc = FOCUS_CLASSES[ev.focus] || FOCUS_CLASSES["all"];
 
   return (
-    <div
-      className="bg-[#0a0d14] font-['Google_Sans'] text-white min-h-screen"
-    >
-      <div className="flex flex-col md:flex-row h-screen">
-        <div className="w-full md:w-1/2 flex flex-col p-8 md:p-16 lg:p-24 justify-center relative bg-[#0a0d14]">
+    <div className="bg-[#0a0d14] font-['Google_Sans'] text-white min-h-screen">
+      <div className="flex flex-col md:flex-row min-h-screen">
+        <div className="w-full md:w-1/2 flex flex-col p-8 md:p-16 lg:p-24 justify-start md:justify-center relative bg-[#0a0d14]">
           <button
             onClick={() => navigate("/")}
             className="absolute top-8 left-8 z-20 flex items-center justify-center w-12 h-12
@@ -51,7 +49,7 @@ const EventDetail = () => {
             />
           </button>
 
-          <div className="max-w-xl space-y-8 mt-16 md:mt-0">
+          <div className="max-w-xl space-y-8 mt-20 md:mt-0">
             <header className="space-y-6">
               <span
                 className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] ${ev.past ? "bg-white/10 text-white/40" : `${fc.bg} ${fc.text}`}`}
@@ -63,7 +61,7 @@ const EventDetail = () => {
               </h1>
             </header>
 
-            <p className="text-white/60 font-light text-lg leading-relaxed line-clamp-4">
+            <p className="text-white/60 font-light text-lg leading-relaxed">
               {ev.desc}
             </p>
 
@@ -149,7 +147,6 @@ const EventDetail = () => {
             className="w-full h-full object-cover object-center block opacity-90"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d14] via-transparent to-transparent hidden md:block" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-transparent to-transparent md:hidden" />
         </div>
       </div>
 
@@ -172,7 +169,7 @@ const EventDetail = () => {
             <div className="w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-black/40 shadow-2xl relative z-10">
               <iframe
                 src={ev.materialLink}
-                className="w-full h-[850px] border-none"
+                className="w-full h-[500px] md:h-[850px] border-none"
                 title="Event Materials"
                 loading="lazy"
               />
