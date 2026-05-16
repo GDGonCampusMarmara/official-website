@@ -43,7 +43,6 @@ export const EVENTS = [
     img: "/events/event1.svg",
     formLink: 'https://forms.gle/YPdQBA6gUta5TeQU6',
     materialLink: '/materials/session_2.html',
-
     videoLink: 'https://youtu.be/N0bB1cOoJXQ'
 
   },
@@ -59,7 +58,8 @@ export const EVENTS = [
     desc: 'Bu seri, tek tek teknolojileri öğretmekten çok, değişen teknolojiler karşısında nasıl düşüneceğimizi konuşuyor. 3. Oturum Hala planlanmaktadır.',
     img: "/events/event1.svg",
     formLink: 'https://forms.gle/JFr4Re2zB77dbiot9',
-    materialLink: '#',
+    materialLink: '/materials/session_3.html',
+    githubRepo: 'https://github.com/hwclass/agent-patterns-workshop'
   },
   {
     id: 6,

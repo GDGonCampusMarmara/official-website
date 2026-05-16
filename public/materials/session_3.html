@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture of Tomorrow · Session 3</title>
+  <style>
+    :root {
+      --bg: #0e0f1a;
+      --panel: rgba(255,255,255,0.07);
+      --panel-strong: rgba(255,255,255,0.12);
+      --text: #f6f7fb;
+      --muted: #dde2f0;
+      --muted-soft: #b7bfd3;
+      --accent: #86efac;
+      --accent-2: #7dd3fc;
+      --accent-3: #f9a8d4;
+      --accent-4: #fcd34d;
+      --border: rgba(255,255,255,0.14);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 24px;
+      --section-gap: 110px;
+      --code-bg: rgba(6,10,20,0.82);
+      --code-border: rgba(255,255,255,0.09);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(125,211,252,0.18), transparent 25%),
+        radial-gradient(circle at 80% 10%, rgba(249,168,212,0.16), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(134,239,172,0.14), transparent 24%),
+        linear-gradient(180deg, #101222 0%, #0a0b13 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+    body { padding: 28px; }
+    .wrap { max-width: 1260px; margin: 0 auto; }
+    .hero, .card, .floating-counter {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 44px;
+      position: relative;
+      overflow: hidden;
+      min-height: 82vh;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 24px;
+      align-items: center;
+      scroll-snap-align: start;
+    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(18px); opacity: 0.8; pointer-events: none; }
+    .orb.one { width: 260px; height: 260px; right: -40px; top: -40px; background: rgba(125,211,252,0.18); }
+    .orb.two { width: 220px; height: 220px; left: -30px; bottom: -50px; background: rgba(249,168,212,0.14); }
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+    h1 {
+      font-size: clamp(2.7rem, 5vw, 5.2rem);
+      line-height: 0.95;
+      margin: 14px 0 14px;
+      letter-spacing: -0.045em;
+      text-wrap: balance;
+      max-width: 11ch;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.85rem, 3vw, 2.8rem);
+      letter-spacing: -0.03em;
+      line-height: 1.04;
+    }
+    h3 {
+      margin: 0 0 10px;
+      font-size: 1.22rem;
+      line-height: 1.18;
+    }
+    .hero-subline {
+      font-size: 1.03rem;
+      line-height: 1.75;
+      color: var(--muted);
+      font-style: italic;
+      max-width: 64ch;
+      margin-bottom: 18px;
+    }
+    .lead {
+      font-size: 1.12rem;
+      line-height: 1.82;
+      color: var(--muted);
+      max-width: 64ch;
+    }
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease, opacity .2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #091018; }
+    .btn.ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); }
+    .hero-panel { display: grid; gap: 16px; }
+    .hero-box {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .hero-box small {
+      display: block;
+      color: var(--muted-soft);
+      margin-bottom: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hero-box strong { font-size: 1.08rem; display: block; margin-bottom: 6px; }
+    .hero-box p { margin: 0; color: var(--muted); line-height: 1.68; }
+    .floating-counter {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 20;
+      padding: 12px 14px;
+      display: grid;
+      gap: 8px;
+      min-width: 120px;
+    }
+    .counter-line {
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .counter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      transition: width .24s ease;
+    }
+    .counter-text {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .deck-nav {
+      position: sticky;
+      top: 14px;
+      z-index: 10;
+      margin: 22px 0 34px;
+      background: rgba(9,11,20,0.64);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 2px;
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      align-items: center;
+    }
+    .deck-nav a {
+      text-decoration: none;
+      color: var(--muted);
+      padding: 8px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.73rem;
+      white-space: nowrap;
+      flex: 1 1 0;
+      min-width: 0;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
+    .deck-nav a:hover, .deck-nav a.active {
+      background: rgba(255,255,255,0.09);
+      color: var(--text);
+    }
+    section {
+      margin: var(--section-gap) 0;
+      scroll-margin-top: 96px;
+      position: relative;
+      scroll-snap-align: start;
+    }
+    section::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: -42px;
+      bottom: -42px;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(125,211,252,0.35), rgba(249,168,212,0.18), rgba(134,239,172,0.22));
+      opacity: 0.55;
+    }
+    section > * { position: relative; z-index: 1; }
+    .section-head {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      align-items: start;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    .section-index {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(125,211,252,0.18), rgba(134,239,172,0.18));
+      border: 1px solid rgba(255,255,255,0.12);
+      font-weight: 900;
+      color: var(--text);
+      margin-left: -10px;
+    }
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 72ch;
+      line-height: 1.72;
+    }
+    .grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .card { padding: 26px; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    .tag {
+      display: inline-block;
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #091018;
+      background: linear-gradient(135deg, var(--accent-4), var(--accent-3));
+    }
+    .card p, .card li { color: var(--muted); line-height: 1.75; }
+    ul.clean { padding-left: 20px; margin: 0; }
+    .quote {
+      font-size: clamp(1.2rem, 2.5vw, 1.9rem);
+      line-height: 1.52;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .accent-card { border-left: 4px solid var(--accent); }
+    .accent-card.blue { border-left-color: var(--accent-2); }
+    .accent-card.pink { border-left-color: var(--accent-3); }
+    .accent-card.yellow { border-left-color: var(--accent-4); }
+    .pattern-card {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 18px;
+      align-items: stretch;
+      min-height: 250px;
+    }
+    .diagram {
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      padding: 14px;
+      display: grid;
+      place-items: center;
+    }
+    .diagram svg { width: 100%; max-width: 460px; height: 230px; }
+    .diagram text {
+      fill: #f6f7fb;
+      font-size: 13px;
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+    }
+    .diagram .muted { fill: var(--muted-soft); font-weight: 600; font-size: 11px; }
+    .diagram rect, .diagram circle, .diagram path {
+      stroke: rgba(255,255,255,0.25);
+      stroke-width: 1.4;
+    }
+    .diagram .box-a { fill: rgba(125,211,252,0.12); }
+    .diagram .box-b { fill: rgba(134,239,172,0.12); }
+    .diagram .box-c { fill: rgba(249,168,212,0.12); }
+    .diagram .box-d { fill: rgba(252,211,77,0.12); }
+    .diagram .line {
+      stroke: rgba(255,255,255,0.45);
+      stroke-width: 1.6;
+      fill: none;
+      marker-end: url(#arrow);
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .pill {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text);
+      font-weight: 700;
+      font-size: .88rem;
+    }
+    pre {
+      margin: 0;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 18px;
+      padding: 18px;
+      overflow: auto;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      color: #dff6ff;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      white-space: pre;
+    }
+    .inline-code {
+      font-family: ui-monospace, monospace;
+      background: rgba(255,255,255,0.08);
+      padding: 2px 8px;
+      border-radius: 7px;
+      color: var(--accent-2);
+    }
+    .resource-list { display: grid; gap: 12px; }
+    .resource {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .resource-title {
+      color: var(--accent-2);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .footer {
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+    }
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding: 28px; }
+      .section-head { grid-template-columns: 1fr; }
+      section::before { left: 6px; }
+      .pattern-card { grid-template-columns: 1fr; }
+      .span-4, .span-5, .span-6, .span-7, .span-8 { grid-column: span 12; }
+      body { padding: 16px; }
+      .deck-nav { border-radius: 24px; }
+      h1 { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero" id="top">
+      <div class="orb one"></div>
+      <div class="orb two"></div>
+      <div>
+        <div class="eyebrow">Architecture of Tomorrow · Session 3</div>
+        <h1>Workshop 3: Practical Stateless Agentic Lego</h1>
+        <div class="hero-subline">Build a streaming multi-agent debate system with Ollama, Lightpanda, and functional architecture</div>
+        <p class="lead">This workshop is the middle path. Fast enough to live-code with students. Clean enough to teach real architecture. The rule is simple: keep the core boring. Put opinions in system definitions. Put side effects in plugins. Pass state explicitly.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#why">Start the workshop</a>
+          <a class="btn ghost" href="#demo-flow">Jump to the demo</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-box">
+          <small>Metaphor</small>
+          <strong>Runtime = the table. System definition = the Lego instruction sheet.</strong>
+          <p>Plugins are the little motors. State is the snapshot of the castle before the cat attacks.</p>
+        </div>
+        <div class="hero-box">
+          <small>Main promise</small>
+          <strong>Real software engineering, not a toy chatbot.</strong>
+          <p>We are building a small multi-agent system with streaming, tool policy, explicit state, and replaceable plugins, but without heavy frameworks or mystery abstractions.</p>
+        </div>
+      </div>
+    </header>
+
+    <nav class="deck-nav">
+      <a href="#why">Why</a><a href="#build">Build</a><a href="#architecture">Architecture</a><a href="#rules">Rules</a><a href="#setup">Setup</a><a href="#system">System</a><a href="#runtime">Runtime</a><a href="#tools">Tools</a><a href="#plugins">Plugins</a><a href="#demo-flow">Demo</a><a href="#extensions">Extensions</a><a href="#patterns">Patterns</a><a href="#practices">Practices</a><a href="#resources">Resources</a><a href="#close">Closing</a>
+    </nav>
+
+    <section id="why"><div class="section-head"><div class="section-index">01</div><div><h2>Why this workshop exists</h2><p>The first design is easy to explain but gets messy fast. The second design is clean but too heavy for a single teaching session. This workshop keeps the good parts of both.</p></div></div><div class="grid"><div class="card span-4 accent-card blue"><span class="tag">Workshop 1</span><h3>Fast, simple, beginner-friendly</h3><ul class="clean"><li>class-based <span class="inline-code">AIAgent</span></li><li>two agents debating in a loop</li><li>easy to live-code</li><li>hardcoded and stateful</li></ul></div><div class="card span-4 accent-card pink"><span class="tag">Workshop 2</span><h3>Architecturally cleaner</h3><ul class="clean"><li>stateless functional core</li><li>plugin shell</li><li>agents as plain data</li><li>too much boilerplate for 45 minutes</li></ul></div><div class="card span-4 accent-card yellow"><span class="tag">Workshop 3</span><h3>The middle path</h3><ul class="clean"><li>simple enough to teach live</li><li>clean enough to grow later</li><li>small project, real architecture</li><li>no framework gravity</li></ul></div><div class="card span-12"><p class="quote">The point is not to make agents look clever. The point is to make the system understandable when something breaks at 2 a.m.</p></div></div></section>
+
+    <section id="build"><div class="section-head"><div class="section-index">02</div><div><h2>What we are building</h2><p>A small Node.js app where Ada the optimist debates Byron the skeptic. Byron can request browser research exactly once, or be forced to use it for a deterministic demo. Ollama streams replies. Lightpanda provides one read-only browser tool. Final state prints as JSON.</p></div></div><div class="grid"><div class="card span-12"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">Project layout</div><pre><code>gdgocmarmara-agent-workshop/
+  package.json
+  .agents/
+    skills/
+      practical-case-builder/
+        SKILL.md
+      evidence-stress-tester/
+        SKILL.md
+  src/
+    index.js
+    systems/
+      personaDebate.js
+    core/
+      runSystem.js
+      runStep.js
+      buildMessages.js
+      applyToolRequests.js
+      loadSkill.js
+    plugins/
+      ollamaLlm.js
+      lightpandaBrowser.js
+      consoleRenderer.js
+      toolPolicy.js</code></pre><p>The extra twist in this version is the <span class="inline-code">.agents/skills</span> folder. Agents stay plain data, but they can still receive reusable capabilities through small Markdown-defined skills.</p></div></div></section>
+
+    <section id="architecture"><div class="section-head"><div class="section-index">03</div><div><h2>Final architecture diagram</h2><p>The composition layer wires concrete plugins together. The runtime stays generic. The system definition contains the debate-specific opinions.</p></div></div><div class="grid"><div class="card span-12 pattern-card"><div><span class="tag">Final shape</span><h3>Index composes. System defines. Core executes. Plugins touch the world.</h3><ul class="clean"><li><span class="inline-code">index.js</span> wires concrete pieces</li><li><span class="inline-code">systems/personaDebate.js</span> holds agents, rounds, tasks</li><li><span class="inline-code">core/runSystem.js</span> and <span class="inline-code">core/runStep.js</span> stay generic</li><li>LLM, browser, renderer, and policy are plugins</li></ul></div><div class="diagram"><svg viewBox="0 0 460 230"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="rgba(255,255,255,0.45)"></path></marker></defs><rect class="box-d" x="154" y="18" rx="14" ry="14" width="152" height="44"></rect><rect class="box-a" x="28" y="94" rx="14" ry="14" width="116" height="54"></rect><rect class="box-b" x="172" y="94" rx="14" ry="14" width="116" height="54"></rect><rect class="box-c" x="316" y="94" rx="14" ry="14" width="116" height="54"></rect><rect class="box-a" x="16" y="174" rx="12" ry="12" width="96" height="38"></rect><rect class="box-b" x="124" y="174" rx="12" ry="12" width="96" height="38"></rect><rect class="box-c" x="232" y="174" rx="12" ry="12" width="96" height="38"></rect><rect class="box-d" x="340" y="174" rx="12" ry="12" width="96" height="38"></rect><path class="line" d="M230 62 V94"></path><path class="line" d="M230 148 V174"></path><text x="205" y="46">index.js</text><text x="42" y="126">system/</text><text x="45" y="142">personaDebate.js</text><text x="208" y="126">core/</text><text x="191" y="142">runSystem.js</text><text x="342" y="126">core/</text><text x="333" y="142">runStep.js</text><text x="29" y="198">LLM adapter</text><text x="136" y="198">browser tool</text><text x="255" y="198">renderer</text><text x="364" y="198">tool policy</text></svg></div></div></div></section>
+
+    <section id="rules"><div class="section-head"><div class="section-index">04</div><div><h2>Key design rules</h2><p>Keep the core boring. Put opinions in system definitions. Put side effects in plugins. Pass state explicitly.</p></div></div><div class="grid"><div class="card span-4"><span class="tag">Rule 1</span><h3>Agents are plain data</h3><p>No instances hiding history. An agent is just a config object with persona, model, and allowed tools.</p></div><div class="card span-4"><span class="tag">Rule 2</span><h3>State is explicit</h3><p>The whole workshop rests on passing state through functions instead of burying it inside objects.</p></div><div class="card span-4"><span class="tag">Rule 3</span><h3>Runtime has no debate knowledge</h3><p>It executes steps from a plan. It does not know Ada, Byron, or what a skeptic is.</p></div><div class="card span-4"><span class="tag">Rule 4</span><h3>Tools are requested, then approved</h3><p>The model can ask. Policy decides. The runtime does not trust the model by default.</p></div><div class="card span-4"><span class="tag">Rule 5</span><h3>Side effects live in plugins</h3><p>LLM calls, browser automation, and console rendering are ports, not core logic.</p></div><div class="card span-4"><span class="tag">Rule 6</span><h3>Streaming is UX, accumulated content is state</h3><p>We stream tokens live for the audience, but we still collect final content and store it explicitly.</p></div></div></section>
+
+    
+<section id="setup"><div class="section-head"><div class="section-index">05</div><div><h2>Setup</h2><p>No framework tower. Just Node, Ollama, Puppeteer Core, the Lightpanda SDK, and a few folders. Keep the file names exactly as shown on the slides if you want the imports to work on case-sensitive systems.</p></div></div><div class="grid"><div class="card span-8"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">Terminal</div><pre><code>mkdir gdgocmarmara-agent-workshop
+cd gdgocmarmara-agent-workshop
+npm init -y
+npm install ollama @lightpanda/browser puppeteer-core
+mkdir -p src/core src/plugins src/systems
+mkdir -p .agents/skills/practical-case-builder
+mkdir -p .agents/skills/evidence-stress-tester
+
+ollama pull qwen2.5-coder:7b</code></pre></div><div class="card span-4"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: package.json</div><pre><code>{
+  "name": "gdgocmarmara-agent-workshop",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "demo": "ROUNDS=2 node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@lightpanda/browser": "^1.2.0",
+    "ollama": "^0.6.3",
+    "puppeteer-core": "^24.43.0"
+  }
+}</code></pre></div><div class="card span-12 accent-card blue"><span class="tag">Pre-flight check</span><ul class="clean"><li><span class="inline-code">node -v</span></li><li><span class="inline-code">ollama list</span></li><li>Confirm <span class="inline-code">qwen2.5-coder:7b</span> exists locally</li><li>Run <span class="inline-code">npm run demo</span> once before the workshop</li></ul></div></div></section>
+
+
+    
+<section id="system"><div class="section-head"><div class="section-index">06</div><div><h2>System definition concept</h2><p>The system defines agents, initial state, plan, task builders, rounds, and reusable skills. The runtime executes this without knowing it is a debate.</p></div></div><div class="grid"><div class="card span-12"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/systems/personaDebate.js</div><pre><code>import { loadSkill } from "../core/loadSkill.js";
+
+const practicalCaseBuilder = loadSkill("practical-case-builder");
+const evidenceStressTester = loadSkill("evidence-stress-tester");
+
+export const personaDebateSystem = {
+  id: "persona-debate",
+  version: "3.1.0",
+
+  settings: {
+    rounds: Number.parseInt(process.env.ROUNDS ?? "2", 10),
+  },
+
+  agents: {
+    optimist: {
+      id: "optimist",
+      name: "Ada",
+      model: process.env.OLLAMA_MODEL ?? "qwen2.5-coder:7b",
+      allowedTools: [],
+      skills: [practicalCaseBuilder],
+      persona: `You are Ada, a technology optimist.
+Keep your answer under 160 words.
+Be concrete.
+End with one question for Byron.`,
+    },
+
+    skeptic: {
+      id: "skeptic",
+      name: "Byron",
+      model: process.env.OLLAMA_MODEL ?? "qwen2.5-coder:7b",
+      allowedTools: ["browser.search"],
+      skills: [evidenceStressTester],
+      persona: `You are Byron, an ethical skeptic.
+Keep your answer under 180 words.
+You may request browser research exactly once by writing:
+[[tool:browser.search {"query":"your search query"}]]
+After tool results arrive, do not request another tool.`,
+    },
+  },
+
+  initialState({ input }) {
+    return {
+      topic: input.topic,
+      statement: input.statement ?? "",
+      searchQuery: input.searchQuery ?? "",
+      requireSearch: Boolean(input.requireSearch),
+      round: 1,
+      transcript: [],
+      toolResults: [],
+    };
+  },
+
+  plan({ system }) {
+    const steps = [];
+    for (let round = 1; round &lt;= system.settings.rounds; round += 1) {
+      steps.push({ id: `round-${round}-optimist`, kind: "agent", round, agentId: "optimist", task({ state }) {
+        return state.transcript.length === 0
+          ? "Open the debate with your strongest practical argument."
+          : "Respond to Byron's latest point and strengthen your position.";
+      }});
+      steps.push({ id: `round-${round}-skeptic`, kind: "agent", round, agentId: "skeptic", task() {
+        return round === 1
+          ? "Respond to Ada. You may use your browser.search tool if research helps."
+          : "Respond to Ada's latest argument. You may use your browser.search tool if research helps.";
+      }});
+    }
+    return steps;
+  },
+};</code></pre></div></div></section>
+
+
+    
+<section id="runtime"><div class="section-head"><div class="section-index">07</div><div><h2>Generic runtime concept</h2><p>Runtime should not know Ada, Byron, debate, browser search, or console rendering. It only executes steps from a plan, passes state forward, and lets plugins do the side effects.</p></div></div><div class="grid"><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/core/runSystem.js</div><pre><code>import { runStep } from "./runStep.js";
+
+export async function runSystem({ system, input, ports }) {
+  let state = system.initialState({ input, system, ports });
+  const steps = system.plan({ state, system, ports });
+
+  for (const step of steps) {
+    state = {
+      ...state,
+      round: step.round ?? state.round,
+    };
+
+    ports.renderer?.stepStarted?.({ step, state });
+
+    state = await runStep({
+      step,
+      system,
+      state,
+      ports,
+    });
+
+    ports.renderer?.stepCompleted?.({ step, state });
+  }
+
+  return state;
+}</code></pre></div><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/core/runStep.js</div><pre><code>import { buildMessages } from "./buildMessages.js";
+import { applyToolRequests } from "./applyToolRequests.js";
+
+const BROWSER_SEARCH_PATTERN = /\[\[tool:browser\.search\s+.+?\]\]/g;
+
+function hasBrowserSearchResult(state) {
+  return state.toolResults.some((result) =&gt; result.toolId === "browser.search");
+}
+
+function removeBrowserSearchRequests(content) {
+  return content.replace(BROWSER_SEARCH_PATTERN, "").trim();
+}
+
+async function runBrowserSearch({ query, agent, state, ports }) {
+  const toolId = "browser.search";
+  const input = { query };
+  const tool = ports.tools[toolId];
+
+  ports.renderer?.toolStarted?.({ toolId, input });
+  const output = await tool.invoke(input);
+  ports.renderer?.toolCompleted?.({ toolId, output });
+
+  return {
+    ...state,
+    toolResults: [
+      ...state.toolResults,
+      { agentId: agent.id, toolId, input, output },
+    ],
+  };
+}
+
+export async function runStep({ step, system, state, ports }) {
+  const agent = system.agents[step.agentId];
+  const task = typeof step.task === "function"
+    ? step.task({ step, state, system, ports, agent })
+    : step.task;
+  const alreadySearched = hasBrowserSearchResult(state);
+  const effectiveTask = agent.id === "skeptic" && state.requireSearch && alreadySearched
+    ? `${task} Browser search has already been used; do not request more tools.`
+    : task;
+
+  const messages = buildMessages({ agent, state, task: effectiveTask });
+  ports.renderer?.agentStarted?.({ agent, step });
+
+  const first = await ports.llm.streamChat({
+    model: agent.model,
+    messages,
+    onToken: (token) =&gt; ports.renderer?.token?.(token),
+  });
+
+  const contentForToolRequests = agent.id === "skeptic" && state.requireSearch && alreadySearched
+    ? removeBrowserSearchRequests(first.content)
+    : first.content;
+
+  const { state: stateAfterTools, usedTools } = await applyToolRequests({
+    content: contentForToolRequests,
+    agent,
+    state,
+    ports,
+  });
+
+  let finalContent = contentForToolRequests;
+  let nextState = stateAfterTools;
+  const shouldForceSearch = agent.id === "skeptic"
+    && state.requireSearch
+    && !alreadySearched
+    && !hasBrowserSearchResult(stateAfterTools);
+
+  if (shouldForceSearch) {
+    nextState = await runBrowserSearch({
+      query: state.searchQuery || state.topic,
+      agent,
+      state: nextState,
+      ports,
+    });
+  }
+
+  if (usedTools || shouldForceSearch) {
+    const followUpMessages = buildMessages({
+      agent,
+      state: nextState,
+      task: "Use the available tool results. Do not request more tools.",
+    });
+    ports.renderer?.agentStarted?.({ agent, step, followUp: true });
+    const second = await ports.llm.streamChat({
+      model: agent.model,
+      messages: followUpMessages,
+      onToken: (token) =&gt; ports.renderer?.token?.(token),
+    });
+    finalContent = second.content;
+  }
+
+  return {
+    ...nextState,
+    transcript: [
+      ...nextState.transcript,
+      {
+        round: step.round ?? nextState.round,
+        agentId: agent.id,
+        speaker: agent.name,
+        content: finalContent.trim(),
+      },
+    ],
+  };
+}</code></pre></div></div></section>
+
+
+    
+<section id="tools"><div class="section-head"><div class="section-index">08</div><div><h2>Messages, tools, policy, and skills</h2><p>Prompt construction is pure. Tool requests are parsed. Policy decides. Tool results go back into state. Skills are loaded as plain text and attached to agents without changing the runtime.</p></div></div><div class="grid"><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/core/buildMessages.js</div><pre><code>export function formatTranscript(transcript = []) {
+  return transcript
+    .map((entry) =&gt; `${entry.speaker}: ${entry.content}`)
+    .join("\n\n");
+}
+
+export function formatToolResults(toolResults = []) {
+  return toolResults
+    .map((result) =&gt; {
+      return `[${result.toolId}] ${result.input.query}
+TITLE: ${result.output.title}
+URL: ${result.output.url}
+EXTRACT:
+${result.output.extract}`;
+    })
+    .join("\n\n");
+}
+
+export function formatSkills(skills = []) {
+  return skills
+    .map((skill) =&gt; {
+      return `${skill.name}
+Description: ${skill.description}
+Location: ${skill.location}
+
+${skill.body}`;
+    })
+    .join("\n\n");
+}
+
+export function buildMessages({ agent, state, task }) {
+  const transcript = formatTranscript(state.transcript);
+  const tools = formatToolResults(state.toolResults);
+  const skills = formatSkills(agent.skills);
+
+  return [
+    {
+      role: "system",
+      content: [agent.persona, skills ? `Skills:
+${skills}` : ""].filter(Boolean).join("\n\n"),
+    },
+    {
+      role: "user",
+      content: [
+        `Topic: ${state.topic}`,
+        state.statement ? `Statement: ${state.statement}` : "",
+        transcript ? `Transcript:
+${transcript}` : "",
+        tools ? `Tool Results:
+${tools}` : "",
+        `Task: ${task}`,
+      ].filter(Boolean).join("\n\n"),
+    },
+  ];
+}</code></pre></div><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/core/applyToolRequests.js</div><pre><code>const TOOL_PATTERN = /\[\[tool:([a-zA-Z0-9._-]+)\s+(.+?)\]\]/g;
+
+export async function applyToolRequests({ content, agent, state, ports }) {
+  const matches = [...content.matchAll(TOOL_PATTERN)];
+  if (!matches.length) return { state, usedTools: false };
+
+  let nextState = state;
+
+  for (const [, toolId, rawInput] of matches) {
+    const input = JSON.parse(rawInput);
+    const decision = ports.toolPolicy.canUseTool({ agent, toolId });
+    if (!decision.allowed) throw new Error(decision.reason);
+
+    const tool = ports.tools[toolId];
+    if (!tool) throw new Error(`Missing tool implementation for ${toolId}`);
+
+    ports.renderer?.toolStarted?.({ toolId, input });
+    const output = await tool.invoke(input);
+    ports.renderer?.toolCompleted?.({ toolId, output });
+
+    nextState = {
+      ...nextState,
+      toolResults: [
+        ...nextState.toolResults,
+        { agentId: agent.id, toolId, input, output },
+      ],
+    };
+  }
+
+  return { state: nextState, usedTools: true };
+}</code></pre><p>The tool marker is just text. The system only becomes trustworthy when parsing, policy, and execution are separate steps.</p></div><div class="card span-12"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/core/loadSkill.js</div><pre><code>import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+
+function parseFrontmatter(markdown, location) {
+  const match = markdown.match(/^---
+([\s\S]*?)
+---
+?([\s\S]*)$/);
+  if (!match) throw new Error(`Skill is missing frontmatter: ${location}`);
+
+  const metadata = {};
+  for (const line of match[1].split("
+")) {
+    const separator = line.indexOf(":");
+    if (separator === -1) continue;
+    const key = line.slice(0, separator).trim();
+    const value = line.slice(separator + 1).trim();
+    metadata[key] = value.replace(/^"(.*)"$/, "$1");
+  }
+
+  return { metadata, body: match[2].trim() };
+}
+
+export function loadSkill(name) {
+  const location = resolve(projectRoot, ".agents", "skills", name, "SKILL.md");
+  const markdown = readFileSync(location, "utf8");
+  const { metadata, body } = parseFrontmatter(markdown, location);
+
+  return {
+    name: metadata.name,
+    description: metadata.description,
+    location,
+    body,
+  };
+}</code></pre><p>Why this matters: skills let you add reusable behavior as plain data and Markdown. That keeps the core runtime unchanged while the agents still become more specialized.</p></div></div></section>
+
+
+    
+
+<section id="plugins"><div class="section-head"><div class="section-index">09</div><div><h2>Plugins</h2><p>Streaming lives in the LLM plugin. Browser automation lives in the browser tool plugin. Console printing lives in the renderer plugin. The runtime never talks to the outside world directly.</p></div></div><div class="grid"><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/plugins/ollamaLlm.js</div><pre><code>import ollama from "ollama";
+
+export function createOllamaLlm() {
+  return {
+    async streamChat({ model, messages, options = {}, onToken }) {
+      const stream = await ollama.chat({
+        model,
+        messages,
+        options,
+        stream: true,
+      });
+
+      let content = "";
+      for await (const chunk of stream) {
+        const token = chunk.message?.content ?? "";
+        if (token) {
+          content += token;
+          onToken?.(token);
+        }
+      }
+
+      return { content: content.trim() };
+    },
+  };
+}</code></pre></div><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/plugins/consoleRenderer.js</div><pre><code>export function createConsoleRenderer() {
+  return {
+    stepStarted({ step }) {
+      console.log(`
+▶ ${step.id}`);
+    },
+    stepCompleted() {
+      console.log("
+");
+    },
+    agentStarted({ agent, followUp = false }) {
+      const label = followUp ? `${agent.name} (after tool)` : agent.name;
+      process.stdout.write(`
+${label}: `);
+    },
+    token(token) {
+      process.stdout.write(token);
+    },
+    toolStarted({ toolId, input }) {
+      console.log(`
+🛠 ${toolId}`, input);
+    },
+    toolCompleted({ output }) {
+      console.log(`
+✓ ${output.title}`);
+    },
+  };
+}</code></pre></div><div class="card span-12"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/plugins/lightpandaBrowser.js</div><pre><code>import { once } from "node:events";
+import net from "node:net";
+import { lightpanda } from "@lightpanda/browser";
+import puppeteer from "puppeteer-core";
+
+function wait(ms) {
+  return new Promise((resolve) =&gt; setTimeout(resolve, ms));
+}
+
+function isPortOpen(host, port, timeoutMs = 400) {
+  return new Promise((resolve) =&gt; {
+    const socket = net.createConnection({ host, port });
+    const done = (value) =&gt; {
+      socket.removeAllListeners();
+      socket.destroy();
+      resolve(value);
+    };
+    socket.setTimeout(timeoutMs);
+    socket.once("connect", () =&gt; done(true));
+    socket.once("timeout", () =&gt; done(false));
+    socket.once("error", () =&gt; done(false));
+  });
+}
+
+async function connectWithRetry(browserWSEndpoint, retries = 20, delayMs = 250) {
+  let lastError;
+  for (let attempt = 0; attempt &lt; retries; attempt += 1) {
+    try {
+      return await puppeteer.connect({ browserWSEndpoint });
+    } catch (error) {
+      lastError = error;
+      await wait(delayMs);
+    }
+  }
+  throw lastError ?? new Error("Failed to connect to Lightpanda");
+}
+
+export async function createLightpandaBrowserSearchTool() {
+  const host = "127.0.0.1";
+  const port = 9222;
+  const browserWSEndpoint = `ws://${host}:${port}`;
+  const hadExistingServer = await isPortOpen(host, port);
+
+  const processRef = hadExistingServer
+    ? null
+    : await lightpanda.serve({ host, port, obeyRobots: true });
+
+  const processExitPromise = processRef
+    ? once(processRef, "exit").then(([code, signal]) =&gt; ({ code, signal }))
+    : null;
+
+  const browser = await connectWithRetry(browserWSEndpoint);
+
+  return {
+    id: "browser.search",
+    async invoke({ query }) {
+      const page = await browser.newPage();
+      try {
+        await page.goto(`https://wiby.me/?q=${encodeURIComponent(query)}`, {
+          waitUntil: "domcontentloaded",
+          timeout: 15000,
+        });
+
+        const firstResult = await page.$eval("blockquote", (block) =&gt; {
+          const link = block.querySelector("a");
+          return {
+            title: link?.textContent?.trim() ?? "Search result",
+            url: link?.href ?? "",
+            snippet: (block.textContent ?? "").trim(),
+          };
+        });
+
+        if (!firstResult.url) throw new Error("No search result URL found");
+
+        try {
+          await page.goto(firstResult.url, {
+            waitUntil: "domcontentloaded",
+            timeout: 20000,
+          });
+
+          return await page.evaluate(() =&gt; ({
+            title: document.title,
+            url: location.href,
+            extract: (document.body?.innerText ?? "").slice(0, 2500),
+          }));
+        } catch (error) {
+          return {
+            title: firstResult.title,
+            url: firstResult.url,
+            extract: firstResult.snippet.slice(0, 2500),
+            note: `Failed to open result page: ${error.message}`,
+          };
+        }
+      } finally {
+        await page.close().catch(() =&gt; {});
+      }
+    },
+
+    async stop() {
+      browser.disconnect();
+      if (!processRef || !processExitPromise) return;
+
+      if (processRef.exitCode === null && processRef.signalCode === null) {
+        processRef.kill("SIGTERM");
+      }
+
+      const exitedGracefully = await Promise.race([
+        processExitPromise.then(() =&gt; true),
+        wait(2000).then(() =&gt; false),
+      ]);
+
+      if (!exitedGracefully && processRef.exitCode === null && processRef.signalCode === null) {
+        processRef.kill("SIGKILL");
+        await processExitPromise.catch(() =&gt; {});
+      }
+    },
+  };
+}</code></pre></div><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/plugins/toolPolicy.js</div><pre><code>export function createToolPolicy() {
+  return {
+    canUseTool({ agent, toolId }) {
+      if (!agent.allowedTools?.includes(toolId)) {
+        return {
+          allowed: false,
+          reason: `Agent ${agent.id} is not allowed to use ${toolId}.`,
+        };
+      }
+      return { allowed: true };
+    },
+  };
+}</code></pre></div><div class="card span-6"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">File: src/index.js</div><pre><code>import { personaDebateSystem } from "./systems/personaDebate.js";
+import { runSystem } from "./core/runSystem.js";
+import { createOllamaLlm } from "./plugins/ollamaLlm.js";
+import { createLightpandaBrowserSearchTool } from "./plugins/lightpandaBrowser.js";
+import { createConsoleRenderer } from "./plugins/consoleRenderer.js";
+import { createToolPolicy } from "./plugins/toolPolicy.js";
+
+const DEFAULT_TOPIC = "Should browser-use agents obey robots.txt by default?";
+
+function parseArgs(args) {
+  const input = {
+    topic: DEFAULT_TOPIC,
+    statement: "",
+    searchQuery: "",
+    requireSearch: false,
+  };
+
+  for (const arg of args) {
+    if (arg.startsWith("--topic=")) input.topic = arg.slice("--topic=".length);
+    else if (arg.startsWith("--statement=")) input.statement = arg.slice("--statement=".length);
+    else if (arg.startsWith("--search=")) input.searchQuery = arg.slice("--search=".length);
+    else if (arg === "--require-search") input.requireSearch = true;
+  }
+  return input;
+}
+
+const llm = createOllamaLlm();
+const browserSearch = await createLightpandaBrowserSearchTool();
+
+try {
+  const finalState = await runSystem({
+    system: personaDebateSystem,
+    input: parseArgs(process.argv.slice(2)),
+    ports: {
+      llm,
+      renderer: createConsoleRenderer(),
+      toolPolicy: createToolPolicy(),
+      tools: { "browser.search": browserSearch },
+    },
+  });
+
+  console.log("\n\nFINAL STATE:");
+  console.log(JSON.stringify(finalState, null, 2));
+} finally {
+  await browserSearch.stop();
+}</code></pre></div></div></section>
+
+
+
+    <section id="demo-flow"><div class="section-head"><div class="section-index">10</div><div><h2>Expected demo flow</h2><p>This is what students should see happen and understand while it is happening. The same runtime can now take a custom topic, statement, and a guaranteed-search mode from the terminal.</p></div></div><div class="grid"><div class="card span-4"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">Terminal</div><pre><code>npm run demo</code></pre></div><div class="card span-4"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">Terminal</div><pre><code>npm run start -- --topic="Should browser-use agents obey robots.txt by default?" --statement="Agents should default to respectful web behavior."</code></pre></div><div class="card span-4"><div style="margin: 0 0 10px; color: var(--muted-soft); font-size: 0.86rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;">Terminal</div><pre><code>npm run start -- --topic="Should coding agents browse documentation first?" --search="coding agent documentation best practices" --require-search</code></pre></div><div class="card span-12 accent-card yellow"><span class="tag">What they will see</span><ul class="clean"><li>Ada streams response</li><li>Byron streams response</li><li>Byron may request <span class="inline-code">[[tool:browser.search {"query":"..."}]]</span></li><li>If <span class="inline-code">--require-search</span> is used, the runtime guarantees one search before Byron’s final answer</li><li>Runtime runs browser tool and keeps result in explicit state</li><li>Final JSON state is printed</li></ul></div></div></section>
+
+    
+<section id="extensions"><div class="section-head"><div class="section-index">11</div><div><h2>Extension ideas</h2><p>Once the core is boring, new pieces attach without drama. These next steps matter because they turn the demo from a neat loop into something closer to a reusable agent system.</p></div></div><div class="grid"><div class="card span-4"><span class="tag">Next step</span><p>Add moderator agent. This helps when you want cleaner turn control and a clearer final summary.</p></div><div class="card span-4"><span class="tag">Next step</span><p>Add evaluator agent. This is useful when you want the system to score answers instead of only generating them.</p></div><div class="card span-4"><span class="tag">Next step</span><p>Add calculator tool. It gives one safe example of a deterministic tool beside browser access.</p></div><div class="card span-4"><span class="tag">Next step</span><p>Add file persistence. You need this when the system should survive process restarts or keep debate history.</p></div><div class="card span-4"><span class="tag">Next step</span><p>Add replay from saved state. This makes debugging and demos easier because you can resume from a known snapshot.</p></div><div class="card span-4"><span class="tag">Next step</span><p>Add OpenAI plugin or MCP tools later. That proves the runtime is not trapped inside one provider or one tool style.</p></div></div></section>
+
+
+    
+<section id="patterns"><div class="section-head"><div class="section-index">12</div><div><h2>What software design patterns did we use?</h2><p>This workshop is small, but the architecture is not random. It borrows several modern software engineering patterns that keep systems understandable as they grow.</p></div></div><div class="grid"><div class="card span-4"><span class="tag">Pattern</span><h3>Functional Core, Imperative Shell</h3><p><span class="inline-code">buildMessages</span>, <span class="inline-code">runSystem</span>, and most state transitions stay deterministic. Browser calls, model streaming, and console output stay at the edges.</p></div><div class="card span-4"><span class="tag">Pattern</span><h3>Ports and Adapters</h3><p>The runtime depends on ports like <span class="inline-code">llm</span>, <span class="inline-code">renderer</span>, <span class="inline-code">toolPolicy</span>, and <span class="inline-code">tools</span>. Concrete plugins adapt Ollama and Lightpanda into that shape.</p></div><div class="card span-4"><span class="tag">Pattern</span><h3>Plugin Architecture</h3><p>LLM, browser search, rendering, and policy are swappable modules. The runtime does not need to change when one of these implementations changes.</p></div><div class="card span-4"><span class="tag">Pattern</span><h3>Strategy Pattern via Data</h3><p>The active behavior changes because the system definition changes, not because the runtime branches on class types. Agents, tasks, and allowed tools are all data-driven strategies.</p></div><div class="card span-4"><span class="tag">Pattern</span><h3>Explicit State Passing</h3><p>State is never hidden inside an object instance. Each step receives state and returns new state. That makes replay, testing, and reasoning much easier.</p></div><div class="card span-4"><span class="tag">Pattern</span><h3>Policy Gate / Guardrail</h3><p>Tool usage passes through an explicit approval layer. The model can suggest actions, but policy decides what the system may actually execute.</p></div></div></section>
+
+<section id="practices"><div class="section-head"><div class="section-index">13</div><div><h2>Best practices for building agents this way</h2><p>The workshop code is one implementation. These practices are the more general lesson: they help students build useful agent systems without needing a giant framework first.</p></div></div><div class="grid"><div class="card span-6 accent-card blue"><span class="tag">Best practices</span><ul class="clean"><li>Keep agent identity, tools, and skills as plain configuration before turning them into classes</li><li>Separate planning from execution so the runtime can stay generic</li><li>Treat tool requests as untrusted model output until parsed and policy-checked</li><li>Stream tokens for UX, but store final content as explicit state</li><li>Prefer narrow, read-only tools first. They are easier to reason about and debug</li><li>Use skills as reusable instruction modules instead of endlessly growing personas</li></ul></div><div class="card span-6 accent-card pink"><span class="tag">Agent-building patterns</span><ul class="clean"><li><strong>Planner + Executor:</strong> a system definition plans steps, runtime executes them</li><li><strong>Toolformer-style augmentation:</strong> the model can ask for tools, but the system orchestrates the call</li><li><strong>Human-readable capabilities:</strong> skills live in Markdown and remain inspectable</li><li><strong>Retry and fallback:</strong> connect retry logic and browser fallback results keep the run alive</li><li><strong>Deterministic demo mode:</strong> <span class="inline-code">--require-search</span> guarantees the browser path when teaching</li><li><strong>State snapshot mindset:</strong> every step leaves a serializable record you can save or replay later</li></ul></div><div class="card span-12"><p class="quote">The deep lesson is not “agents need a framework.” It is “agents need clean boundaries, explicit state, and boring runtime rules.”</p></div></div></section>
+
+<section id="resources"><div class="section-head"><div class="section-index">14</div><div><h2>Sources and further reading</h2><p>These are good next reads for students who want to go beyond the workshop and understand the ideas underneath the code.</p></div></div><div class="grid"><div class="card span-12"><div class="resource-list"><div class="resource"><div><a class="resource-title" href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a><br><span>Local model runtime used in the workshop.</span></div></div><div class="resource"><div><a class="resource-title" href="https://lightpanda.io/docs/" target="_blank" rel="noopener">Lightpanda Documentation</a><br><span>Official docs for the machine-oriented browser and CDP usage.</span></div></div><div class="resource"><div><a class="resource-title" href="https://lightpanda.io/docs/open-source/usage" target="_blank" rel="noopener">Lightpanda Usage with Puppeteer</a><br><span>Shows the CDP connection model used in this workshop.</span></div></div><div class="resource"><div><a class="resource-title" href="https://pptr.dev/" target="_blank" rel="noopener">Puppeteer Core</a><br><span>The controller library that drives the browser runtime.</span></div></div><div class="resource"><div><a class="resource-title" href="https://github.com/humanlayer/12-factor-agents" target="_blank" rel="noopener">12-Factor Agents</a><br><span>Principles for building reliable tool-using agent systems.</span></div></div><div class="resource"><div><a class="resource-title" href="https://martinfowler.com/bliki/BoundedContext.html" target="_blank" rel="noopener">Martin Fowler · Bounded Context</a><br><span>A helpful way to think about system boundaries and where opinions belong.</span></div></div><div class="resource"><div><a class="resource-title" href="https://alistair.cockburn.us/hexagonal-architecture" target="_blank" rel="noopener">Alistair Cockburn · Hexagonal Architecture</a><br><span>The original ports-and-adapters framing behind the plugin boundary story.</span></div></div><div class="resource"><div><a class="resource-title" href="https://learn.microsoft.com/en-us/azure/architecture/patterns/sidecar" target="_blank" rel="noopener">Microsoft Architecture Patterns</a><br><span>General reference library for pragmatic software patterns and trade-offs.</span></div></div><div class="resource"><div><a class="resource-title" href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Model Context Protocol</a><br><span>A future-facing reference if students later want standardized tool integrations.</span></div></div><div class="resource"><div><a class="resource-title" href="https://nodejs.org/api/esm.html" target="_blank" rel="noopener">Node.js ESM</a><br><span>The import/export model used throughout this workshop.</span></div></div></div></div></section>
+<section id="close"><div class="section-head"><div class="section-index">15</div><div><h2>Closing takeaway</h2><p>Agentic AI systems are not just prompts. They are workflows over explicit state, with tools guarded by policy and side effects isolated behind plugins.</p></div></div><div class="grid"><div class="card span-12 accent-card yellow"><p class="quote">Keep the core boring. Put opinions in system definitions. Put side effects in plugins. Pass state explicitly.</p></div></div></section>
+
+    <div class="footer card">Use arrow keys, Page Up / Down, or space to move through the deck.</div>
+  </div>
+
+  <div class="floating-counter">
+    <div class="counter-text"><span id="counterNow">01</span><span id="counterTotal">15</span></div>
+    <div class="counter-line"><div class="counter-fill" id="counterFill"></div></div>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll('header.hero, section')];
+    const navLinks = [...document.querySelectorAll('.deck-nav a')];
+    const counterNow = document.getElementById('counterNow');
+    const counterTotal = document.getElementById('counterTotal');
+    const counterFill = document.getElementById('counterFill');
+    counterTotal.textContent = String(slides.length).padStart(2, '0');
+
+    function getCurrentSlideIndex() {
+      const y = window.scrollY + window.innerHeight * 0.35;
+      let idx = 0;
+      slides.forEach((slide, i) => { if (slide.offsetTop <= y) idx = i; });
+      return idx;
+    }
+    function updateDeckState() {
+      const idx = getCurrentSlideIndex();
+      counterNow.textContent = String(idx + 1).padStart(2, '0');
+      counterFill.style.width = `${((idx + 1) / slides.length) * 100}%`;
+      const currentId = slides[idx].id;
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href')?.slice(1);
+        link.classList.toggle('active', href === currentId);
+      });
+    }
+    function goToSlide(delta) {
+      const idx = getCurrentSlideIndex();
+      const next = Math.max(0, Math.min(slides.length - 1, idx + delta));
+      slides[next].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.addEventListener('scroll', updateDeckState);
+    window.addEventListener('load', updateDeckState);
+    window.addEventListener('keydown', (event) => {
+      const targetTag = document.activeElement?.tagName?.toLowerCase();
+      if (targetTag === 'input' || targetTag === 'textarea') return;
+      if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
+        event.preventDefault(); goToSlide(1);
+      }
+      if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+        event.preventDefault(); goToSlide(-1);
+      }
+    });
+  </script>
+</body>
+</html>
