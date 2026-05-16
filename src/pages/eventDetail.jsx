@@ -107,6 +107,21 @@ const EventDetail = () => {
                       : "Materyal Henüz Yok"}
                   </button>
 
+                  {/* YENİ EKLENEN GITHUB REPO BUTONU */}
+                  {ev.githubRepo && ev.githubRepo !== "#" && (
+                    <a
+                      href={ev.githubRepo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-bold text-sm transition-all shadow-xl
+                       bg-white/[0.03] text-white/80 border border-white/10
+                       hover:bg-purple-500/[0.08] hover:text-purple-400 hover:border-purple-500/30"
+                    >
+                      <Icon name="Github" size={18} />
+                      GitHub Reposunu İncele
+                    </a>
+                  )}
+
                   {ev.videoLink && (
                     <a
                       href={ev.videoLink}
