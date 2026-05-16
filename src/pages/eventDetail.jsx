@@ -107,7 +107,6 @@ const EventDetail = () => {
                       : "Materyal Henüz Yok"}
                   </button>
 
-                  {/* YENİ EKLENEN GITHUB REPO BUTONU */}
                   {ev.githubRepo && ev.githubRepo !== "#" && (
                     <a
                       href={ev.githubRepo}
