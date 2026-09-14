@@ -1,99 +1,53 @@
-import { focusAreas } from "../constants/aboutData";
-import FocusCard from "../components/focusCard";
-import Icon from "../components/common/icon";
+import { expectations } from "../constants/aboutExpectations";
+import { useAboutGame } from "../hooks/useAboutGame";
+import AboutExpectations from "../components/AboutExpectations";
+import AboutResult from "../components/AboutResult";
 
-const About = () => {
+export default function About() {
+  const game = useAboutGame();
+
   return (
     <section
       id="about"
-      aria-labelledby="about-heading"
-      className="min-h-screen w-full pt-16 md:pt-24 pb-16 bg-[#0a0d14] relative overflow-hidden"
+      className="relative overflow-hidden bg-[#0a0d14] px-5 py-24 text-white sm:px-8 lg:px-12 lg:py-32"
     >
-      <div
-        className="absolute top-1/4 -left-20 w-48 h-48 md:w-72 md:h-72 bg-blue-600/5 rounded-full blur-[80px] md:blur-[120px]"
-        aria-hidden="true"
-      ></div>
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[10%] top-[15%] h-48 w-48 rounded-full bg-[#4285F4]/[0.025] blur-[100px]" />
+        <div className="absolute right-[10%] top-[40%] h-56 w-56 rounded-full bg-[#EA4335]/[0.02] blur-[110px]" />
+        <div className="absolute bottom-[10%] left-[45%] h-48 w-48 rounded-full bg-[#34A853]/[0.02] blur-[100px]" />
+      </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <article className="flex flex-col gap-6 text-center lg:text-left items-center lg:items-start">
-            <h2
-              id="about-heading"
-              className="text-blue-500 font-bold tracking-widest uppercase text-xs md:text-sm"
-            >
-              Hakkımızda
-            </h2>
+      <div className="relative mx-auto max-w-6xl">
+        <div className="mb-14 max-w-3xl">
 
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-[1.2]">
-              Geleceğin Teknolojilerini <br className="hidden sm:block" />
-              <span className="text-gray-400 font-medium">
-                Birlikte İnşa Ediyoruz.
-              </span>
-            </h3>
+          <h2 className="font-['Google_Sans',Arial,sans-serif] text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+            Geleceğin teknolojilerini{" "}
+            <span className="text-white">birlikte keşfediyoruz.</span>
+          </h2>
 
-            <p className="text-gray-400 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
-              <strong className="text-gray-300 font-semibold">
-                GDG on Campus Marmara
-              </strong>
-              , teknolojiye meraklı öğrencileri bir araya getiren, paylaşımı ve
-              öğrenmeyi temel alan bir topluluktur. <strong>Google</strong>{" "}
-              ekosistemindeki en güncel gelişmeleri takip ederken, uygulamalı
-              atölyelerle kendimizi geliştiriyoruz.
-            </p>
-            <div
-              className="flex flex-wrap justify-center lg:justify-start gap-3 md:gap-4 mt-2"
-              aria-label="Core values"
-            >
-              <div className="px-4 py-2 md:px-6 md:py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-xs md:text-sm flex items-center gap-2">
-                <Icon
-                  name="Zap"
-                  size={18}
-                  className="text-yellow-400"
-                  aria-hidden="true"
-                />
-                <span>İnovasyon Odaklı</span>
-              </div>
-              <div className="px-4 py-2 md:px-6 md:py-3 bg-white/5 border border-white/10 rounded-2xl text-white text-xs md:text-sm flex items-center gap-2">
-                <Icon
-                  name="Users"
-                  size={18}
-                  className="text-blue-400"
-                  aria-hidden="true"
-                />
-                <span>Topluluk Ruhu</span>
-              </div>
-            </div>
-          </article>
-          <div
-            className="grid sm:grid-cols-2 gap-4 md:gap-6 w-full mt-8 lg:mt-0"
-            role="region"
-            aria-label="Our Focus Areas"
-          >
-            {focusAreas.map((area, index) => (
-              <FocusCard
-                key={index}
-                icon={
-                  <Icon
-                    name={area.icon}
-                    size={48}
-                    className={
-                      area.color === "border-yellow-600"
-                        ? "text-yellow-400"
-                        : area.color.replace("border-", "text-")
-                    }
-                    aria-hidden="true"
-                  />
-                }
-                title={area.title}
-                description={area.description}
-                borderColorClass={area.color}
-              />
-            ))}
-          </div>
+          <p className="mt-6 max-w-2xl font-['Google_Sans',Arial,sans-serif] text-lg leading-relaxed text-white/60 sm:text-xl">
+            Teknolojiyi birlikte öğreniyor, fikirlerimizi gerçeğe dönüştürüyor ve
+            geleceği şekillendiren bir topluluk olarak birlikte gelişiyoruz.
+          </p>
         </div>
+
+        <AboutExpectations
+          selected={game.selected}
+          draggedItem={game.draggedItem}
+          checking={game.checking}
+          movingItems={game.movingItems}
+          arrivedItems={game.arrivedItems}
+          availableItems={game.availableItems}
+          addItem={game.addItem}
+          removeItem={game.removeItem}
+          handleDragStart={game.handleDragStart}
+          handleDragEnd={game.handleDragEnd}
+          handleDrop={game.handleDrop}
+          handleCheck={game.handleCheck}
+        />
+
+        <AboutResult checked={game.checked} />
       </div>
     </section>
   );
-};
-
-export default About;
+}
