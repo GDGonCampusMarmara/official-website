@@ -2,6 +2,7 @@ import { expectations } from "../constants/aboutExpectations";
 import { useAboutGame } from "../hooks/useAboutGame";
 import AboutExpectations from "../components/AboutExpectations";
 import AboutResult from "../components/AboutResult";
+import AboutMobileResult from "../components/AboutMobileResult";
 
 export default function About() {
   const game = useAboutGame();
@@ -18,8 +19,7 @@ export default function About() {
       </div>
 
       <div className="relative mx-auto max-w-6xl">
-        <div className="mb-14 max-w-3xl">
-
+        <div className="mb-14 hidden max-w-3xl lg:block">
           <h2 className="font-['Google_Sans',Arial,sans-serif] text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
             Geleceğin teknolojilerini{" "}
             <span className="text-white">birlikte keşfediyoruz.</span>
@@ -31,22 +31,28 @@ export default function About() {
           </p>
         </div>
 
-        <AboutExpectations
-          selected={game.selected}
-          draggedItem={game.draggedItem}
-          checking={game.checking}
-          movingItems={game.movingItems}
-          arrivedItems={game.arrivedItems}
-          availableItems={game.availableItems}
-          addItem={game.addItem}
-          removeItem={game.removeItem}
-          handleDragStart={game.handleDragStart}
-          handleDragEnd={game.handleDragEnd}
-          handleDrop={game.handleDrop}
-          handleCheck={game.handleCheck}
-        />
+        <div className="hidden lg:block">
+          <AboutExpectations
+            selected={game.selected}
+            draggedItem={game.draggedItem}
+            checking={game.checking}
+            movingItems={game.movingItems}
+            arrivedItems={game.arrivedItems}
+            availableItems={game.availableItems}
+            addItem={game.addItem}
+            removeItem={game.removeItem}
+            handleDragStart={game.handleDragStart}
+            handleDragEnd={game.handleDragEnd}
+            handleDrop={game.handleDrop}
+            handleCheck={game.handleCheck}
+          />
 
-        <AboutResult checked={game.checked} />
+          <AboutResult checked={game.checked} />
+        </div>
+
+        <div className="lg:hidden">
+          <AboutMobileResult />
+        </div>
       </div>
     </section>
   );
